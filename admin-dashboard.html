@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voyago Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <button id="sidebarClose" class="sidebar-close" aria-label="Close menu">✕</button>
+            <div class="sidebar-header">
+                <div class="logo-section">
+                    <div class="logo-circle">V</div>
+                    <h1 class="logo-text">Voyago</h1>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="dashboard">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-section="bookings">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    </svg>
+                    <span>Bookings</span>
+                </button>
+                <button class="nav-item" data-section="vehicles">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="18" cy="18" r="3" />
+                        <circle cx="6" cy="18" r="3" />
+                        <path d="M6 12h12M3 6h18v6H3z" />
+                    </svg>
+                    <span>Vehicles</span>
+                </button>
+                <button class="nav-item" data-section="tracking">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    <span>Live Tracking</span>
+                </button>
+                <button class="nav-item" data-section="expiry">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>Rental Expiry</span>
+                </button>
+                <button class="nav-item" data-section="packages">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                        <line x1="7" y1="7" x2="7.01" y2="7" />
+                    </svg>
+                    <span>Packages</span>
+                </button>
+                <button class="nav-item" data-section="users">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>Users</span>
+                </button>
+                <button class="nav-item" data-section="payments">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M20 21H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2z" />
+                        <rect x="3" y="6" width="18" height="12" />
+                    </svg>
+                    <span>Payments</span>
+                </button>
+                <button class="nav-item" data-section="settings">
+                    <svg class="nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m5.08-5.08l4.24-4.24" />
+                    </svg>
+                    <span>Settings</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">AR</div>
+                    <div class="user-info">
+                        <div class="user-name">Admin</div>
+                        <div class="user-role">Manager</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="header">
+                <button class="hamburger-menu" id="hamburgerMenu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+                <div class="header-title">
+                    <h2 id="sectionTitle">Dashboard</h2>
+                </div>
+                <div class="header-actions">
+                    <div class="time-display" id="timeDisplay">10:30 AM</div>
+                    <button class="header-icon-btn" id="notifBell">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                    </button>
+                    <div class="header-dropdown">
+                        <button class="header-icon-btn dropdown-toggle">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="1" />
+                                <circle cx="12" cy="5" r="1" />
+                                <circle cx="12" cy="19" r="1" />
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item" id="profileMenuItem">Profile</a>
+                            <a href="#" class="dropdown-item" id="logoutMenuItem">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area">
+                <section id="dashboard-section" class="section active">
+                    <div class="stats-grid">
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23" />
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                </svg>
+                                <span class="stat-trend positive">+12.5%</span>
+                            </div>
+                            <div class="stat-label">Total Revenue</div>
+                            <div class="stat-value">₹45,231.89</div>
+                        </div>
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="7" height="7" />
+                                    <rect x="14" y="3" width="7" height="7" />
+                                    <rect x="14" y="14" width="7" height="7" />
+                                    <rect x="3" y="14" width="7" height="7" />
+                                </svg>
+                                <span class="stat-trend positive">+8.2%</span>
+                            </div>
+                            <div class="stat-label">Total Bookings</div>
+                            <div class="stat-value">1,234</div>
+                        </div>
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                                <span class="stat-trend positive">+5.1%</span>
+                            </div>
+                            <div class="stat-label">Total Users</div>
+                            <div class="stat-value">8,234</div>
+                        </div>
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="18" cy="18" r="3" />
+                                    <circle cx="6" cy="18" r="3" />
+                                    <path d="M6 12h12M3 6h18v6H3z" />
+                                </svg>
+                                <span class="stat-trend positive">+3.8%</span>
+                            </div>
+                            <div class="stat-label">Active Rentals</div>
+                            <div class="stat-value">567</div>
+                        </div>
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M12 1v22m11-11H1" />
+                                </svg>
+                                <span class="stat-trend neutral">0%</span>
+                            </div>
+                            <div class="stat-label">Pending Payments</div>
+                            <div class="stat-value">₹2,450</div>
+                        </div>
+                    </div>
+                    <div class="charts-section">
+                        <div class="chart-container">
+                            <h3>Monthly Bookings & Cancellations</h3>
+                            <canvas id="bookingsChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Payment Methods Distribution</h3>
+                            <canvas id="paymentChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="activity-section">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-feed">
+                            <div class="activity-item">
+                                <div class="activity-icon completed">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Booking Confirmed</div>
+                                    <div class="activity-desc">Booking #BK123456 confirmed</div>
+                                </div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon payment">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                                        <path d="M1 10h22" />
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Payment Received</div>
+                                    <div class="activity-desc">₹5,000 from customer John Doe</div>
+                                </div>
+                                <div class="activity-time">4 hours ago</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon vehicle">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="18" cy="18" r="3" />
+                                        <circle cx="6" cy="18" r="3" />
+                                        <path d="M6 12h12M3 6h18v6H3z" />
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Vehicle Added</div>
+                                    <div class="activity-desc">2023 Toyota Fortuner added to fleet</div>
+                                </div>
+                                <div class="activity-time">6 hours ago</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon user">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">New User Registered</div>
+                                    <div class="activity-desc">Jane Smith registered as new user</div>
+                                </div>
+                                <div class="activity-time">8 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="bookings-section" class="section">
+                    <div class="filters-bar">
+                        <div class="filter-group">
+                            <input type="text" id="bookingSearch" placeholder="Search booking ID..."
+                                class="filter-input">
+                        </div>
+                        <div class="filter-group">
+                            <select id="statusFilter" class="filter-select">
+                                <option value="">All Status</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary">Export</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Customer</th>
+                                    <th>Vehicle</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th>Amount</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingsTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="vehicles-section" class="section">
+                    <div class="filters-bar">
+                        <div class="filter-group">
+                            <input type="text" id="vehicleSearch" placeholder="Search vehicle..." class="filter-input">
+                        </div>
+                        <div class="filter-group">
+                            <select id="typeFilter" class="filter-select">
+                                <option value="">All Types</option>
+                                <option value="sedan">Sedan</option>
+                                <option value="suv">SUV</option>
+                                <option value="van">Van</option>
+                                <option value="luxury">Luxury</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <select id="statusVehicleFilter" class="filter-select">
+                                <option value="">All Status</option>
+                                <option value="available">Available</option>
+                                <option value="rented">Rented</option>
+                                <option value="maintenance">Maintenance</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary">Add Vehicle</button>
+                    </div>
+                    <div class="vehicles-grid" id="vehiclesGrid"></div>
+                </section>
+
+                <section id="tracking-section" class="section">
+                    <div class="tracking-alert">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span>2 rentals are overdue. Immediate action required.</span>
+                    </div>
+                    <h3>Active Rentals & Tracking</h3>
+                    <div class="rentals-grid">
+                        <div class="rental-card">
+                            <div class="rental-header">
+                                <h4>Order #BK789456</h4>
+                                <span class="badge badge-active">Active</span>
+                            </div>
+                            <div class="rental-info">
+                                <div class="rental-detail"><span class="detail-label">Customer:</span><span
+                                        class="detail-value">John Doe</span></div>
+                                <div class="rental-detail"><span class="detail-label">Vehicle:</span><span
+                                        class="detail-value">2023 Toyota Fortuner</span></div>
+                                <div class="rental-detail"><span class="detail-label">Location:</span><span
+                                        class="detail-value">Mumbai - Heading to Pune</span></div>
+                                <div class="rental-detail"><span class="detail-label">Duration:</span><span
+                                        class="detail-value">3 days remaining</span></div>
+                            </div>
+                            <div class="rental-actions">
+                                <button class="btn-secondary"
+                                    onclick="openModal('bookingDetailModal'); document.getElementById('bookingDetailBody').innerHTML = '<p><strong>Order:</strong> #BK789456</p><p><strong>Customer:</strong> John Doe</p><p><strong>Vehicle:</strong> 2023 Toyota Fortuner</p><p><strong>Location:</strong> Mumbai - Heading to Pune</p><p><strong>Duration:</strong> 3 days remaining</p>'">View
+                                    Details</button>
+                                <button class="btn-secondary"
+                                    onclick="showToast('Live tracking coming soon!', 'info')">Track</button>
+                            </div>
+                        </div>
+                        <div class="rental-card">
+                            <div class="rental-header">
+                                <h4>Order #BK789457</h4>
+                                <span class="badge badge-overdue">Overdue</span>
+                            </div>
+                            <div class="rental-info">
+                                <div class="rental-detail"><span class="detail-label">Customer:</span><span
+                                        class="detail-value">Jane Smith</span></div>
+                                <div class="rental-detail"><span class="detail-label">Vehicle:</span><span
+                                        class="detail-value">2022 Hyundai Creta</span></div>
+                                <div class="rental-detail"><span class="detail-label">Location:</span><span
+                                        class="detail-value">Delhi - Stationary</span></div>
+                                <div class="rental-detail"><span class="detail-label">Overdue:</span><span
+                                        class="detail-value overdue-text">2 hours 45 mins</span></div>
+                            </div>
+                            <div class="rental-actions">
+                                <button class="btn-secondary"
+                                    onclick="openModal('bookingDetailModal'); document.getElementById('bookingDetailBody').innerHTML = '<p><strong>Order:</strong> #BK789457</p><p><strong>Customer:</strong> Jane Smith</p><p><strong>Vehicle:</strong> 2022 Hyundai Creta</p><p><strong>Location:</strong> Delhi - Stationary</p><p><strong>Status:</strong> <span style=color:red>Overdue - 2 hours 45 mins</span></p>'">View
+                                    Details</button>
+                                <button class="btn-warning"
+                                    onclick="showToast('Contacting Jane Smith via SMS...', 'warning')">Contact
+                                    Customer</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="map-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                        <p>Map integration placeholder</p>
+                    </div>
+                </section>
+
+                <section id="expiry-section" class="section">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="expiring">Expiring Soon</button>
+                        <button class="tab-btn" data-tab="upcoming">Upcoming</button>
+                        <button class="tab-btn" data-tab="overdue">Overdue</button>
+                    </div>
+                    <div class="tab-content active" id="expiring-tab">
+                        <div class="expiry-grid">
+                            <div class="expiry-card">
+                                <div class="expiry-header">
+                                    <h4>Booking #BK456789</h4>
+                                    <span class="badge badge-expiring">Expiring Soon</span>
+                                </div>
+                                <div class="countdown-timer" data-deadline="17:00">
+                                    <div class="timer-display">00:00:00</div>
+                                    <div class="timer-label">Hours : Minutes : Seconds</div>
+                                </div>
+                                <div class="expiry-info">
+                                    <div>Customer: Raj Kumar</div>
+                                    <div>Vehicle: Maruti Swift</div>
+                                    <div>Return Date: Today, 5:00 PM</div>
+                                </div>
+                                <button class="btn-primary btn-block"
+                                    onclick="showToast('Reminder sent to Raj Kumar for Maruti Swift return by 5:00 PM!', 'success')">Send
+                                    Reminder</button>
+                            </div>
+                            <div class="expiry-card">
+                                <div class="expiry-header">
+                                    <h4>Booking #BK456790</h4>
+                                    <span class="badge badge-expiring">Expiring Soon</span>
+                                </div>
+                                <div class="countdown-timer" data-deadline="15:00">
+                                    <div class="timer-display">00:00:00</div>
+                                    <div class="timer-label">Hours : Minutes : Seconds</div>
+                                </div>
+                                <div class="expiry-info">
+                                    <div>Customer: Priya Singh</div>
+                                    <div>Vehicle: Honda City</div>
+                                    <div>Return Date: Today, 3:00 PM</div>
+                                </div>
+                                <button class="btn-primary btn-block"
+                                    onclick="showToast('Reminder sent to Priya Singh for Honda City return by 3:00 PM!', 'success')">Send
+                                    Reminder</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="upcoming-tab">
+                        <div class="expiry-grid">
+                            <div class="expiry-card">
+                                <div class="expiry-header">
+                                    <h4>Booking #BK456791</h4>
+                                    <span class="badge badge-upcoming">Upcoming</span>
+                                </div>
+                                <div class="countdown-timer">
+                                    <div class="timer-display">1:23:45:30</div>
+                                    <div class="timer-label">Days : Hours : Minutes : Seconds</div>
+                                </div>
+                                <div class="expiry-info">
+                                    <div>Customer: Amit Patel</div>
+                                    <div>Vehicle: Tata Harrier</div>
+                                    <div>Return Date: Tomorrow, 10:00 AM</div>
+                                </div>
+                                <button class="btn-secondary btn-block"
+                                    onclick="openModal('bookingDetailModal'); document.getElementById('bookingDetailBody').innerHTML = '<p><strong>Booking:</strong> #BK456791</p><p><strong>Customer:</strong> Amit Patel</p><p><strong>Vehicle:</strong> Tata Harrier</p><p><strong>Return Date:</strong> Tomorrow, 10:00 AM</p><p><strong>Status:</strong> Upcoming</p>'">View
+                                    Booking</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="overdue-tab">
+                        <div class="expiry-grid">
+                            <div class="expiry-card overdue-card">
+                                <div class="expiry-header">
+                                    <h4>Booking #BK456792</h4>
+                                    <span class="badge badge-overdue">Overdue</span>
+                                </div>
+                                <div class="countdown-timer overdue">
+                                    <div class="timer-display">3 days 5 hours</div>
+                                    <div class="timer-label">Overdue Amount: ₹2,500</div>
+                                </div>
+                                <div class="expiry-info">
+                                    <div>Customer: Vikram Singh</div>
+                                    <div>Vehicle: Kia Sonet</div>
+                                    <div>Return Date: 3 days ago</div>
+                                </div>
+                                <button class="btn-warning btn-block"
+                                    onclick="showToast('Contacting Vikram Singh — Overdue ₹2,500 for Kia Sonet!', 'warning')">Contact
+                                    Customer</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="packages-section" class="section">
+                    <div class="filters-bar">
+                        <div class="filter-group">
+                            <input type="text" id="packageSearch" placeholder="Search package..." class="filter-input">
+                        </div>
+                        <button class="btn-primary" id="addPackageBtn"
+                            onclick="showToast('Add Package form coming soon!', 'info')">+ Add Package</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Package ID</th>
+                                    <th>Name</th>
+                                    <th>Duration</th>
+                                    <th>Price</th>
+                                    <th>Vehicles</th>
+                                    <th>Bookings</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="packagesTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="users-section" class="section">
+                    <div class="filters-bar">
+                        <div class="filter-group">
+                            <input type="text" id="userSearch" placeholder="Search by name or email..."
+                                class="filter-input">
+                        </div>
+                        <div class="filter-group">
+                            <select id="userStatusFilter" class="filter-select">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="new">New</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Registered</th>
+                                    <th>Bookings</th>
+                                    <th>Spent</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="payments-section" class="section">
+                    <div class="stats-grid">
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M12 1v22m11-11H1" />
+                                </svg>
+                                <span class="stat-trend positive">+18%</span>
+                            </div>
+                            <div class="stat-label">Collected This Month</div>
+                            <div class="stat-value">₹7,16,700</div>
+                        </div>
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                </svg>
+                                <span class="stat-trend neutral">-5%</span>
+                            </div>
+                            <div class="stat-label">Pending Payments</div>
+                            <div class="stat-value">₹1,25,800</div>
+                        </div>
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+                                </svg>
+                                <span class="stat-trend negative">-12%</span>
+                            </div>
+                            <div class="stat-label">Failed Payments</div>
+                            <div class="stat-value">₹18,200</div>
+                        </div>
+                        <div class="stat-card card-hover">
+                            <div class="stat-header">
+                                <svg class="stat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10" />
+                                </svg>
+                                <span class="stat-trend neutral">0%</span>
+                            </div>
+                            <div class="stat-label">Refunded</div>
+                            <div class="stat-value">₹32,400</div>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Payment ID</th>
+                                    <th>Booking ID</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentsTableBody"></tbody>
+                        </table>
+                    </div>
+                    <div class="charts-section">
+                        <div class="chart-container">
+                            <h3>Payment Methods Distribution</h3>
+                            <canvas id="paymentMethodsChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="settings-section" class="section">
+                    <div class="settings-container">
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="general">General</button>
+                            <button class="tab-btn" data-tab="account">Admin Account</button>
+                            <button class="tab-btn" data-tab="notifications">Notifications</button>
+                            <button class="tab-btn" data-tab="pricing">Pricing Rules</button>
+                        </div>
+                        <div class="tab-content active" id="general-tab">
+                            <div class="settings-form">
+                                <div class="form-group"><label>Company Name</label><input type="text"
+                                        value="Voyago Rentals" class="form-input"></div>
+                                <div class="form-group"><label>Address</label><input type="text"
+                                        value="123 Business Park, Mumbai" class="form-input"></div>
+                                <div class="form-group"><label>Phone</label><input type="text" value="+91-1800-VOYAGO"
+                                        class="form-input"></div>
+                                <div class="form-group"><label>Email</label><input type="email" value="admin@voyago.com"
+                                        class="form-input"></div>
+                                <div class="form-group"><label>GST Number</label><input type="text"
+                                        value="18AABCO1234H1Z0" class="form-input"></div>
+                                <button class="btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                        <div class="tab-content" id="account-tab">
+                            <div class="settings-form">
+                                <div class="form-group"><label>Admin Name</label><input type="text" value="Super Admin"
+                                        class="form-input"></div>
+                                <div class="form-group"><label>Email Address</label><input type="email"
+                                        value="superadmin@voyago.com" class="form-input"></div>
+                                <div class="form-group"><label>Current Password</label><input type="password"
+                                        class="form-input"></div>
+                                <div class="form-group"><label>New Password</label><input type="password"
+                                        class="form-input">
+                                    <div
+                                        style="margin-top:8px;height:4px;background:#e0e0e0;border-radius:2px;overflow:hidden;">
+                                        <div style="width:0%;height:100%;background:#d32f2f;transition:width 0.3s;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input
+                                            type="checkbox"><span>Enable Two-Factor Authentication</span></label></div>
+                                <button class="btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                        <div class="tab-content" id="notifications-tab">
+                            <div class="settings-form">
+                                <h4 style="margin-bottom:16px;color:var(--voyago-dark);">Email Notifications</h4>
+                                <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input
+                                            type="checkbox" checked><span>Email on New Booking</span></label></div>
+                                <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input
+                                            type="checkbox" checked><span>Email on Payment Received</span></label></div>
+                                <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input
+                                            type="checkbox" checked><span>Email on Rental Expiry</span></label></div>
+                                <h4 style="margin:20px 0 16px 0;color:var(--voyago-dark);">SMS Notifications</h4>
+                                <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input
+                                            type="checkbox"><span>SMS on Booking Confirmation</span></label></div>
+                                <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input
+                                            type="checkbox"><span>SMS on Payment Failure</span></label></div>
+                                <button class="btn-primary">Save Preferences</button>
+                            </div>
+                        </div>
+                        <div class="tab-content" id="pricing-tab">
+                            <div class="settings-form">
+                                <div class="form-group"><label>Late Return Charge Per Day (₹)</label><input
+                                        type="number" value="500" class="form-input"></div>
+                                <div class="form-group"><label>GST Percentage (%)</label><input type="number" value="18"
+                                        step="0.1" class="form-input"></div>
+                                <div class="form-group"><label>Default Security Deposit (₹)</label><input type="number"
+                                        value="5000" class="form-input"></div>
+                                <button class="btn-primary">Save Pricing Rules</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Admin Profile</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Name:</strong> Super Admin</p>
+                <p><strong>Role:</strong> Manager</p>
+                <p><strong>Email:</strong> superadmin@voyago.com</p>
+                <p><strong>Phone:</strong> +91-1800-VOYAGO</p>
+                <p><strong>Last Login:</strong> Today, 10:30 AM</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="logoutConfirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Logout</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to logout?</p>
+                <div style="display:flex;gap:12px;margin-top:20px;">
+                    <button class="btn-secondary btn-block" onclick="closeModal('logoutConfirmModal')">Cancel</button>
+                    <button class="btn-primary btn-block" id="confirmLogoutBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bookingDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Booking Details</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="bookingDetailBody"></div>
+        </div>
+    </div>
+
+    <div id="extendRentalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Extend Rental</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Current End Date</label><input type="date" id="currentEndDate" disabled
+                        class="form-input"></div>
+                <div class="form-group"><label>New End Date</label><input type="date" id="newEndDate"
+                        class="form-input"></div>
+                <div class="form-group"><label>Extra Days</label><input type="number" id="extraDays" disabled
+                        class="form-input"></div>
+                <div class="form-group"><label>Additional Charges (₹)</label><input type="number" id="additionalCharges"
+                        disabled class="form-input"></div>
+                <div class="form-group"><label>Payment Status</label><select class="form-input">
+                        <option>Collect on Return</option>
+                        <option>Paid Now</option>
+                    </select></div>
+                <button class="btn-primary btn-block">Confirm Extension</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <div id="notificationPanel" class="notification-panel">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button class="btn-secondary" id="markAllRead" style="padding:4px 8px;font-size:12px;">Mark all
+                read</button>
+        </div>
+        <div class="notification-list" id="notificationList"></div>
+    </div>
+
+    <div id="slidePanel" class="slide-panel">
+        <div class="slide-panel-header">
+            <h3>Add Vehicle</h3>
+            <button class="slide-panel-close">&times;</button>
+        </div>
+        <div class="slide-panel-body">
+            <div class="form-group"><label>Vehicle Name</label><input type="text"
+                    placeholder="e.g., 2024 Toyota Fortuner" class="form-input"></div>
+            <div class="form-group"><label>Vehicle Type</label><select class="form-input">
+                    <option>Sedan</option>
+                    <option>SUV</option>
+                    <option>Van</option>
+                    <option>Luxury</option>
+                </select></div>
+            <div class="form-group"><label>Registration Number</label><input type="text"
+                    placeholder="e.g., MH-01-AB-1234" class="form-input"></div>
+            <div class="form-group"><label>Number of Seats</label><input type="number" placeholder="5"
+                    class="form-input"></div>
+            <div class="form-group"><label>Per Day Rate (₹)</label><input type="number" placeholder="2500"
+                    class="form-input"></div>
+            <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox"
+                        checked><span>Available for Booking</span></label></div>
+            <button class="btn-primary btn-block">Save Vehicle</button>
+        </div>
+    </div>
+
+    <div id="packageSlidePanel" class="slide-panel">
+        <div class="slide-panel-header">
+            <h3 id="packagePanelTitle">Add Package</h3>
+            <button class="slide-panel-close" onclick="closePackagePanel()">&times;</button>
+        </div>
+        <div class="slide-panel-body">
+            <input type="hidden" id="editPackageId">
+            <div class="form-group"><label>Package Name</label><input type="text" id="pkgName"
+                    placeholder="e.g., Kerala Backwaters Tour" class="form-input"></div>
+            <div class="form-group"><label>Duration</label><input type="text" id="pkgDuration"
+                    placeholder="e.g., 5 Days" class="form-input"></div>
+            <div class="form-group"><label>Price (₹)</label><input type="number" id="pkgPrice" placeholder="e.g., 18500"
+                    class="form-input"></div>
+            <div class="form-group"><label>Vehicles</label><input type="number" id="pkgVehicles" placeholder="e.g., 12"
+                    class="form-input"></div>
+            <div class="form-group"><label>Status</label>
+                <select id="pkgStatus" class="form-input">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <button class="btn-primary btn-block" onclick="savePackage()">Save Package</button>
+        </div>
+    </div>
+
+    <div id="panelOverlay" class="panel-overlay"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Voyago — Log In</title>
+    <title>Voyago — Admin Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -400,59 +400,28 @@
             position: relative;
         }
 
-        .tabs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            border-bottom: 1px solid #e6e0d4;
-            margin-bottom: 22px;
-        }
-
-        .tab {
-            background: none;
-            border: 0;
-            font-family: inherit;
-            font-size: clamp(13px, 2.5vw, 14px);
-            color: var(--gray);
-            padding: 12px 4px 14px;
-            cursor: pointer;
+        .admin-badge {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            font-weight: 500;
-            position: relative;
-            transition: color .2s ease;
-            min-height: 44px;
-        }
-
-        .tab svg {
-            width: 16px;
-            height: 16px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 1.8;
-        }
-
-        .tab.active {
+            background: rgba(92, 26, 31, 0.08);
             color: var(--maroon);
+            font-size: 11px;
             font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 6px 16px 6px 12px;
+            border-radius: 100px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(92, 26, 31, 0.12);
         }
 
-        .tab.active::after {
-            content: "";
-            position: absolute;
-            left: 15%;
-            right: 15%;
-            bottom: -1px;
-            height: 3px;
-            background: var(--maroon);
-            border-radius: 3px 3px 0 0;
-        }
-
-        .tab:focus-visible {
-            outline: 2px solid var(--gold);
-            outline-offset: 2px;
-            border-radius: 4px;
+        .admin-badge svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--maroon);
+            fill: none;
+            stroke-width: 2;
         }
 
         form {
@@ -479,17 +448,6 @@
             letter-spacing: 0.12em;
             text-transform: uppercase;
             color: #5a5651;
-        }
-
-        .forgot {
-            font-size: 12px;
-            color: var(--maroon);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .forgot:hover {
-            text-decoration: underline;
         }
 
         .input-wrap {
@@ -680,74 +638,20 @@
             }
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 22px 0 16px;
-            color: var(--gray);
-            font-size: 11px;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: #e2dccf;
-        }
-
-        .social {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .social button {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 1px solid #e2dccf;
-            background: #fff;
-            cursor: pointer;
-            display: grid;
-            place-items: center;
-            transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-        }
-
-        .social button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-            border-color: #cfc7b7;
-        }
-
-        .social button:focus-visible {
-            outline: 2px solid var(--gold);
-            outline-offset: 2px;
-        }
-
-        .social svg {
-            width: 22px;
-            height: 22px;
-        }
-
-        .signup {
+        .footer-note {
             text-align: center;
             margin-top: 22px;
-            font-size: 13px;
-            color: #4d4944;
+            font-size: 12px;
+            color: var(--gray);
         }
 
-        .signup a {
+        .footer-note a {
             color: var(--maroon);
-            font-weight: 700;
+            font-weight: 600;
             text-decoration: none;
         }
 
-        .signup a:hover {
+        .footer-note a:hover {
             text-decoration: underline;
         }
 
@@ -791,20 +695,11 @@
             form {
                 gap: 12px;
             }
-
-            .divider {
-                margin: 16px 0 12px;
-            }
         }
 
         @media (max-width: 480px) {
             .card {
                 max-width: 95vw;
-            }
-
-            .social button {
-                width: 46px;
-                height: 46px;
             }
         }
     </style>
@@ -830,49 +725,41 @@
                     <path d="M14 14l5-2-1 3 1 3-5-2-3 1 1-2-1-2z" stroke-linejoin="round" />
                 </svg>
             </div>
-            <h1 class="welcome" id="welcome-heading">Welcome <span class="gold">Back</span></h1>
-            <p class="subhead">Continue your journey with us.</p>
+            <h1 class="welcome" id="welcome-heading">Admin <span class="gold">Portal</span></h1>
+            <p class="subhead">Secure access to the Voyago control panel.</p>
         </section>
 
         <section class="form-panel">
-            <div class="tabs" role="tablist" aria-label="Account type">
-                <button class="tab active" role="tab" aria-selected="true" data-tab="customer" id="tab-customer"
-                    aria-controls="form-region">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
-                    </svg>
-                    Returning Customer
-                </button>
-                <button class="tab" role="tab" aria-selected="false" data-tab="agent" id="tab-agent"
-                    aria-controls="form-region" tabindex="-1">
+            <div style="display:flex;justify-content:center;">
+                <span class="admin-badge" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
                         <rect x="3" y="7" width="18" height="13" rx="2" />
                         <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        <path d="M12 12v4" />
+                        <circle cx="12" cy="18" r="0.5" fill="currentColor" stroke="none" />
                     </svg>
-                    Travel Agent
-                </button>
+                    Administrator
+                </span>
             </div>
 
-            <form id="loginForm" novalidate region role="region" aria-labelledby="welcome-heading">
-                <div id="form-region" class="form-fade">
-                    <div class="field" id="identifier-field">
-                        <label class="lbl" for="identifier" id="identifier-label">Email Address</label>
+            <form id="loginForm" novalidate>
+                <div class="form-fade">
+                    <div class="field" id="email-field">
+                        <label class="lbl" for="email">Admin Email</label>
                         <div class="input-wrap">
-                            <svg class="left" viewBox="0 0 24 24" id="identifier-icon">
+                            <svg class="left" viewBox="0 0 24 24">
                                 <rect x="3" y="5" width="18" height="14" rx="2" />
                                 <path d="M3 7l9 7 9-7" />
                             </svg>
-                            <input type="email" id="identifier" name="identifier" autocomplete="email"
-                                placeholder="e.g. james.clark@heritage.com" required />
+                            <input type="email" id="email" name="email" autocomplete="email"
+                                placeholder="admin@voyago.com" required />
                         </div>
-                        <p class="error-msg" id="identifier-error">Please enter a valid email address.</p>
+                        <p class="error-msg" id="email-error">Please enter a valid admin email address.</p>
                     </div>
 
                     <div class="field" style="margin-top:14px;">
                         <div class="label-row">
                             <label class="lbl" for="password">Password</label>
-                            <a href="forgotpassword.html" class="forgot">Forgot Password?</a>
                         </div>
                         <div class="input-wrap has-toggle">
                             <svg class="left" viewBox="0 0 24 24">
@@ -907,36 +794,7 @@
                 </div>
             </form>
 
-            <div class="divider"><span>Or continue with</span></div>
-
-            <div class="social" aria-label="Social login options">
-                <button type="button" aria-label="Continue with Google">
-                    <svg viewBox="0 0 24 24">
-                        <path fill="#4285F4"
-                            d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.6c-.2 1.3-1 2.4-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.5z" />
-                        <path fill="#34A853"
-                            d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7C4.4 19.7 7.9 22 12 22z" />
-                        <path fill="#FBBC05"
-                            d="M6.2 13.6c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V6.9H2.7C2 8.4 1.6 10.1 1.6 12s.4 3.6 1.1 5.1l3.5-2.7z" />
-                        <path fill="#EA4335"
-                            d="M12 5.8c1.5 0 2.9.5 4 1.5l3-3C17.2 2.6 14.8 1.6 12 1.6 7.9 1.6 4.4 3.9 2.7 7.3l3.5 2.7C7 7.6 9.3 5.8 12 5.8z" />
-                    </svg>
-                </button>
-                <button type="button" aria-label="Continue with Apple">
-                    <svg viewBox="0 0 24 24" fill="#000">
-                        <path
-                            d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1 1-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.7 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.3.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.5-1-2.5-3.9zM14.3 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.2-.6 2.8-1.4z" />
-                    </svg>
-                </button>
-                <button type="button" aria-label="Continue with SSO">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="1.8">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
-                    </svg>
-                </button>
-            </div>
-
-            <p class="signup">New here? <a href="register.html">Create an account</a></p>
+            <p class="footer-note">Secure &bull; Admin access only</p>
         </section>
     </main>
 
@@ -944,23 +802,18 @@
         (function () {
             const $ = (s) => document.querySelector(s);
             const form = $('#loginForm');
-            const identifier = $('#identifier');
-            const identifierLabel = $('#identifier-label');
-            const identifierError = $('#identifier-error');
-            const identifierIcon = $('#identifier-icon');
+            const email = $('#email');
+            const emailError = $('#email-error');
             const password = $('#password');
             const passwordError = $('#password-error');
             const rememberCb = $('#remember');
             const loginBtn = $('#loginBtn');
-            const tabs = document.querySelectorAll('.tab');
-            const formRegion = $('#form-region');
-            let currentTab = 'customer';
 
             try {
-                if (localStorage.getItem('voyago_remember') === '1') {
+                if (localStorage.getItem('voyago_admin_remember') === '1') {
                     rememberCb.checked = true;
-                    const saved = localStorage.getItem('voyago_identifier');
-                    if (saved) identifier.value = saved;
+                    const saved = localStorage.getItem('voyago_admin_email');
+                    if (saved) email.value = saved;
                 }
             } catch (e) { }
 
@@ -970,81 +823,46 @@
                 const btn = $('#togglePwd');
                 btn.setAttribute('aria-pressed', String(isPwd));
                 btn.setAttribute('aria-label', isPwd ? 'Hide password' : 'Show password');
-                $('#eyeIcon').innerHTML = isPwd
-                    ? '<path d="M3 3l18 18"/><path d="M10.6 6.1A10.6 10.6 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-3.2 4M6.2 7.7A17 17 0 0 0 2 12s3.5 6 10 6c1.6 0 3-.3 4.2-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>'
-                    : '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
+                $('#eyeIcon').innerHTML = isPwd ?
+                    '<path d="M3 3l18 18"/><path d="M10.6 6.1A10.6 10.6 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-3.2 4M6.2 7.7A17 17 0 0 0 2 12s3.5 6 10 6c1.6 0 3-.3 4.2-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>' :
+                    '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
             });
-
-            tabs.forEach(t => {
-                t.addEventListener('click', () => switchTab(t.dataset.tab));
-                t.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-                        e.preventDefault();
-                        const other = [...tabs].find(x => x !== t);
-                        other.focus(); switchTab(other.dataset.tab);
-                    }
-                });
-            });
-
-            function switchTab(name) {
-                if (name === currentTab) return;
-                currentTab = name;
-                tabs.forEach(t => {
-                    const active = t.dataset.tab === name;
-                    t.classList.toggle('active', active);
-                    t.setAttribute('aria-selected', active);
-                    t.tabIndex = active ? 0 : -1;
-                });
-                if (name === 'agent') {
-                    identifierLabel.textContent = 'Agency ID';
-                    identifier.type = 'text';
-                    identifier.placeholder = 'e.g. AGT-48201';
-                    identifier.autocomplete = 'username';
-                    identifierIcon.innerHTML = '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>';
-                } else {
-                    identifierLabel.textContent = 'Email Address';
-                    identifier.type = 'email';
-                    identifier.placeholder = 'e.g. james.clark@heritage.com';
-                    identifier.autocomplete = 'email';
-                    identifierIcon.innerHTML = '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 7 9-7"/>';
-                }
-                clearError('identifier');
-                formRegion.classList.remove('form-fade');
-                void formRegion.offsetWidth;
-                formRegion.classList.add('form-fade');
-            }
 
             function setError(name, msg) {
                 const field = document.getElementById(name).closest('.field');
                 field.classList.add('has-error');
                 if (msg) document.getElementById(name + '-error').textContent = msg;
             }
+
             function clearError(name) {
                 document.getElementById(name).closest('.field').classList.remove('has-error');
             }
-            identifier.addEventListener('input', () => clearError('identifier'));
+
+            email.addEventListener('input', () => clearError('email'));
             password.addEventListener('input', () => clearError('password'));
 
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 let ok = true;
-                const idVal = identifier.value.trim();
-                if (currentTab === 'customer') {
-                    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!re.test(idVal)) { setError('identifier', 'Please enter a valid email address.'); ok = false; }
-                } else {
-                    if (idVal.length < 4) { setError('identifier', 'Agency ID must be at least 4 characters.'); ok = false; }
+                const emailVal = email.value.trim();
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!re.test(emailVal)) {
+                    setError('email', 'Please enter a valid admin email address.');
+                    ok = false;
                 }
-                if (password.value.length < 8) { setError('password', 'Password must be at least 8 characters.'); ok = false; }
+                if (password.value.length < 8) {
+                    setError('password', 'Password must be at least 8 characters.');
+                    ok = false;
+                }
                 if (!ok) return;
 
                 try {
                     if (rememberCb.checked) {
-                        localStorage.setItem('voyago_remember', '1');
-                        localStorage.setItem('voyago_identifier', idVal);
+                        localStorage.setItem('voyago_admin_remember', '1');
+                        localStorage.setItem('voyago_admin_email', emailVal);
                     } else {
-                        localStorage.removeItem('voyago_remember');
-                        localStorage.removeItem('voyago_identifier');
+                        localStorage.removeItem('voyago_admin_remember');
+                        localStorage.removeItem('voyago_admin_email');
                     }
                 } catch (e) { }
 
@@ -1055,6 +873,8 @@
                     loginBtn.classList.remove('loading');
                     loginBtn.disabled = false;
                     loginBtn.querySelector('.btn-label').textContent = 'Log In';
+                    // For demo: show success
+                    alert('Admin login successful! (Demo)');
                 }, 1500);
             });
         })();
