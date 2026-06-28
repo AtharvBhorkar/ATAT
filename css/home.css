@@ -391,7 +391,7 @@ input, select, button, textarea { font-family: var(--font-body); }
 .hero-bg {
   position: absolute;
   inset: -10% 0;
-  background-image: url('https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1920&q=85');
+  background-image: url('https://i.pinimg.com/736x/40/e3/1a/40e31aaec493afdb0b8cb0ba78dc0a61.jpg');
   background-size: cover;
   background-position: center;
   will-change: transform;
