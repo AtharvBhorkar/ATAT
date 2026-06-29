@@ -14,48 +14,64 @@ const packageRoutes = require('./routes/packages');
 const bookingRoutes = require('./routes/bookings');
 const contactRoutes = require('./routes/contacts');
 
-// App init
 const app = express();
 
 /* ───────────────────────────────
-   MIDDLEWARE
+CORS
 ─────────────────────────────── */
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://localhost:5500',
-    'http://127.0.0.1:5500'
-  ],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'http://localhost:5500',
+      'http://127.0.0.1:5500'
+    ],
+    credentials: true
+  })
+);
 
+/* ───────────────────────────────
+MIDDLEWARE
+─────────────────────────────── */
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 /* ───────────────────────────────
-   DEV LOGGING
+STATIC FRONTEND (IMPORTANT)
+─────────────────────────────── */
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+/* ───────────────────────────────
+DEV LOGGING
 ─────────────────────────────── */
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {
-    console.log(`${req.method} ${req.path} - ${req.ip}`);
+    console.log(`${req.method} ${req.path}`);
     next();
   });
 }
 
 /* ───────────────────────────────
-   HEALTH CHECK
+ROOT → HOME PAGE
+─────────────────────────────── */
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/home.html'));
+});
+
+/* ───────────────────────────────
+HEALTH CHECK
 ─────────────────────────────── */
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
-    message: 'Voyago API is running.',
+    message: 'Voyago API is running',
     timestamp: new Date().toISOString()
   });
 });
 
 /* ───────────────────────────────
-   ADMIN PAGES (IMPORTANT ORDER)
+ADMIN PAGES
 ─────────────────────────────── */
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin-login.html'));
@@ -65,13 +81,13 @@ app.get('/admin/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin-dashboard.html'));
 });
 
-// FIX: prevent refresh 404 issue
+// SPA refresh fix
 app.get('/admin/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin-dashboard.html'));
 });
 
 /* ───────────────────────────────
-   API ROUTES
+API ROUTES
 ─────────────────────────────── */
 app.use('/api/admin', adminAuthRoutes);
 app.use('/api/vehicles', vehicleRoutes);
@@ -79,29 +95,30 @@ app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/contacts', contactRoutes);
 
-// 404 handler
+/* ───────────────────────────────
+404 HANDLER
+─────────────────────────────── */
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: `API Route ${req.method} ${req.path} not found.`
+    message: `API Route ${req.method} ${req.path} not found`
   });
 });
 
 /* ───────────────────────────────
-   GLOBAL ERROR HANDLER
+GLOBAL ERROR HANDLER
 ─────────────────────────────── */
 app.use((err, req, res, next) => {
-  console.error('Server Error:', err);
+  console.error(err);
 
   res.status(err.statusCode || 500).json({
     success: false,
-    message: err.message || 'Internal Server Error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    message: err.message || 'Internal Server Error'
   });
 });
 
 /* ───────────────────────────────
-   START SERVER
+START SERVER
 ─────────────────────────────── */
 const PORT = process.env.PORT || 5000;
 
@@ -113,13 +130,11 @@ const start = async () => {
     app.listen(PORT, () => {
       console.log('\n========================================');
       console.log('  Voyago Server Running');
-      console.log(`  Mode: ${process.env.NODE_ENV || 'development'}`);
       console.log(`  Port: ${PORT}`);
-      console.log(`  URL: http://localhost:${PORT}`);
+      console.log(`  Home: http://localhost:${PORT}`);
       console.log(`  Admin: http://localhost:${PORT}/admin`);
       console.log('========================================\n');
     });
-
   } catch (error) {
     console.error('Server startup failed:', error);
     process.exit(1);
