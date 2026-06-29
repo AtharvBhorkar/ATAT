@@ -7,10 +7,15 @@ const vehicleSchema = new mongoose.Schema(
       required: [true, 'Vehicle name is required'],
       trim: true
     },
+    slug: {
+      type: String,
+      unique: true,
+      lowercase: true
+    },
     type: {
       type: String,
       required: [true, 'Vehicle type is required'],
-      enum: ['sedan', 'suv', 'hatchback', 'van', 'bus', 'tempo-traveller', 'bike', 'luxury']
+      enum: ['sedan', 'suv', 'muv', 'tempo', 'bus', 'luxury', 'hatchback', 'van', 'bike']
     },
     brand: {
       type: String,
@@ -26,6 +31,10 @@ const vehicleSchema = new mongoose.Schema(
     seats: {
       type: Number,
       default: 4
+    },
+    bags: {
+      type: Number,
+      default: 0
     },
     fuelType: {
       type: String,
@@ -61,6 +70,14 @@ const vehicleSchema = new mongoose.Schema(
       type: Boolean,
       default: true
     },
+    badge: {
+      type: String,
+      default: ''
+    },
+    badgeClass: {
+      type: String,
+      default: ''
+    },
     description: {
       type: String
     },
@@ -73,20 +90,15 @@ const vehicleSchema = new mongoose.Schema(
     totalTrips: {
       type: Number,
       default: 0
+    },
+    totalKmLakhs: {
+      type: Number,
+      default: 0
     }
   },
   {
     timestamps: true
   }
 );
-
-vehicleSchema.pre('save', function (next) {
-  if (this.dailyRate && !this.pricePerDay) {
-    this.pricePerDay = this.dailyRate;
-  } else if (this.pricePerDay && !this.dailyRate) {
-    this.dailyRate = this.pricePerDay;
-  }
-  next();
-});
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);

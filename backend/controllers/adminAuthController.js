@@ -1,63 +1,81 @@
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
 
-// Generate JWT Token
+
+
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '7d'
   });
 };
 
-// @desc    Register a new admin (optional — for multi-admin setups)
+// @desc    Register a new admin
 // @route   POST /api/admin/register
-// @access  Public (consider protecting this in production)
+// @access  Public
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, secretKey } = req.body;
 
-    // Validate input
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide name, email, and password.'
+        message: "Please provide name, email and password."
       });
     }
 
     if (password.length < 6) {
       return res.status(400).json({
         success: false,
-        message: 'Password must be at least 6 characters long.'
+        message: "Password must be at least 6 characters."
       });
     }
 
-    // Check if admin already exists
+    // Normalize both keys
+    const cleanKey = (secretKey || "")
+      .replace(/[^A-Za-z0-9]/g, "")
+      .toUpperCase();
+
+    const cleanEnvKey = (process.env.ADMIN_SECRET_KEY || "")
+      .replace(/[^A-Za-z0-9]/g, "")
+      .toUpperCase();
+
+    if (!cleanKey || cleanKey !== cleanEnvKey) {
+      console.log("Received:", cleanKey);
+      console.log("Expected:", cleanEnvKey);
+
+      return res.status(403).json({
+        success: false,
+        message: "Invalid or expired admin registration key."
+      });
+    }
+
     const existingAdmin = await Admin.findOne({ email });
+
     if (existingAdmin) {
       return res.status(400).json({
         success: false,
-        message: 'An admin with this email already exists.'
+        message: "An admin with this email already exists."
       });
     }
 
-    // Create admin
-    const admin = await Admin.create({ name, email, password });
+    const admin = await Admin.create({
+      name,
+      email,
+      password
+    });
 
-    // Generate token
     const token = generateToken(admin._id);
 
     res.status(201).json({
       success: true,
-      message: 'Admin registered successfully.',
+      message: "Admin registered successfully.",
       data: {
         token,
-        admin: {
-          id: admin._id,
-          name: admin.name,
-          email: admin.email,
-          role: admin.role
-        }
+        admin
       }
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -73,7 +91,6 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validate input
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -81,9 +98,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Find admin (include password for comparison)
     const admin = await Admin.findOne({ email }).select('+password');
-
     if (!admin) {
       return res.status(401).json({
         success: false,
@@ -91,9 +106,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Compare password
     const isMatch = await admin.comparePassword(password);
-
     if (!isMatch) {
       return res.status(401).json({
         success: false,
@@ -101,11 +114,8 @@ exports.login = async (req, res) => {
       });
     }
 
-    // Update last login
     admin.lastLogin = new Date();
     await admin.save({ validateBeforeSave: false });
-
-    // Generate token
     const token = generateToken(admin._id);
 
     res.json({
@@ -130,9 +140,35 @@ exports.login = async (req, res) => {
   }
 };
 
+
+// @desc    Logout admin
+// @route   POST /api/admin/logout
+// @access  Private/Public
+exports.logout = async (req, res) => {
+  try {
+    // If you're using cookies
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Logged out successfully.'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+
 // @desc    Get admin dashboard stats
 // @route   GET /api/admin/dashboard
-// @access  Private (Admin only)
+// @access  Private
 exports.dashboard = async (req, res) => {
   try {
     const Vehicle = require('../models/Vehicle');
@@ -146,22 +182,11 @@ exports.dashboard = async (req, res) => {
     const totalUsersCount = uniqueEmails.length;
 
     // Count totals
-    const [
-      totalVehicles,
-      totalPackages,
-      totalBookings,
-      pendingBookings,
-      confirmedBookings,
-      completedBookings,
-      cancelledBookings,
-      activeRentals,
-      totalContacts,
-      unreadContacts,
-      revenueAggregation,
-      pendingPaymentsAggregation
-    ] = await Promise.all([
+    const [totalVehicles, totalPackages, totalBookings, pendingBookings, confirmedBookings, completedBookings, cancelledBookings, totalContacts, unreadContacts, totalRevenue] = await Promise.all([
       Vehicle.countDocuments(),
-      Package.countDocuments({ active: true }),
+      Vehicle.countDocuments({ available: true }),          // ADDED
+      Package.countDocuments(),
+      Package.countDocuments({ active: true }),              // ADDED
       Booking.countDocuments(),
       Booking.countDocuments({ status: 'pending' }),
       Booking.countDocuments({ status: 'confirmed' }),
@@ -187,23 +212,19 @@ exports.dashboard = async (req, res) => {
       ])
     ]);
 
-    // Recent bookings (last 5)
     const recentBookings = await Booking.find()
       .populate('vehicleId', 'name type brand')
       .populate('packageId', 'title destination')
       .sort({ createdAt: -1 })
       .limit(5);
 
-    // Recent contacts (last 5)
     const recentContacts = await Contact.find()
       .sort({ createdAt: -1 })
       .limit(5);
 
-    // Bookings by type
     const vehicleBookings = await Booking.countDocuments({ bookingType: 'vehicle' });
     const packageBookings = await Booking.countDocuments({ bookingType: 'package' });
 
-    // Revenue breakdown
     const vehicleRevenue = await Booking.aggregate([
       { $match: { bookingType: 'vehicle', status: { $in: ['confirmed', 'completed'] } } },
       { $group: { _id: null, total: { $sum: '$totalPrice' } } }
@@ -213,17 +234,13 @@ exports.dashboard = async (req, res) => {
       { $group: { _id: null, total: { $sum: '$totalPrice' } } }
     ]);
 
-    // Monthly bookings (last 6 months)
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
     const monthlyBookings = await Booking.aggregate([
       { $match: { createdAt: { $gte: sixMonthsAgo } } },
       {
         $group: {
-          _id: {
-            year: { $year: '$createdAt' },
-            month: { $month: '$createdAt' }
-          },
+          _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
           count: { $sum: 1 },
           cancellations: {
             $sum: { $cond: [{ $eq: ['$status', 'cancelled'] }, 1, 0] }
@@ -234,53 +251,14 @@ exports.dashboard = async (req, res) => {
       { $sort: { '_id.year': 1, '_id.month': 1 } }
     ]);
 
-    // Payment methods aggregation
-    const paymentMethodsStats = await Payment.aggregate([
-      { $group: { _id: '$method', count: { $sum: 1 } } }
-    ]);
-
-    // Generate real-time combined activity feed
-    const [recentBookingsList, recentPaymentsList, recentVehiclesList] = await Promise.all([
-      Booking.find().sort({ createdAt: -1 }).limit(3),
-      Payment.find().sort({ date: -1 }).limit(3),
-      Vehicle.find().sort({ createdAt: -1 }).limit(3)
-    ]);
-
-    const recentActivity = [];
-    recentBookingsList.forEach(b => {
-      recentActivity.push({
-        type: 'booking',
-        title: `Booking ${b.status === 'confirmed' ? 'Confirmed' : b.status === 'completed' ? 'Completed' : 'Created'}`,
-        description: `Booking #${b.bookingId || b._id} for customer ${b.name}`,
-        time: b.createdAt
-      });
-    });
-    recentPaymentsList.forEach(p => {
-      recentActivity.push({
-        type: 'payment',
-        title: `Payment ${p.status === 'paid' ? 'Received' : 'Failed'}`,
-        description: `₹${p.amount} from customer ${p.customer}`,
-        time: p.date
-      });
-    });
-    recentVehiclesList.forEach(v => {
-      recentActivity.push({
-        type: 'vehicle',
-        title: 'Vehicle Added',
-        description: `${v.name} added to fleet`,
-        time: v.createdAt
-      });
-    });
-    // Sort combined activities by date descending
-    recentActivity.sort((a, b) => new Date(b.time) - new Date(a.time));
-    const recentActivityFeed = recentActivity.slice(0, 5);
-
     res.json({
       success: true,
       data: {
         stats: {
           totalVehicles,
+          availableVehicles,       // ADDED
           totalPackages,
+          activePackages,          // ADDED
           totalBookings,
           pendingBookings,
           confirmedBookings,
@@ -299,9 +277,7 @@ exports.dashboard = async (req, res) => {
         },
         recentBookings,
         recentContacts,
-        monthlyBookings,
-        paymentMethodsStats,
-        recentActivityFeed
+        monthlyBookings
       }
     });
   } catch (error) {
@@ -314,7 +290,7 @@ exports.dashboard = async (req, res) => {
 
 // @desc    Get current admin profile
 // @route   GET /api/admin/me
-// @access  Private (Admin only)
+// @access  Private
 exports.getMe = async (req, res) => {
   try {
     const admin = await Admin.findById(req.admin._id);
@@ -338,7 +314,6 @@ exports.getMe = async (req, res) => {
 };
 
 // @desc    Seed default admin from .env
-// @access  Called at server startup
 exports.seedDefaultAdmin = async () => {
   try {
     const existingAdmin = await Admin.findOne({ email: process.env.ADMIN_EMAIL });
