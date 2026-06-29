@@ -14,7 +14,6 @@ const vehicleSchema = new mongoose.Schema(
     },
     brand: {
       type: String,
-      required: [true, 'Brand is required'],
       trim: true
     },
     model: {
@@ -26,7 +25,7 @@ const vehicleSchema = new mongoose.Schema(
     },
     seats: {
       type: Number,
-      required: [true, 'Seat count is required']
+      default: 4
     },
     fuelType: {
       type: String,
@@ -41,8 +40,10 @@ const vehicleSchema = new mongoose.Schema(
       default: true
     },
     pricePerDay: {
-      type: Number,
-      required: [true, 'Price per day is required']
+      type: Number
+    },
+    dailyRate: {
+      type: Number
     },
     pricePerKm: {
       type: Number
@@ -78,5 +79,14 @@ const vehicleSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+vehicleSchema.pre('save', function (next) {
+  if (this.dailyRate && !this.pricePerDay) {
+    this.pricePerDay = this.dailyRate;
+  } else if (this.pricePerDay && !this.dailyRate) {
+    this.dailyRate = this.pricePerDay;
+  }
+  next();
+});
 
 module.exports = mongoose.model('Vehicle', vehicleSchema);

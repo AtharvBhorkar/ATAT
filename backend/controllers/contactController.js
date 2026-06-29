@@ -69,14 +69,17 @@ exports.createContact = async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
 
-    if (!name || !email || !subject || !message) {
+    if (!name || !email || !message) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide name, email, subject, and message.'
+        message: 'Please provide name, email, and message.'
       });
     }
 
-    const contact = await Contact.create(req.body);
+    const contact = await Contact.create({
+      ...req.body,
+      subject: subject || 'General Inquiry'
+    });
     res.status(201).json({
       success: true,
       message: 'Your message has been sent successfully. We will get back to you soon.',

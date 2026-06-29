@@ -139,9 +139,27 @@ exports.dashboard = async (req, res) => {
     const Package = require('../models/Package');
     const Booking = require('../models/Booking');
     const Contact = require('../models/Contact');
+    const Payment = require('../models/Payment');
+
+    // Count unique emails from bookings to estimate total users
+    const uniqueEmails = await Booking.distinct('email');
+    const totalUsersCount = uniqueEmails.length;
 
     // Count totals
-    const [totalVehicles, totalPackages, totalBookings, pendingBookings, confirmedBookings, completedBookings, cancelledBookings, totalContacts, unreadContacts, totalRevenue] = await Promise.all([
+    const [
+      totalVehicles,
+      totalPackages,
+      totalBookings,
+      pendingBookings,
+      confirmedBookings,
+      completedBookings,
+      cancelledBookings,
+      activeRentals,
+      totalContacts,
+      unreadContacts,
+      revenueAggregation,
+      pendingPaymentsAggregation
+    ] = await Promise.all([
       Vehicle.countDocuments(),
       Package.countDocuments({ active: true }),
       Booking.countDocuments(),
@@ -149,11 +167,23 @@ exports.dashboard = async (req, res) => {
       Booking.countDocuments({ status: 'confirmed' }),
       Booking.countDocuments({ status: 'completed' }),
       Booking.countDocuments({ status: 'cancelled' }),
+      Booking.countDocuments({ status: 'in-progress' }),
       Contact.countDocuments(),
       Contact.countDocuments({ isRead: false }),
       Booking.aggregate([
         { $match: { status: { $in: ['confirmed', 'completed'] } } },
         { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+      ]),
+      Booking.aggregate([
+        { $match: { paymentStatus: { $ne: 'paid' }, status: { $ne: 'cancelled' } } },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: { $subtract: ['$totalPrice', '$advancePaid'] }
+            }
+          }
+        }
       ])
     ]);
 
@@ -195,11 +225,55 @@ exports.dashboard = async (req, res) => {
             month: { $month: '$createdAt' }
           },
           count: { $sum: 1 },
+          cancellations: {
+            $sum: { $cond: [{ $eq: ['$status', 'cancelled'] }, 1, 0] }
+          },
           revenue: { $sum: '$totalPrice' }
         }
       },
       { $sort: { '_id.year': 1, '_id.month': 1 } }
     ]);
+
+    // Payment methods aggregation
+    const paymentMethodsStats = await Payment.aggregate([
+      { $group: { _id: '$method', count: { $sum: 1 } } }
+    ]);
+
+    // Generate real-time combined activity feed
+    const [recentBookingsList, recentPaymentsList, recentVehiclesList] = await Promise.all([
+      Booking.find().sort({ createdAt: -1 }).limit(3),
+      Payment.find().sort({ date: -1 }).limit(3),
+      Vehicle.find().sort({ createdAt: -1 }).limit(3)
+    ]);
+
+    const recentActivity = [];
+    recentBookingsList.forEach(b => {
+      recentActivity.push({
+        type: 'booking',
+        title: `Booking ${b.status === 'confirmed' ? 'Confirmed' : b.status === 'completed' ? 'Completed' : 'Created'}`,
+        description: `Booking #${b.bookingId || b._id} for customer ${b.name}`,
+        time: b.createdAt
+      });
+    });
+    recentPaymentsList.forEach(p => {
+      recentActivity.push({
+        type: 'payment',
+        title: `Payment ${p.status === 'paid' ? 'Received' : 'Failed'}`,
+        description: `₹${p.amount} from customer ${p.customer}`,
+        time: p.date
+      });
+    });
+    recentVehiclesList.forEach(v => {
+      recentActivity.push({
+        type: 'vehicle',
+        title: 'Vehicle Added',
+        description: `${v.name} added to fleet`,
+        time: v.createdAt
+      });
+    });
+    // Sort combined activities by date descending
+    recentActivity.sort((a, b) => new Date(b.time) - new Date(a.time));
+    const recentActivityFeed = recentActivity.slice(0, 5);
 
     res.json({
       success: true,
@@ -212,9 +286,12 @@ exports.dashboard = async (req, res) => {
           confirmedBookings,
           completedBookings,
           cancelledBookings,
+          activeRentals,
           totalContacts,
           unreadContacts,
-          totalRevenue: totalRevenue[0]?.total || 0,
+          totalRevenue: revenueAggregation[0]?.total || 0,
+          pendingPayments: pendingPaymentsAggregation[0]?.total || 0,
+          totalUsers: totalUsersCount,
           vehicleBookings,
           packageBookings,
           vehicleRevenue: vehicleRevenue[0]?.total || 0,
@@ -222,7 +299,9 @@ exports.dashboard = async (req, res) => {
         },
         recentBookings,
         recentContacts,
-        monthlyBookings
+        monthlyBookings,
+        paymentMethodsStats,
+        recentActivityFeed
       }
     });
   } catch (error) {
