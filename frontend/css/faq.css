@@ -1,4 +1,4 @@
-/* 
+﻿/* 
     Voyago Premium Stylesheet 
     - FAQ Page Redesign
 */
@@ -24,7 +24,7 @@ body {
 
 .text-center { text-align: center; }
 
-/* ══════════════ HERO SECTION ══════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• HERO SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .faq-hero {
     position: relative;
     padding-top: 12rem;
@@ -105,7 +105,7 @@ body {
     outline: none;
 }
 
-/* ══════════════ QUICK LINKS ══════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• QUICK LINKS â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .faq-quick-links {
     position: relative;
     margin-top: -3rem; /* Overlap hero */
@@ -180,7 +180,7 @@ body {
     letter-spacing: 1px;
 }
 
-/* ══════════════ MAIN LAYOUT & SIDEBAR ══════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• MAIN LAYOUT & SIDEBAR â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .faq-main {
     padding: 4rem 0 6rem;
 }
@@ -319,7 +319,7 @@ body {
     gap: 0.5rem;
 }
 
-/* ══════════════ CONTENT AREA ══════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• CONTENT AREA â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .faq-group {
     margin-bottom: 4rem;
 }
@@ -405,7 +405,7 @@ body {
     line-height: 1.7;
 }
 
-/* ══════════════ FEATURES SECTION ══════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• FEATURES SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .faq-features {
     padding: 6rem 0;
     background: #fff;
@@ -485,7 +485,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* ══════════════ CTA BANNER ══════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• CTA BANNER â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .cta-banner {
     padding: 8rem 5%;
     position: relative;
@@ -582,7 +582,7 @@ body {
     box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
 }
 
-/* ══════════════ SCROLL ANIMATIONS ══════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• SCROLL ANIMATIONS â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .fade-up {
     opacity: 0;
     transform: translateY(40px);
@@ -599,7 +599,7 @@ body {
 .delay-3 { transition-delay: 0.3s; }
 
 
-/* ══════════════ RESPONSIVE ══════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â• RESPONSIVE â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 @media (max-width: 1024px) {
     .faq-layout {
         grid-template-columns: 280px 1fr;
@@ -640,3 +640,91 @@ body {
         font-size: 3rem;
     }
 }
+
+
+/* --- EXACT HOME PAGE NAVBAR AND FOOTER OVERRIDES --- */
+.navbar, .footer { font-family: 'Inter', system-ui, sans-serif !important; }
+.navbar * { font-family: inherit; }
+.footer * { font-family: inherit; }
+.nav-links a { font-size: 13px !important; }
+.footer-brand p { font-size: 13.5px !important; }
+.footer-col h5 { font-size: 11px !important; font-family: 'Inter', system-ui, sans-serif !important; }
+.footer-col ul a { font-size: 13.5px !important; }
+.contact-list li a, .contact-list li span { font-size: 13.5px !important; }
+.footer-hours strong { font-size: 11px !important; font-family: 'Inter', system-ui, sans-serif !important; }
+.footer-hours span { font-size: 13px !important; }
+.footer-bottom p { font-size: 12.5px !important; }
+.footer-legal a { font-size: 12.5px !important; }
+
+/* ==================================== NAVBAR ==================================== */ .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: var(--nav-h); display: flex; align-items: center; transition: background var(--transition), box-shadow var(--transition); } .navbar.scrolled { background: rgba(245,239,230,0.97); backdrop-filter: blur(14px); box-shadow: 0 2px 24px rgba(26,16,16,.1); } .nav-inner { display: flex; align-items: center; gap: 32px; max-width: 1280px; width: 100%; margin: 0 auto; padding: 0 24px; } .logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: 0.1em; color: var(--white); text-transform: uppercase; transition: color var(--transition); flex-shrink: 0; } .navbar.scrolled .logo { color: var(--maroon-dark); } .logo-icon { color: var(--gold); transition: color var(--transition); } .navbar.scrolled .logo-icon { color: var(--maroon); } .nav-links { display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; list-style: none; } .nav-links a { color: rgba(255,255,255,.88); font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 50px; transition: all var(--transition); display: block; } .navbar.scrolled .nav-links a { color: var(--text); } .nav-links a:hover, .nav-links a.active { color: var(--white); background: rgba(255,255,255,.14); } .navbar.scrolled .nav-links a:hover, .navbar.scrolled .nav-links a.active { color: var(--maroon); background: rgba(110,31,43,.08); } .nav-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; } .nav-actions .btn-ghost { color: rgba(255,255,255,.88); } .navbar.scrolled .nav-actions .btn-ghost { color: var(--text); } .nav-actions .btn-primary { font-size: 13px; padding: 10px 22px; } .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; margin-left: auto; } .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all var(--transition); } .navbar.scrolled .hamburger span { background: var(--dark); } .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); } .hamburger.open span:nth-child(2) { opacity: 0; } .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+/* ==================================== FOOTER ==================================== */ .footer { background: var(--dark); padding-top: 80px; } .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 60px; padding-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,.08); } .footer-brand .footer-logo { color: var(--white); margin-bottom: 20px; } .footer-brand .footer-logo .logo-icon { color: var(--gold); } .footer-brand p { font-size: 13.5px; color: rgba(255,255,255,.5); line-height: 1.75; max-width: 300px; margin-bottom: 28px; } .social-links { display: flex; gap: 12px; } .social-links a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,.12); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.5); transition: all var(--transition); } .social-links a:hover { background: var(--maroon); border-color: var(--maroon); color: var(--white); } .footer-col h5 { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; } .footer-col ul li { margin-bottom: 10px; } .footer-col ul a { font-size: 13.5px; color: rgba(255,255,255,.5); transition: color var(--transition); } .footer-col ul a:hover { color: var(--white); } .contact-list li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; } .contact-list li svg { flex-shrink: 0; color: var(--rust); margin-top: 2px; } .contact-list li a, .contact-list li span { font-size: 13.5px; color: rgba(255,255,255,.55); transition: color var(--transition); } .contact-list li a:hover { color: var(--white); } .footer-hours { margin-top: 24px; display: flex; flex-direction: column; gap: 4px; } .footer-hours strong { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; } .footer-hours span { font-size: 13px; color: rgba(255,255,255,.45); } .footer-bottom { padding: 22px 0; } .footer-bottom-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; } .footer-bottom p { font-size: 12.5px; color: rgba(255,255,255,.3); } .footer-legal { display: flex; gap: 24px; flex-wrap: wrap; } .footer-legal a { font-size: 12.5px; color: rgba(255,255,255,.35); transition: color var(--transition); } .footer-legal a:hover { color: rgba(255,255,255,.7); }
+
+/* Ensure Navbar and Footer use Inter font exactly like the Home page to match sizes */
+.navbar, .footer { font-family: var(--font-body) !important; line-height: 1.7 !important; -webkit-font-smoothing: antialiased !important; -moz-osx-font-smoothing: grayscale !important; font-weight: 400 !important; } 
+
+/* Fix missing global resets for navbar and footer */
+.navbar a, .footer a { text-decoration: none !important; }
+.navbar ul, .footer ul { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+.navbar *, .footer * { box-sizing: border-box !important; }
+
+/* Fix missing global padding/margin resets and container width for footer */
+.footer h1, .footer h2, .footer h3, .footer h4, .footer h5, .footer h6, .footer p { margin-top: 0 !important; }
+
+.footer .container { max-width: 1280px !important; padding: 0 24px !important; width: 100% !important; }
+
+/* Fix missing responsive media queries for the footer */
+@media (max-width: 1100px) {
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
+}
+@media (max-width: 700px) {
+  .footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .footer-bottom-inner { flex-direction: column !important; text-align: center !important; }
+  .footer-legal { justify-content: center !important; }
+}
+
+/* Unify global container to perfectly match home.css */
+.container {
+    width: 100% !important;
+    max-width: 1280px !important;
+    margin: 0 auto !important;
+    padding: 0 24px !important;
+}
+
+/* Variables required by the Navbar and Footer */
+:root {
+  --maroon:       #6E1F2B;
+  --maroon-dark:  #4d1520;
+  --maroon-mid:   #8a2535;
+  --gold:         #D9A441;
+  --gold-muted:   #c4903a;
+  --rust:         #A35334;
+  --charcoal:     #3A3A3A;
+  --charcoal-mid: #555555;
+  --ivory:        #F5EFE6;
+  --ivory-deep:   #EDE5D8;
+  --dark:         #1A1010;
+  --text:         #2A1A1A;
+  --text-muted:   #7a6a64;
+  --white:        #FFFFFF;
+  --nav-h:        80px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --transition:   0.3s ease;
+}
+
+/* Restore logo styling that was broken by the aggressive navbar reset */
+.navbar .logo, .footer .logo {
+    color: var(--white) !important;
+    font-family: var(--font-display) !important;
+}
+.navbar.scrolled .logo {
+    color: var(--maroon-dark) !important;
+}
+
+/* Reset bottom margin for copyright text */
+.footer-bottom p { margin-bottom: 0 !important; }
+
+/* Unify footer link opacities */
+.footer-legal a { color: rgba(255, 255, 255, 0.5) !important; }
+.footer-legal a:hover { color: var(--white) !important; }
