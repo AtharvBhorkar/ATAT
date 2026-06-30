@@ -182,11 +182,26 @@ exports.dashboard = async (req, res) => {
     const totalUsersCount = uniqueEmails.length;
 
     // Count totals
-    const [totalVehicles, totalPackages, totalBookings, pendingBookings, confirmedBookings, completedBookings, cancelledBookings, totalContacts, unreadContacts, totalRevenue] = await Promise.all([
+    const [
+      totalVehicles,
+      availableVehicles,
+      totalPackages,
+      activePackages,
+      totalBookings,
+      pendingBookings,
+      confirmedBookings,
+      completedBookings,
+      cancelledBookings,
+      activeRentals,
+      totalContacts,
+      unreadContacts,
+      revenueAggregation,
+      pendingPaymentsAggregation
+    ] = await Promise.all([
       Vehicle.countDocuments(),
-      Vehicle.countDocuments({ available: true }),          // ADDED
+      Vehicle.countDocuments({ available: true }),
       Package.countDocuments(),
-      Package.countDocuments({ active: true }),              // ADDED
+      Package.countDocuments({ active: true }),
       Booking.countDocuments(),
       Booking.countDocuments({ status: 'pending' }),
       Booking.countDocuments({ status: 'confirmed' }),
@@ -251,14 +266,56 @@ exports.dashboard = async (req, res) => {
       { $sort: { '_id.year': 1, '_id.month': 1 } }
     ]);
 
+    // Payment methods aggregation
+    const paymentMethodsStats = await Payment.aggregate([
+      { $group: { _id: '$method', count: { $sum: 1 } } }
+    ]);
+
+    // Generate real-time combined activity feed
+    const [recentBookingsList, recentPaymentsList, recentVehiclesList] = await Promise.all([
+      Booking.find().sort({ createdAt: -1 }).limit(3),
+      Payment.find().sort({ date: -1 }).limit(3),
+      Vehicle.find().sort({ createdAt: -1 }).limit(3)
+    ]);
+
+    const recentActivity = [];
+    recentBookingsList.forEach(b => {
+      recentActivity.push({
+        type: 'booking',
+        title: `Booking ${b.status === 'confirmed' ? 'Confirmed' : b.status === 'completed' ? 'Completed' : 'Created'}`,
+        description: `Booking #${b.bookingId || b._id} for customer ${b.name}`,
+        time: b.createdAt
+      });
+    });
+    recentPaymentsList.forEach(p => {
+      recentActivity.push({
+        type: 'payment',
+        title: `Payment ${p.status === 'paid' ? 'Received' : 'Failed'}`,
+        description: `₹${p.amount} from customer ${p.customer}`,
+        time: p.date
+      });
+    });
+    recentVehiclesList.forEach(v => {
+      recentActivity.push({
+        type: 'vehicle',
+        title: 'Vehicle Added',
+        description: `${v.name} added to fleet`,
+        time: v.createdAt
+      });
+    });
+    
+    // Sort combined activities by date descending
+    recentActivity.sort((a, b) => new Date(b.time) - new Date(a.time));
+    const recentActivityFeed = recentActivity.slice(0, 5);
+
     res.json({
       success: true,
       data: {
         stats: {
           totalVehicles,
-          availableVehicles,       // ADDED
+          availableVehicles,
           totalPackages,
-          activePackages,          // ADDED
+          activePackages,
           totalBookings,
           pendingBookings,
           confirmedBookings,
@@ -277,7 +334,9 @@ exports.dashboard = async (req, res) => {
         },
         recentBookings,
         recentContacts,
-        monthlyBookings
+        monthlyBookings,
+        paymentMethodsStats,
+        recentActivityFeed
       }
     });
   } catch (error) {
