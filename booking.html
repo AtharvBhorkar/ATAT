@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/home.css" />
-  <link rel="stylesheet" href="css/booking.css?v=5" />
+  <link rel="stylesheet" href="css/booking.css?v=6" />
 </head>
 <body>
 
@@ -37,7 +37,7 @@
 
       <div class="nav-actions">
         <a href="login.html" class="btn-ghost">Sign In</a>
-        <a href="booking.html" class="btn-primary" style="background: var(--maroon-dark); border-color: var(--maroon-dark);">Book a Ride</a>
+        <a href="booking.html" class="btn-primary">Book a Ride</a>
       </div>
 
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -74,7 +74,7 @@
           </div>
           <div class="step-item" data-step="5" id="stepIndicator5">
             <div class="step-circle">5</div>
-            <span class="step-label">Payment</span>
+            <span class="step-label">Confirm Booking</span>
           </div>
         </div>
       </div>
@@ -283,122 +283,31 @@
                   <span>Go Back</span>
                 </button>
                 <button type="button" class="btn-step-next" id="goToStep5Btn">
-                  <span>Continue to Payment</span>
+                  <span>Continue to Confirm Booking</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </button>
               </div>
             </div>
 
-            <!-- STEP 5: PAYMENT -->
+            <!-- STEP 5: CONFIRMATION -->
             <div class="form-step-view" id="stepView5">
-              <h2 class="step-title">Step 5: Secure Payment</h2>
-              <p class="step-subtitle">Complete your transaction using our safe checkout</p>
+              <h2 class="step-title">Step 5: Confirm Booking</h2>
+              <p class="step-subtitle">Please review your details and confirm your reservation</p>
               
-              <div class="payment-method-selector">
-                <label class="payment-method-card active">
-                  <input type="radio" name="paymentMethod" value="card" checked />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="2" y="5" width="20" height="14" rx="2" />
-                      <line x1="2" y1="10" x2="22" y2="10" />
-                      <rect x="6" y="14" width="3" height="2" rx="0.5" />
-                    </svg>
-                    <strong>Credit / Debit Card</strong>
-                  </span>
-                </label>
-
-                <label class="payment-method-card">
-                  <input type="radio" name="paymentMethod" value="upi" />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="5" y="2" width="14" height="20" rx="2" />
-                      <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
-                      <path d="M9 10l2 2 4-4" />
-                    </svg>
-                    <strong>UPI (Instant Pay)</strong>
-                  </span>
-                </label>
-
-                <label class="payment-method-card">
-                  <input type="radio" name="paymentMethod" value="cash" />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="2" y="6" width="20" height="12" rx="2" />
-                      <circle cx="12" cy="12" r="3" />
-                      <path d="M6 12h.01M18 12h.01" stroke-width="2.5" />
-                    </svg>
-                    <strong>Pay to Driver</strong>
-                  </span>
-                </label>
-              </div>
-
-              <!-- Card form inputs container -->
-              <div class="card-details-form" id="cardDetailsForm">
-                <div class="form-grid">
-                  <div class="form-group span-full">
-                    <label for="cardNumber" class="form-label">Card Number</label>
-                    <div class="input-wrapper">
-                      <span class="input-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                      </span>
-                      <input type="text" id="cardNumber" class="form-input-text" placeholder="4111 2222 3333 4444" maxlength="19" />
-                    </div>
-                    <div class="error-msg" id="cardNumError">Please enter a valid card number.</div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="cardExpiry" class="form-label">Expiry Date</label>
-                    <input type="text" id="cardExpiry" class="form-input-text" placeholder="MM/YY" maxlength="5" />
-                    <div class="error-msg" id="cardExpiryError">Enter date in MM/YY format.</div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="cardCvv" class="form-label">CVV / CVV2</label>
-                    <input type="password" id="cardCvv" class="form-input-text" placeholder="***" maxlength="4" />
-                    <div class="error-msg" id="cardCvvError">Enter 3 or 4 digit CVV.</div>
-                  </div>
+              <div class="booking-confirmation-notice">
+                <div class="confirm-icon-wrap">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--maroon)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
                 </div>
+                <h3>Ready to Confirm Your Ride?</h3>
+                <p>By confirming, you agree to our booking policies. Your driver details and trip verification code will be sent to your contact email and phone number shortly.</p>
               </div>
 
-              <!-- UPI Info -->
-              <div class="upi-info-container" id="upiInfoContainer" style="display: none;">
-                <div class="form-group">
-                  <label for="upiId" class="form-label">UPI ID *</label>
-                  <input type="text" id="upiId" class="form-input-text" placeholder="username@upi" />
-                  <div class="error-msg" id="upiError">Please enter a valid UPI ID (e.g. name@okaxis).</div>
-                </div>
-                <div style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">
-                  We will send a payment request to your UPI app. Open Google Pay, PhonePe, or BHIM to approve it.
-                </div>
-              </div>
-
-              <!-- Cash Info -->
-              <div class="cash-info-container" id="cashInfoContainer" style="display: none;">
-                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 8px;">
-                  You can pay the full amount of <strong id="cashPayableAmt">₹ 4,800</strong> directly to the driver at the end of the trip via Cash, UPI, or Card.
-                </p>
-                <div style="background: rgba(110,31,43,.04); border-left: 3px solid var(--maroon); padding: 12px; border-radius: 4px; font-size: 13px;">
-                  <strong>Note:</strong> A verification OTP will be sent to your mobile number prior to dispatch.
-                </div>
-              </div>
-
-              <!-- Terms checkbox -->
-              <div class="terms-acceptance-checkbox">
-                <label class="custom-checkbox-container">
-                  <input type="checkbox" id="termsCheck" required />
-                  <span class="checkmark"></span>
-                  <span class="checkbox-text">I agree to the <a href="terms-condition.html" target="_blank">Terms &amp; Conditions</a>, <a href="privacy.html" target="_blank">Privacy Policy</a>, and <a href="cancellation-policy.html" target="_blank">Cancellation Policy</a>.</span>
-                </label>
-                <div class="error-msg" id="termsError">You must agree to the terms to proceed.</div>
-              </div>
-
-              <div class="step-actions">
-                <button type="button" class="btn-step-prev-nav" id="backToStep4Btn">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                  <span>Go Back</span>
-                </button>
-                <button type="button" class="btn-step-next" id="confirmPaymentBtn">
-                  <span>Pay &amp; Confirm Booking</span>
+              <div class="step-actions" style="justify-content: center; margin-top: 32px;">
+                <button type="button" class="btn-step-next" id="confirmPaymentBtn" style="width: 100%; max-width: 320px; justify-content: center;">
+                  <span>Confirm Booking</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 </button>
               </div>
@@ -408,7 +317,7 @@
             <div class="form-step-view" id="stepViewLoading">
               <div class="payment-processing-loader">
                 <div class="spinner-ring"></div>
-                <h3>Processing Payment...</h3>
+                <h3>Processing Booking....</h3>
                 <p>Securing connection with bank server. Please do not refresh this page or close your browser.</p>
               </div>
             </div>
@@ -647,6 +556,6 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <script src="js/booking.js?v=5"></script>
+  <script src="js/booking.js?v=6"></script>
 </body>
 </html>

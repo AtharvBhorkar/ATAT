@@ -350,9 +350,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  backToStep4Btn.addEventListener('click', () => {
-    showStep(4);
-  });
+  if (backToStep4Btn) {
+    backToStep4Btn.addEventListener('click', () => {
+      showStep(4);
+    });
+  }
 
   confirmPaymentBtn.addEventListener('click', () => {
     if (validateStep5()) {
@@ -597,7 +599,9 @@ document.addEventListener('DOMContentLoaded', () => {
     summaryTotal.textContent = `₹ ${total.toLocaleString('en-IN')}`;
 
     // Update Cash payable placeholder on Step 5 if needed
-    cashPayableAmt.textContent = `₹ ${total.toLocaleString('en-IN')}`;
+    if (cashPayableAmt) {
+      cashPayableAmt.textContent = `₹ ${total.toLocaleString('en-IN')}`;
+    }
 
     // Update details in Step 2 vehicle pricing tags dynamically as well!
     updateVehicleListPricings(distance);
@@ -721,25 +725,29 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Credit Card formatting (gaps after 4 digits)
-  cardNumber.addEventListener('input', (e) => {
-    let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-    let formatted = '';
-    for (let i = 0; i < val.length; i++) {
-      if (i > 0 && i % 4 === 0) formatted += ' ';
-      formatted += val[i];
-    }
-    e.target.value = formatted;
-  });
+  if (cardNumber) {
+    cardNumber.addEventListener('input', (e) => {
+      let val = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+      let formatted = '';
+      for (let i = 0; i < val.length; i++) {
+        if (i > 0 && i % 4 === 0) formatted += ' ';
+        formatted += val[i];
+      }
+      e.target.value = formatted;
+    });
+  }
 
   // Expiry date formatting (MM/YY)
-  cardExpiry.addEventListener('input', (e) => {
-    let val = e.target.value.replace(/\//g, '').replace(/[^0-9]/gi, '');
-    if (val.length >= 2) {
-      e.target.value = val.substring(0, 2) + '/' + val.substring(2, 4);
-    } else {
-      e.target.value = val;
-    }
-  });
+  if (cardExpiry) {
+    cardExpiry.addEventListener('input', (e) => {
+      let val = e.target.value.replace(/\//g, '').replace(/[^0-9]/gi, '');
+      if (val.length >= 2) {
+        e.target.value = val.substring(0, 2) + '/' + val.substring(2, 4);
+      } else {
+        e.target.value = val;
+      }
+    });
+  }
 
 
   // ─── VALIDATION SCHEMES ───
@@ -814,64 +822,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function validateStep5() {
-    let isValid = true;
-    const activeMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-
-    if (activeMethod === 'card') {
-      // Validate Card Number (16 digits formatted is 19 characters)
-      const cNum = cardNumber.value.replace(/\s/g, '');
-      if (cNum.length !== 16 || isNaN(cNum)) {
-        cardNumber.classList.add('error');
-        cardNumError.style.display = 'block';
-        isValid = false;
-      } else {
-        cardNumber.classList.remove('error');
-        cardNumError.style.display = 'none';
-      }
-
-      // Validate Expiry (MM/YY)
-      const exp = cardExpiry.value;
-      const expRegex = /^(0[1-9]|1[0-2])\/([0-9]{2})$/;
-      if (!expRegex.test(exp)) {
-        cardExpiry.classList.add('error');
-        cardExpiryError.style.display = 'block';
-        isValid = false;
-      } else {
-        cardExpiry.classList.remove('error');
-        cardExpiryError.style.display = 'none';
-      }
-
-      // Validate CVV (3 or 4 digits)
-      const cvv = cardCvv.value;
-      if (cvv.length < 3 || cvv.length > 4 || isNaN(cvv)) {
-        cardCvv.classList.add('error');
-        cardCvvError.style.display = 'block';
-        isValid = false;
-      } else {
-        cardCvv.classList.remove('error');
-        cardCvvError.style.display = 'none';
-      }
-    } else if (activeMethod === 'upi') {
-      const upiVal = upiId.value.trim();
-      if (!upiVal || !upiVal.includes('@')) {
-        upiId.classList.add('error');
-        upiError.style.display = 'block';
-        isValid = false;
-      } else {
-        upiId.classList.remove('error');
-        upiError.style.display = 'none';
-      }
-    }
-
-    // Terms check box
-    if (!termsCheck.checked) {
-      termsError.style.display = 'block';
-      isValid = false;
-    } else {
-      termsError.style.display = 'none';
-    }
-
-    return isValid;
+    return true; // No payment validation needed
   }
 
 
