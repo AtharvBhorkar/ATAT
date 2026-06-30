@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -167,9 +167,11 @@
             </div>
 
         </div>
+    </section>
 
-        <!-- Contained Map -->
-        <div class="container fade-up delay-2" style="margin-top: -3rem; position: relative; z-index: 2;">
+    <!-- Contact Map Section -->
+    <section class="contact-map" style="padding: 4rem 0;">
+        <div class="container fade-up delay-2">
             <div class="contained-map-wrapper">
                 <iframe src="https://maps.google.com/maps?q=Mayfair,%20London&t=&z=14&ie=UTF8&iwloc=&output=embed"
                     allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
@@ -270,6 +272,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- Newsletter Hero Section -->
     <section class="newsletter-hero">
@@ -463,9 +466,7 @@
         }
     </script>
 
-<script>
-/* -- NAVBAR SCROLL -- */ const navbar = document.getElementById('navbar'); const onScroll = () => { navbar.classList.toggle('scrolled', window.scrollY > 40); }; window.addEventListener('scroll', onScroll, { passive: true }); onScroll(); /* -- HAMBURGER MENU -- */ const hamburger = document.getElementById('hamburger'); const navLinks = document.getElementById('navLinks'); hamburger.addEventListener('click', () => { const open = hamburger.classList.toggle('open'); navLinks.classList.toggle('open', open); hamburger.setAttribute('aria-expanded', open); }); // Close on link click navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); })); // Close on outside click document.addEventListener('click', e => { if (!navbar.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
-</script>
+
 </body>
 
 </html>

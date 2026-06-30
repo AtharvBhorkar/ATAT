@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -446,9 +446,7 @@
         }
     </script>
 
-<script>
-/* -- NAVBAR SCROLL -- */ const navbar = document.getElementById('navbar'); const onScroll = () => { navbar.classList.toggle('scrolled', window.scrollY > 40); }; window.addEventListener('scroll', onScroll, { passive: true }); onScroll(); /* -- HAMBURGER MENU -- */ const hamburger = document.getElementById('hamburger'); const navLinks = document.getElementById('navLinks'); hamburger.addEventListener('click', () => { const open = hamburger.classList.toggle('open'); navLinks.classList.toggle('open', open); hamburger.setAttribute('aria-expanded', open); }); // Close on link click navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); })); // Close on outside click document.addEventListener('click', e => { if (!navbar.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
-</script>
+
 </body>
 
 </html>
