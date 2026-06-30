@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery | WanderWheels Tours & Travels</title>
+  <link rel="stylesheet" href="css/gallery.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-bg-img"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Memories On <span class="hero-accent">Every Road</span></h1>
+      <p class="hero-sub">Thousands of trips. Countless smiles. One family of travellers who chose the road less taken.
+      </p>
+      <div class="hero-btns">
+        <a href="#gallery" class="hero-btn-primary">Explore Gallery</a>
+        <a href="#behind" class="hero-btn-secondary">Our Story</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== GALLERY HEADING + FILTER ===== -->
+  <section class="gallery-intro" id="gallery">
+    <div class="gallery-intro-inner">
+      <h2 class="gallery-heading">Memories, Journeys <span class="maroon-accent">&amp; Experiences</span></h2>
+      <p class="gallery-desc">Explore our fleet, beautiful destinations and happy moments from our amazing journeys.</p>
+    </div>
+    <div class="filter-wrap">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-btn active" data-filter="all">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          All
+        </button>
+        <button class="filter-btn" data-filter="vehicles">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v9a2 2 0 01-2 2h-2" />
+            <circle cx="7.5" cy="17.5" r="2.5" />
+            <circle cx="17.5" cy="17.5" r="2.5" />
+          </svg>
+          Vehicles
+        </button>
+        <button class="filter-btn" data-filter="destinations">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+            <circle cx="12" cy="9" r="2.5" />
+          </svg>
+          Destinations
+        </button>
+        <button class="filter-btn" data-filter="family">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 00-3-3.87" />
+            <path d="M16 3.13a4 4 0 010 7.75" />
+          </svg>
+          Family Trips
+        </button>
+        <button class="filter-btn" data-filter="group">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="7" r="4" />
+            <path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" />
+            <circle cx="19" cy="7" r="3" />
+            <path d="M23 21v-2a3 3 0 00-2-2.83" />
+          </svg>
+          Group Tours
+        </button>
+        <button class="filter-btn" data-filter="adventure">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 17l4-8 4 4 3-6 4 10" />
+            <path d="M21 21H3" />
+          </svg>
+          Adventure Trips
+        </button>
+        <button class="filter-btn" data-filter="moments">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z" />
+            <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+            <line x1="9" y1="9" x2="9.01" y2="9" />
+            <line x1="15" y1="9" x2="15.01" y2="9" />
+          </svg>
+          Customer Moments
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHOTO GRID ===== -->
+  <section class="gallery-section">
+    <div class="gallery-grid" id="galleryGrid">
+
+      <!-- TRIPS (10) -->
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=85" alt="Manali"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Manali Expedition</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=700&q=85" alt="Varanasi"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Varanasi Darshan</p>
+            <p class="card-loc">Uttar Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1548013146-72479768bada?w=700&q=85" alt="Taj Mahal"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Agra — Taj Mahal</p>
+            <p class="card-loc">Uttar Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=85" alt="Shimla"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Shimla Snow Trip</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1000&q=85" alt="Valley"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Valley of Flowers</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=700&q=85" alt="Leh Ladakh"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Leh Ladakh — The Dream</p>
+            <p class="card-loc">Ladakh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1600298881974-6be191ceeda1?w=700&q=85" alt="Kerala"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Kerala Backwaters</p>
+            <p class="card-loc">Kerala</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=85" alt="Nainital"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Nainital Lake View</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=1000&q=85" alt="Pangong"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Pangong Lake Sunrise</p>
+            <p class="card-loc">Ladakh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/fc/2e/6c/fc2e6cd3fbcb9e4acdda415e336bde1c.jpg" alt="Desert"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Sam Sand Dunes — Jaisalmer</p>
+            <p class="card-loc">Rajasthan</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=700&q=85" alt="Kedarnath"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Kedarnath Trek</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item" data-category="trips">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=85" alt="Rohtang"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Rohtang Pass</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VEHICLES (10) -->
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://img.magnific.com/free-photo/long-shot-people-standing-van_23-2149005001.jpg?uid=R239087192&ga=GA1.1.1945946296.1782119128&semt=ais_test_b&w=740&q=80" alt="Tempo" loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Tempo Traveller — 12 Seater</p>
+            <p class="card-loc">AC · Music · GPS</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1570733577524-3a047079e80d?w=700&q=85" alt="SUV" loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Luxury — 7 Seater</p>
+            <p class="card-loc">AC · Sunroof · Premium</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=700&q=85" alt="Bus" loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Mini Bus — 20 Seater</p>
+            <p class="card-loc">AC · Recliner Seats</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://img.magnific.com/free-photo/group-friends-trip-together_23-2148375101.jpg?uid=R239087192&ga=GA1.1.1945946296.1782119128&semt=ais_test_b&w=740&q=80 alt="Car" loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Sedan — 4 Seater</p>
+            <p class="card-loc">AC · Comfortable</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://img.magnific.com/free-photo/closeup-shot-old-minibus-green-landscape-cloudy-sky_181624-14149.jpg?uid=R239087192&ga=GA1.1.1945946296.1782119128&semt=ais_test_b&w=740&q=80" alt="Van" loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Force Urbania — 10 Seater</p>
+            <p class="card-loc">AC · Push Back Seats</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://img.magnific.com/premium-photo/happy-friends-celebration-road-trip-roof-car-holiday-weekend-travel-outdoor-vacation-excited-group-people-with-hands-air-vehicle-transportation-traveling-journey_590464-289722.jpg?uid=R239087192&ga=GA1.1.1945946296.1782119128&semt=ais_test_b&w=740&q=80"Coach"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Luxury Coach </p>
+            <p class="card-loc">AC · Entertainment</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/0a/73/93/0a7393a0c0f5183e02368d34a52a63fd.jpg" alt="Innova" loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Innova Crysta — 7 Seater</p>
+            <p class="card-loc">AC · Most Popular</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/84/12/8b/84128bf6b7635a5a2757077219967c5a.jpg" alt="Fortuner"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Fortuner — Mountain Beast</p>
+            <p class="card-loc">4WD · Premium</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=700&q=85" alt="Bus2"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Volvo car- Luxary</p>
+            <p class="card-loc">AC · Sleeper · Night Travel</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/69/89/cd/6989cd2193e636040de99de7af2f99af.jpg" alt="Electric"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Electric Vehicle — Eco Tour</p>
+            <p class="card-loc">Zero Emission · Modern</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="vehicles">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1546614042-7df3c24c9e5d?w=700&q=85" alt="Traveller"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Mahindra Scorpio — 7 Seater</p>
+            <p class="card-loc">4WD · Hill Ready</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESTINATIONS (10) -->
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?w=700&q=85" alt="Kutch"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Rann of Kutch</p>
+            <p class="card-loc">Gujarat</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=700&q=85" alt="Andaman"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Andaman Islands</p>
+            <p class="card-loc">Andaman & Nicobar</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=85" alt="Himalayas"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">The Great Himalayas</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=700&q=85" alt="Goa" loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Goa Beaches</p>
+            <p class="card-loc">Goa</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=700&q=85" alt="Varanasi"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Ghats of Varanasi</p>
+            <p class="card-loc">Uttar Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1600298881974-6be191ceeda1?w=700&q=85" alt="Kerala"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Kerala Backwaters</p>
+            <p class="card-loc">Kerala</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1548013146-72479768bada?w=700&q=85" alt="Agra" loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Taj Mahal, Agra</p>
+            <p class="card-loc">Uttar Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=85" alt="Mountains"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Rohtang Pass</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=700&q=85" alt="Kedarnath"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Kedarnath Temple</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=1000&q=85" alt="Pangong"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Pangong Tso Lake</p>
+            <p class="card-loc">Ladakh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=700&q=85" alt="Goa Dest"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Baga Beach</p>
+            <p class="card-loc">Goa</p>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item" data-category="destinations">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=85" alt="Nainital Dest"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Naini Lake</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAMILY (10) -->
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/64/ed/75/64ed7569f1eee7414692798583468ef8.jpg" alt="Family"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Family Vacation</p>
+            <p class="card-loc">Manali</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?w=700&q=85" alt="Family Road"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Family Road Trip</p>
+            <p class="card-loc">Rajasthan</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1000&q=85" alt="Family Tour"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Royal Rajasthan Family Tour</p>
+            <p class="card-loc">Jaipur · Jodhpur</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1000&q=85" alt="Family Valley"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Valley of Flowers Trip</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/b9/7c/33/b97c335273dabd4ebb42e260054fe6b6.jpg" alt="Family Beach"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Family Beach Holiday</p>
+            <p class="card-loc">Pondicherry</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=85" alt="Family Lake"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Nainital Family Escape</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=700&q=85" alt="Family Sunset"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Golden Hour with Family</p>
+            <p class="card-loc">Rajasthan</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/fc/2e/6c/fc2e6cd3fbcb9e4acdda415e336bde1c.jpg" alt="Family Desert"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Desert Safari Family</p>
+            <p class="card-loc">Jaisalmer</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=700&q=85" alt="Family Coorg"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Coorg Plantation Stay</p>
+            <p class="card-loc">Karnataka</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1600298881974-6be191ceeda1?w=700&q=85" alt="Family Kerala"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Kerala Houseboat Family</p>
+            <p class="card-loc">Kerala</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=700&q=85" alt="Family Ladakh"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Family Trip — Ladakh</p>
+            <p class="card-loc">Ladakh</p>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item" data-category="family">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=700&q=85" alt="Family Varanasi"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Family Darshan — Varanasi</p>
+            <p class="card-loc">Uttar Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GROUP (10) -->
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=700&q=85" alt="Group Spiti"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Adventure — Spiti</p>
+            <p class="card-loc">Spiti Valley</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=700&q=85" alt="Group Goa"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Friends Group — Goa</p>
+            <p class="card-loc">Goa</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=700&q=85" alt="Group Camp"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Camping Night</p>
+            <p class="card-loc">Spiti Valley</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1000&q=85" alt="Group Rajasthan"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Tour — Rajasthan</p>
+            <p class="card-loc">Jaipur · Jodhpur · Udaipur</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=700&q=85" alt="Group Ladakh"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Ride — Ladakh</p>
+            <p class="card-loc">Ladakh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=85" alt="Group Manali"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">College Group — Manali</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=85" alt="Group Shimla"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Trip — Shimla</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=700&q=85" alt="Group Beach"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Beach Group Getaway</p>
+            <p class="card-loc">Goa</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/fc/2e/6c/fc2e6cd3fbcb9e4acdda415e336bde1c.jpg" alt="Group Desert"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Desert Camp</p>
+            <p class="card-loc">Jaisalmer</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=700&q=85" alt="Group Sunset"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Sunset Group Drive</p>
+            <p class="card-loc">Rajasthan</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1600298881974-6be191ceeda1?w=700&q=85" alt="Group Kerala"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Tour — Kerala</p>
+            <p class="card-loc">Kerala</p>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item" data-category="group">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1548013146-72479768bada?w=700&q=85" alt="Group Agra"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Trip — Agra</p>
+            <p class="card-loc">Uttar Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADVENTURE (10) -->
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=85" alt="Adventure Mountains"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Himalayan Trek</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=700&q=85" alt="Kedarnath"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Kedarnath Trek</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=700&q=85" alt="Camping"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Camping Under Stars</p>
+            <p class="card-loc">Spiti Valley</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1000&q=85" alt="Valley Trek"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Valley of Flowers Trek</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=700&q=85" alt="Leh Adventure"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Leh — Bike Expedition</p>
+            <p class="card-loc">Ladakh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=1000&q=85" alt="Pangong Adventure"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Pangong — High Altitude</p>
+            <p class="card-loc">Ladakh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=85" alt="Snow Adventure"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Snow Adventure — Shimla</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=85" alt="Manali Adventure"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Manali — Extreme Cold</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=85" alt="Lake Adventure"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Lake Trekking — Nainital</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/fc/2e/6c/fc2e6cd3fbcb9e4acdda415e336bde1c.jpg" alt="Desert Adventure"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Desert Dune Bashing</p>
+            <p class="card-loc">Jaisalmer</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=700&q=85" alt="Adventure Sunset"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Sunset Cliff Adventure</p>
+            <p class="card-loc">Rajasthan</p>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item" data-category="adventure">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?w=700&q=85" alt="Adventure Rann"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Rann Expedition</p>
+            <p class="card-loc">Gujarat</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOMENTS (10) -->
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?w=700&q=85" alt="Family Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Family Road Trip</p>
+            <p class="card-loc">Rajasthan</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=700&q=85" alt="Group Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Group Adventure</p>
+            <p class="card-loc">Spiti Valley</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=700&q=85" alt="Friends Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Friends Forever</p>
+            <p class="card-loc">Goa</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1000&q=85" alt="Rajasthan Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Royal Rajasthan Circuit</p>
+            <p class="card-loc">Jaipur · Jodhpur · Udaipur</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=700&q=85" alt="Sunset Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Golden Hour Drive</p>
+            <p class="card-loc">Rajasthan</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=700&q=85" alt="Couple Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Honeymoon Special</p>
+            <p class="card-loc">Coorg, Karnataka</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://i.pinimg.com/474x/fc/94/6a/fc946ae4f14eabb6144664e1520cce60.jpg" alt="Weekend Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Weekend Getaway</p>
+            <p class="card-loc">Pondicherry</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=700&q=85" alt="Camp Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Camping Under Stars</p>
+            <p class="card-loc">Spiti Valley</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=85" alt="Lake Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Nainital Lake View</p>
+            <p class="card-loc">Uttarakhand</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=700&q=85" alt="Beach Moment"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Goa Beach Escape</p>
+            <p class="card-loc">Goa</p>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=85" alt="Moment Manali"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Manali Memories</p>
+            <p class="card-loc">Himachal Pradesh</p>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-item" data-category="moments">
+        <div class="gallery-card">
+          <img src="https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=1000&q=85" alt="Moment Pangong"
+            loading="lazy" />
+          <div class="card-overlay">
+            <p class="card-title">Pangong Memories</p>
+            <p class="card-loc">Ladakh</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="gallery-actions" id="galleryActions">
+      <button class="action-btn load-more-btn" id="loadMoreBtn"><span>Load More Photos</span></button>
+      <button class="action-btn show-less-btn" id="showLessBtn" style="display:none;">Show Less</button>
+    </div>
+  </section>
+
+  <!-- ===== BEHIND THE JOURNEY ===== -->
+  <section class="behind-section" id="behind">
+
+    <div class="behind-header">
+
+      <h2 class="behind-title">Behind The <span class="gold-accent">journey</span></h2>
+      <p class="behind-desc">A glimpse into the care, preparation, and dedication that make every trip unforgettable.
+      </p>
+    </div>
+
+    <div class="behind-carousel-wrapper">
+      <div class="behind-track" id="behindTrack">
+
+        <!-- Card 1 -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=700&q=85" alt="Vehicle Inspection"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Vehicle Inspection</h3>
+              <p class="behind-card-text">Every vehicle undergoes a thorough safety inspection before departure —
+                brakes, tyres, lights, and engine all checked.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <path d="M14 36l6-4 4 6 6-8 6 5 6-9" stroke="#6E1F2B" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <circle cx="20" cy="28" r="3" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M32 20h12M32 24h8" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <path d="M46 22l3 3-3 3" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <rect x="14" y="38" width="36" height="10" rx="2" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <circle cx="20" cy="43" r="2" fill="#6E1F2B" />
+                <circle cx="44" cy="43" r="2" fill="#6E1F2B" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=85" alt="Clean Fleet"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Clean &amp; Sanitized Fleet</h3>
+              <p class="behind-card-text">Our vehicles are thoroughly cleaned and sanitized after every trip — interiors
+                vacuumed, surfaces wiped, vents cleared.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <path d="M20 44s4-6 12-6 12 6 12 6" stroke="#6E1F2B" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M24 30c0 0 1 4 8 4s8-4 8-4" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <path d="M18 22l3 2m25-2l-3 2" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <path d="M26 20c1-3 3-5 6-5s5 2 6 5" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <circle cx="32" cy="26" r="4" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M14 38h4m28 0h4" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=700&q=85"
+              alt="Professional Drivers" class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Professional Drivers</h3>
+              <p class="behind-card-text">Experienced, verified, and courteous drivers — each with 5+ years on the road
+                and fully background-verified.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <circle cx="32" cy="22" r="7" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M20 44c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="#6E1F2B" stroke-width="2"
+                  stroke-linecap="round" />
+                <path d="M40 19l4-4m0 0l2 2-4 4" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M44 26h2a2 2 0 002-2v-8a2 2 0 00-2-2h-2" stroke="#6E1F2B" stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1473625247510-8ceb1760943f?w=700&q=85" alt="Hassle-Free Pickup"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Hassle-Free Pickup</h3>
+              <p class="behind-card-text">On-time pickup with luggage assistance — our drivers arrive early and wait so
+                your journey starts without a hitch.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <rect x="18" y="28" width="14" height="18" rx="2" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <rect x="22" y="22" width="6" height="8" rx="1" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M32 36h12M32 40h8" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <circle cx="25" cy="36" r="1.5" fill="#6E1F2B" />
+                <path d="M40 30l3 3-3 3" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M20 46h24" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=700&q=85" alt="Regular Maintenance"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Regular Maintenance</h3>
+              <p class="behind-card-text">Routine servicing and maintenance keep our fleet reliable on every route — no
+                mid-journey breakdowns, ever.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <circle cx="32" cy="32" r="10" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M32 22v4m0 12v4M22 32h4m12 0h4" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <path d="M32 28v4l3 3" stroke="#6E1F2B" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <circle cx="32" cy="32" r="2" fill="#6E1F2B" />
+                <path d="M24.93 24.93l2.83 2.83m8.48 8.48l2.83 2.83M24.93 39.07l2.83-2.83m8.48-8.48l2.83-2.83"
+                  stroke="#6E1F2B" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=700&q=85" alt="Planned Itineraries"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Planned Itineraries</h3>
+              <p class="behind-card-text">Every trip is pre-planned with precise timing, stops, and contingencies —
+                travel stress-free while we handle every detail.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <path d="M20 42V24a2 2 0 012-2h8l2 4h10a2 2 0 012 2v14a2 2 0 01-2 2H22a2 2 0 01-2-2z" stroke="#6E1F2B"
+                  stroke-width="2" fill="none" />
+                <path d="M27 34l3 3 7-7" stroke="#6E1F2B" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== DUPLICATE FOR SEAMLESS LOOP ===== -->
+
+        <!-- Card 1 Duplicate -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=700&q=85" alt="Vehicle Inspection"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Vehicle Inspection</h3>
+              <p class="behind-card-text">Every vehicle undergoes a thorough safety inspection before departure —
+                brakes, tyres, lights, and engine all checked.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <path d="M14 36l6-4 4 6 6-8 6 5 6-9" stroke="#6E1F2B" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <circle cx="20" cy="28" r="3" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M32 20h12M32 24h8" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <path d="M46 22l3 3-3 3" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <rect x="14" y="38" width="36" height="10" rx="2" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <circle cx="20" cy="43" r="2" fill="#6E1F2B" />
+                <circle cx="44" cy="43" r="2" fill="#6E1F2B" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 Duplicate -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=85" alt="Clean Fleet"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Clean &amp; Sanitized Fleet</h3>
+              <p class="behind-card-text">Our vehicles are thoroughly cleaned and sanitized after every trip — interiors
+                vacuumed, surfaces wiped, vents cleared.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <path d="M20 44s4-6 12-6 12 6 12 6" stroke="#6E1F2B" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M24 30c0 0 1 4 8 4s8-4 8-4" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <path d="M18 22l3 2m25-2l-3 2" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <path d="M26 20c1-3 3-5 6-5s5 2 6 5" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <circle cx="32" cy="26" r="4" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M14 38h4m28 0h4" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 Duplicate -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=700&q=85"
+              alt="Professional Drivers" class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Professional Drivers</h3>
+              <p class="behind-card-text">Experienced, verified, and courteous drivers — each with 5+ years on the road
+                and fully background-verified.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <circle cx="32" cy="22" r="7" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M20 44c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="#6E1F2B" stroke-width="2"
+                  stroke-linecap="round" />
+                <path d="M40 19l4-4m0 0l2 2-4 4" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M44 26h2a2 2 0 002-2v-8a2 2 0 00-2-2h-2" stroke="#6E1F2B" stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 Duplicate -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1473625247510-8ceb1760943f?w=700&q=85" alt="Hassle-Free Pickup"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Hassle-Free Pickup</h3>
+              <p class="behind-card-text">On-time pickup with luggage assistance — our drivers arrive early and wait so
+                your journey starts without a hitch.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <rect x="18" y="28" width="14" height="18" rx="2" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <rect x="22" y="22" width="6" height="8" rx="1" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M32 36h12M32 40h8" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <circle cx="25" cy="36" r="1.5" fill="#6E1F2B" />
+                <path d="M40 30l3 3-3 3" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <path d="M20 46h24" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 Duplicate -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=700&q=85" alt="Regular Maintenance"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Regular Maintenance</h3>
+              <p class="behind-card-text">Routine servicing and maintenance keep our fleet reliable on every route — no
+                mid-journey breakdowns, ever.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <circle cx="32" cy="32" r="10" stroke="#6E1F2B" stroke-width="2" fill="none" />
+                <path d="M32 22v4m0 12v4M22 32h4m12 0h4" stroke="#6E1F2B" stroke-width="2" stroke-linecap="round" />
+                <path d="M32 28v4l3 3" stroke="#6E1F2B" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <circle cx="32" cy="32" r="2" fill="#6E1F2B" />
+                <path d="M24.93 24.93l2.83 2.83m8.48 8.48l2.83 2.83M24.93 39.07l2.83-2.83m8.48-8.48l2.83-2.83"
+                  stroke="#6E1F2B" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 Duplicate -->
+        <div class="behind-card">
+          <div class="behind-card-img-wrap">
+            <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=700&q=85" alt="Planned Itineraries"
+              class="behind-card-img">
+          </div>
+          <div class="behind-card-body">
+            <div class="behind-card-text-wrap">
+              <h3 class="behind-card-title">Planned Itineraries</h3>
+              <p class="behind-card-text">Every trip is pre-planned with precise timing, stops, and contingencies —
+                travel stress-free while we handle every detail.</p>
+            </div>
+            <div class="behind-card-icon">
+              <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="32" r="28" fill="#6E1F2B" opacity="0.1" />
+                <path d="M20 42V24a2 2 0 012-2h8l2 4h10a2 2 0 012 2v14a2 2 0 01-2 2H22a2 2 0 01-2-2z" stroke="#6E1F2B"
+                  stroke-width="2" fill="none" />
+                <path d="M27 34l3 3 7-7" stroke="#6E1F2B" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="behind-dots" id="behindDots"></div>
+
+  </section>
+
+  <!-- ===== CTA SECTION ===== -->
+  <section class="cta-outer">
+    <div class="cta-box">
+      <div class="cta-bg-img"></div>
+      <div class="cta-box-overlay"></div>
+      <div class="cta-box-content">
+      
+        <h2 class="cta-title">Ready to Create <span class="cta-accent">Your Story?</span></h2>
+        <p class="cta-sub">Join thousands of happy travellers who trusted us with their most precious journeys. Your
+          next adventure is just one booking away.</p>
+        <div class="cta-btns">
+          <a href="#" class="cta-btn-primary">Book Your Trip</a>
+          <a href="#" class="cta-btn-secondary">Get a Free Quote</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LIGHTBOX ===== -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="lightbox-box">
+      <button class="lb-close" id="lbClose">&times;</button>
+      <button class="lb-prev" id="lbPrev">&#8592;</button>
+      <button class="lb-next" id="lbNext">&#8594;</button>
+      <div class="lb-img-wrap">
+        <img src="" alt="" id="lbImg" />
+        <div class="lb-loader" id="lbLoader"></div>
+      </div>
+      <p class="lb-caption" id="lbCaption"></p>
+    </div>
+  </div>
+
+  <script src="js/gallery.js"></script>
+</body>
+
+</html>

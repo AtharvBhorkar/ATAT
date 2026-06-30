@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voyago — Create Account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --maroon-dark: #3d0f12;
+            --maroon: #5c1a1f;
+            --gold: #cf9a3a;
+            --gold-light: #d4a017;
+            --ivory: #f7f3ec;
+            --charcoal: #2b2b2b;
+            --rust: #b5511f;
+            --gray: #8a8a8a;
+            --gray-light: #d9d4cb;
+            --error: #c0392b;
+            --success: #2e8b4f;
+            --warn: #d97a1f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            color: var(--charcoal);
+            background: #0d0605;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: clamp(16px, 4vw, 40px);
+            position: relative;
+            overflow-x: hidden;
+            isolation: isolate;
+        }
+
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-layer--radial {
+            background: radial-gradient(ellipse 120% 90% at 25% 15%,
+                    rgba(181, 81, 31, 0.35) 0%,
+                    rgba(61, 15, 18, 0.18) 35%,
+                    rgba(13, 6, 5, 0.9) 70%,
+                    #0a0404 100%);
+            animation: radialShift 14s ease-in-out infinite alternate;
+        }
+
+        @keyframes radialShift {
+            0% {
+                background: radial-gradient(ellipse 120% 90% at 25% 15%,
+                        rgba(181, 81, 31, 0.35) 0%,
+                        rgba(61, 15, 18, 0.18) 35%,
+                        rgba(13, 6, 5, 0.9) 70%,
+                        #0a0404 100%);
+            }
+
+            33% {
+                background: radial-gradient(ellipse 130% 100% at 60% 25%,
+                        rgba(207, 154, 58, 0.28) 0%,
+                        rgba(92, 26, 31, 0.2) 30%,
+                        rgba(13, 6, 5, 0.88) 65%,
+                        #0a0303 100%);
+            }
+
+            66% {
+                background: radial-gradient(ellipse 110% 95% at 70% 10%,
+                        rgba(181, 81, 31, 0.3) 0%,
+                        rgba(61, 15, 18, 0.15) 40%,
+                        rgba(13, 6, 5, 0.92) 72%,
+                        #0b0505 100%);
+            }
+
+            100% {
+                background: radial-gradient(ellipse 125% 85% at 15% 30%,
+                        rgba(212, 160, 23, 0.25) 0%,
+                        rgba(61, 15, 18, 0.22) 32%,
+                        rgba(13, 6, 5, 0.9) 68%,
+                        #0a0404 100%);
+            }
+        }
+
+        .bg-layer--sweep {
+            background: linear-gradient(145deg,
+                    rgba(92, 26, 31, 0.5) 0%,
+                    rgba(13, 6, 5, 0.2) 30%,
+                    rgba(181, 81, 31, 0.25) 55%,
+                    rgba(13, 6, 5, 0.6) 80%,
+                    #0d0605 100%);
+            background-size: 250% 250%;
+            animation: sweepGradient 18s ease-in-out infinite;
+            mix-blend-mode: overlay;
+            opacity: 0.85;
+        }
+
+        @keyframes sweepGradient {
+            0% {
+                background-position: 0% 0%;
+            }
+
+            25% {
+                background-position: 50% 30%;
+            }
+
+            50% {
+                background-position: 100% 70%;
+            }
+
+            75% {
+                background-position: 40% 90%;
+            }
+
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        .bg-layer--texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+            opacity: 0.7;
+            animation: textureDrift 22s linear infinite;
+        }
+
+        @keyframes textureDrift {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 200px 200px;
+            }
+        }
+
+        .bg-layer--particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle,
+                    rgba(212, 160, 23, 0.7) 0%,
+                    rgba(207, 154, 58, 0.25) 40%,
+                    transparent 70%);
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        .particle:nth-child(1) {
+            width: 4px;
+            height: 4px;
+            left: 12%;
+            animation-duration: 9s;
+            animation-delay: 0s;
+            box-shadow: 0 0 8px 3px rgba(212, 160, 23, 0.5);
+        }
+
+        .particle:nth-child(2) {
+            width: 2.5px;
+            height: 2.5px;
+            left: 28%;
+            animation-duration: 11s;
+            animation-delay: 2s;
+            box-shadow: 0 0 6px 2px rgba(207, 154, 58, 0.45);
+        }
+
+        .particle:nth-child(3) {
+            width: 3.5px;
+            height: 3.5px;
+            left: 44%;
+            animation-duration: 8s;
+            animation-delay: 4s;
+            box-shadow: 0 0 7px 3px rgba(181, 81, 31, 0.5);
+        }
+
+        .particle:nth-child(4) {
+            width: 2px;
+            height: 2px;
+            left: 58%;
+            animation-duration: 13s;
+            animation-delay: 1s;
+            box-shadow: 0 0 5px 2px rgba(212, 160, 23, 0.4);
+        }
+
+        .particle:nth-child(5) {
+            width: 5px;
+            height: 5px;
+            left: 72%;
+            animation-duration: 10s;
+            animation-delay: 5s;
+            box-shadow: 0 0 10px 4px rgba(207, 154, 58, 0.55);
+        }
+
+        .particle:nth-child(6) {
+            width: 3px;
+            height: 3px;
+            left: 85%;
+            animation-duration: 12s;
+            animation-delay: 3s;
+            box-shadow: 0 0 7px 2px rgba(181, 81, 31, 0.5);
+        }
+
+        .particle:nth-child(7) {
+            width: 2px;
+            height: 2px;
+            left: 6%;
+            animation-duration: 9.5s;
+            animation-delay: 6s;
+            box-shadow: 0 0 5px 2px rgba(212, 160, 23, 0.4);
+        }
+
+        .particle:nth-child(8) {
+            width: 4.5px;
+            height: 4.5px;
+            left: 35%;
+            animation-duration: 11.5s;
+            animation-delay: 7s;
+            box-shadow: 0 0 9px 3px rgba(207, 154, 58, 0.5);
+        }
+
+        .particle:nth-child(9) {
+            width: 2.8px;
+            height: 2.8px;
+            left: 52%;
+            animation-duration: 8.5s;
+            animation-delay: 2.5s;
+            box-shadow: 0 0 6px 2px rgba(181, 81, 31, 0.45);
+        }
+
+        .particle:nth-child(10) {
+            width: 3.2px;
+            height: 3.2px;
+            left: 66%;
+            animation-duration: 10.5s;
+            animation-delay: 4.5s;
+            box-shadow: 0 0 7px 3px rgba(212, 160, 23, 0.5);
+        }
+
+        .particle:nth-child(11) {
+            width: 1.8px;
+            height: 1.8px;
+            left: 78%;
+            animation-duration: 14s;
+            animation-delay: 1.5s;
+            box-shadow: 0 0 4px 2px rgba(207, 154, 58, 0.35);
+        }
+
+        .particle:nth-child(12) {
+            width: 3.8px;
+            height: 3.8px;
+            left: 20%;
+            animation-duration: 9.8s;
+            animation-delay: 5.5s;
+            box-shadow: 0 0 8px 3px rgba(181, 81, 31, 0.5);
+        }
+
+        @keyframes floatUp {
+            0% {
+                bottom: -40px;
+                opacity: 0;
+                transform: translateX(0) scale(0.3);
+            }
+
+            15% {
+                opacity: 0.9;
+                transform: translateX(8px) scale(1);
+            }
+
+            35% {
+                transform: translateX(-6px) scale(1.2);
+            }
+
+            55% {
+                transform: translateX(4px) scale(0.9);
+            }
+
+            75% {
+                opacity: 0.5;
+                transform: translateX(-10px) scale(0.6);
+            }
+
+            100% {
+                bottom: 105%;
+                opacity: 0;
+                transform: translateX(12px) scale(0.2);
+            }
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            border-radius: 50%;
+            border: 1.5px solid var(--rust);
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+            animation: ringPulse 8s ease-in-out infinite alternate,
+                ringRotate 30s linear infinite;
+            box-shadow: 0 0 0 60px rgba(181, 81, 31, 0.06),
+                0 0 0 120px rgba(181, 81, 31, 0.04),
+                0 0 0 200px rgba(181, 81, 31, 0.02);
+        }
+
+        body::before {
+            top: -550px;
+            left: -450px;
+            animation-delay: 0s;
+        }
+
+        body::after {
+            bottom: -550px;
+            right: -450px;
+            animation-delay: -4s;
+            border-color: rgba(207, 154, 58, 0.6);
+            box-shadow: 0 0 0 60px rgba(207, 154, 58, 0.05),
+                0 0 0 120px rgba(207, 154, 58, 0.03),
+                0 0 0 200px rgba(207, 154, 58, 0.015);
+        }
+
+        @keyframes ringPulse {
+            0% {
+                opacity: 0.08;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.16;
+                transform: scale(1.04);
+            }
+
+            100% {
+                opacity: 0.09;
+                transform: scale(1.01);
+            }
+        }
+
+        @keyframes ringRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .card {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-panel {
+            background: linear-gradient(160deg, var(--maroon) 0%, var(--maroon-dark) 100%);
+            border-radius: 20px;
+            padding: clamp(18px, 4vw, 26px) clamp(24px, 4vw, 32px) clamp(32px, 5vw, 44px);
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-panel::after {
+            content: "";
+            position: absolute;
+            top: -60%;
+            left: -60%;
+            width: 220%;
+            height: 220%;
+            background: radial-gradient(ellipse at center,
+                    rgba(255, 255, 255, 0.06) 0%,
+                    transparent 65%);
+            animation: headerShimmer 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes headerShimmer {
+
+            0%,
+            100% {
+                transform: translate(-5%, -5%) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(5%, 8%) rotate(3deg);
+            }
+        }
+
+        .badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #2a0709;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 10px;
+            border: 1.5px solid rgba(212, 160, 23, 0.3);
+            position: relative;
+            z-index: 1;
+            animation: badgeGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes badgeGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 12px rgba(212, 160, 23, 0.2), 0 0 24px rgba(212, 160, 23, 0.08);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(212, 160, 23, 0.35), 0 0 36px rgba(212, 160, 23, 0.14);
+            }
+        }
+
+        .badge svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--gold-light);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        h1.welcome {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 700;
+            font-size: clamp(24px, 5vw, 32px);
+            line-height: 1.15;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1.welcome .gold {
+            color: var(--gold-light);
+            font-style: italic;
+            animation: goldShimmer 2.5s ease-in-out infinite;
+        }
+
+        @keyframes goldShimmer {
+
+            0%,
+            100% {
+                color: #d4a017;
+            }
+
+            50% {
+                color: #e8c44a;
+            }
+        }
+
+        .subhead {
+            color: #e8dccd;
+            font-size: clamp(13px, 2.5vw, 15px);
+            opacity: 0.85;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-panel {
+            background: var(--ivory);
+            border-radius: 20px;
+            margin-top: -24px;
+            padding: clamp(16px, 3vw, 22px) clamp(20px, 4vw, 28px);
+            box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.55), 0 8px 20px rgba(0, 0, 0, 0.25);
+            position: relative;
+            transition: box-shadow 0.4s ease;
+        }
+
+        .form-panel:hover {
+            box-shadow: 0 34px 64px -18px rgba(0, 0, 0, 0.6), 0 10px 24px rgba(0, 0, 0, 0.28),
+                0 0 0 1px rgba(207, 154, 58, 0.12);
+        }
+
+        .form-panel.shake {
+            animation: shake .45s ease;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            20% {
+                transform: translateX(-8px)
+            }
+
+            40% {
+                transform: translateX(8px)
+            }
+
+            60% {
+                transform: translateX(-5px)
+            }
+
+            80% {
+                transform: translateX(5px)
+            }
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid #e6e0d4;
+            margin-bottom: 14px;
+        }
+
+        .tab {
+            background: none;
+            border: 0;
+            font-family: inherit;
+            font-size: clamp(13px, 2.5vw, 14px);
+            color: var(--gray);
+            padding: 8px 4px 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+            position: relative;
+            transition: color .2s ease, background .2s ease;
+            min-height: 36px;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .tab svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .tab.active {
+            color: var(--maroon);
+            font-weight: 700;
+            background: rgba(92, 26, 31, 0.04);
+        }
+
+        .tab.active::after {
+            content: "";
+            position: absolute;
+            left: 15%;
+            right: 15%;
+            bottom: -1px;
+            height: 3px;
+            background: var(--maroon);
+            border-radius: 3px 3px 0 0;
+            animation: tabIndicatorIn 0.3s ease-out;
+        }
+
+        @keyframes tabIndicatorIn {
+            from {
+                transform: scaleX(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scaleX(1);
+                opacity: 1;
+            }
+        }
+
+        .tab:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .field.field-hidden {
+            display: none;
+        }
+
+        label.lbl {
+            font-size: clamp(10.5px, 2vw, 11.5px);
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #5a5651;
+        }
+
+        .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrap svg.left,
+        .input-wrap button.right,
+        .input-wrap .status-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            stroke: var(--gray);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .input-wrap svg.left {
+            left: 14px;
+        }
+
+        .input-wrap button.right {
+            right: 12px;
+            background: none;
+            border: 0;
+            padding: 4px;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+            border-radius: 6px;
+            transition: background .15s ease;
+        }
+
+        .input-wrap button.right:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .input-wrap button.right svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--gray);
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .input-wrap .status-icon {
+            right: 44px;
+            width: 16px;
+            height: 16px;
+            display: none;
+        }
+
+        .input-wrap .status-icon.show {
+            display: block;
+        }
+
+        .input-wrap .status-icon.ok {
+            stroke: var(--success);
+        }
+
+        .input-wrap .status-icon.bad {
+            stroke: var(--error);
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .input-wrap input,
+        .input-wrap select {
+            width: 100%;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 10px 14px 10px 42px;
+            border: 1px solid #e2dccf;
+            border-radius: 10px;
+            background: #fff;
+            color: var(--charcoal);
+            transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+            min-height: 40px;
+        }
+
+        .input-wrap input:focus,
+        .input-wrap select:focus {
+            outline: none;
+            border-color: var(--maroon);
+            box-shadow: 0 0 0 3px rgba(92, 26, 31, 0.12);
+            background: #fefdfb;
+        }
+
+        .input-wrap.has-toggle input {
+            padding-right: 70px;
+        }
+
+        .phone-row {
+            display: grid;
+            grid-template-columns: 96px 1fr;
+            gap: 8px;
+        }
+
+        .phone-row .input-wrap.code select {
+            padding: 13px 10px 13px 14px;
+            min-height: 46px;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, #8a8a8a 50%),
+                linear-gradient(135deg, #8a8a8a 50%, transparent 50%);
+            background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+            background-size: 5px 5px, 5px 5px;
+            background-repeat: no-repeat;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 12px;
+            display: none;
+            animation: fadeInDown 0.2s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .field.has-error .input-wrap input,
+        .field.has-error .input-wrap select {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.08);
+        }
+
+        .field.has-error .error-msg {
+            display: block;
+        }
+
+        .strength {
+            display: none;
+        }
+
+        .strength-bar {
+            height: 5px;
+            background: #e6e0d4;
+            border-radius: 3px;
+            overflow: hidden;
+            display: flex;
+            gap: 3px;
+        }
+
+        .strength-bar span {
+            flex: 1;
+            background: #e6e0d4;
+            border-radius: 3px;
+            transition: background .3s ease, transform .2s ease;
+        }
+
+        .strength-label {
+            font-size: 11px;
+            color: var(--gray);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            transition: color .3s ease;
+        }
+
+        .strength[data-level="1"] span:nth-child(-n+1) {
+            background: var(--error);
+        }
+
+        .strength[data-level="2"] span:nth-child(-n+2) {
+            background: var(--warn);
+        }
+
+        .strength[data-level="3"] span:nth-child(-n+3) {
+            background: #c9b53a;
+        }
+
+        .strength[data-level="4"] span {
+            background: var(--success);
+            animation: strengthPulse 0.5s ease;
+        }
+
+        @keyframes strengthPulse {
+
+            0%,
+            100% {
+                transform: scaleY(1);
+            }
+
+            50% {
+                transform: scaleY(1.8);
+            }
+        }
+
+        .strength[data-level="1"] .strength-label {
+            color: var(--error);
+        }
+
+        .strength[data-level="2"] .strength-label {
+            color: var(--warn);
+        }
+
+        .strength[data-level="3"] .strength-label {
+            color: #8a7a1f;
+        }
+
+        .strength[data-level="4"] .strength-label {
+            color: var(--success);
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #4d4944;
+            user-select: none;
+            line-height: 1.45;
+            padding: 4px 0;
+        }
+
+        .terms input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .check {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            border-radius: 5px;
+            border: 1.5px solid #b9b1a2;
+            display: grid;
+            place-items: center;
+            background: #fff;
+            transition: all .2s ease;
+            margin-top: 1px;
+        }
+
+        .check svg {
+            width: 12px;
+            height: 12px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 3;
+            opacity: 0;
+            transition: opacity .2s ease, transform .2s ease;
+            transform: scale(0.6);
+        }
+
+        .terms input:checked+.check {
+            background: var(--maroon);
+            border-color: var(--maroon);
+            animation: checkPop .3s ease;
+        }
+
+        .terms input:checked+.check svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @keyframes checkPop {
+            0% {
+                transform: scale(1);
+            }
+
+            40% {
+                transform: scale(1.15);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .terms input:focus-visible+.check {
+            box-shadow: 0 0 0 3px rgba(207, 154, 58, 0.4);
+        }
+
+        .terms a {
+            color: var(--maroon);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-login {
+            margin-top: 2px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: #fff;
+            background: linear-gradient(180deg, #d6a445 0%, var(--gold) 100%);
+            border: 0;
+            border-radius: 12px;
+            padding: 10px;
+            min-height: 42px;
+            cursor: pointer;
+            box-shadow: 0 6px 14px -4px rgba(207, 154, 58, 0.55);
+            transition: transform .15s ease, box-shadow .2s ease, filter .15s ease, background .3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg,
+                    rgba(255, 255, 255, 0.15) 0%,
+                    transparent 50%);
+            pointer-events: none;
+            transition: opacity .2s ease;
+        }
+
+        .btn-login:hover:not([disabled]) {
+            filter: brightness(0.95);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px -6px rgba(207, 154, 58, 0.6);
+        }
+
+        .btn-login:active:not([disabled]) {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px -4px rgba(207, 154, 58, 0.5);
+        }
+
+        .btn-login[disabled] {
+            cursor: not-allowed;
+            opacity: 0.55;
+            box-shadow: none;
+            filter: grayscale(0.15);
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            display: none;
+        }
+
+        .btn-login.loading .spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 14px 0 10px;
+            color: var(--gray);
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e2dccf;
+        }
+
+        .social {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .social button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid #e2dccf;
+            background: #fff;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+        }
+
+        .social button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+            border-color: #cfc7b7;
+            background: #fefdfb;
+        }
+
+        .social button:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        .social svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .signup {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #4d4944;
+        }
+
+        .signup a {
+            color: var(--maroon);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color .2s ease;
+        }
+
+        .signup a:hover {
+            text-decoration: underline;
+            color: #7a232a;
+        }
+
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 6, 5, 0.7);
+            display: none;
+            place-items: center;
+            z-index: 50;
+            padding: 20px;
+            backdrop-filter: blur(2px);
+            animation: fadeIn .25s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-bg.show {
+            display: grid;
+        }
+
+        .modal {
+            background: var(--ivory);
+            border-radius: 16px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 28px;
+            animation: modalSlideUp .3s ease;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--maroon-dark);
+            margin-bottom: 12px;
+        }
+
+        .modal p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            color: #4d4944;
+        }
+
+        .modal .close {
+            margin-top: 14px;
+            background: var(--maroon);
+            color: #fff;
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: background .2s ease;
+        }
+
+        .modal .close:hover {
+            background: #4a1519;
+        }
+
+        @media (max-height: 760px) {
+            .header-panel {
+                padding-top: 20px;
+                padding-bottom: 36px;
+            }
+
+            .badge {
+                margin-bottom: 10px;
+                width: 48px;
+                height: 48px;
+            }
+
+            .badge svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            h1.welcome {
+                font-size: clamp(22px, 4vw, 28px);
+            }
+
+            .form-panel {
+                margin-top: -28px;
+            }
+
+            form {
+                gap: 11px;
+            }
+
+            .divider {
+                margin: 14px 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                max-width: 95vw;
+            }
+
+            .social button {
+                width: 46px;
+                height: 46px;
+            }
+
+            .phone-row {
+                grid-template-columns: 86px 1fr;
+            }
+
+            body::before,
+            body::after {
+                width: 600px;
+                height: 600px;
+            }
+
+            body::before {
+                top: -400px;
+                left: -350px;
+            }
+
+            body::after {
+                bottom: -400px;
+                right: -350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-layer bg-layer--radial" aria-hidden="true"></div>
+    <div class="bg-layer bg-layer--sweep" aria-hidden="true"></div>
+    <div class="bg-layer bg-layer--texture" aria-hidden="true"></div>
+
+    <div class="bg-layer--particles" aria-hidden="true">
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+        <span class="particle"></span>
+    </div>
+
+    <main class="card" role="main">
+        <section class="header-panel" aria-labelledby="welcome-heading">
+            <div class="badge" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                    <rect x="4" y="8" width="16" height="11" rx="2" />
+                    <path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
+                    <path d="M14 14l5-2-1 3 1 3-5-2-3 1 1-2-1-2z" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <h1 class="welcome" id="welcome-heading">Create <span class="gold">Account</span></h1>
+            <p class="subhead">Start planning your next adventure.</p>
+        </section>
+
+        <section class="form-panel" id="formPanel">
+            <div class="tabs" role="tablist" aria-label="Account type">
+                <button class="tab active" role="tab" aria-selected="true" data-tab="individual" id="tab-individual">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
+                    </svg>
+                    Individual
+                </button>
+                <button class="tab" role="tab" aria-selected="false" data-tab="agent" id="tab-agent" tabindex="-1">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="7" width="18" height="13" rx="2" />
+                        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                    Travel Agent
+                </button>
+            </div>
+
+            <form id="signupForm" novalidate>
+                <div class="field">
+                    <label class="lbl" for="fullname">Full Name</label>
+                    <div class="input-wrap">
+                        <svg class="left" viewBox="0 0 24 24">
+                            <circle cx="12" cy="8" r="4" />
+                            <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
+                        </svg>
+                        <input type="text" id="fullname" name="fullname" autocomplete="name"
+                            placeholder="e.g. James Clark" required maxlength="80" />
+                    </div>
+                    <p class="error-msg" id="fullname-error">Please enter your full name.</p>
+                </div>
+
+                <div class="field field-hidden" id="agencyName-field">
+                    <label class="lbl" for="agencyName">Agency Name</label>
+                    <div class="input-wrap">
+                        <svg class="left" viewBox="0 0 24 24">
+                            <rect x="3" y="7" width="18" height="13" rx="2" />
+                            <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        </svg>
+                        <input type="text" id="agencyName" name="agencyName" autocomplete="organization"
+                            placeholder="e.g. Heritage Travels" maxlength="100" />
+                    </div>
+                    <p class="error-msg" id="agencyName-error">Please enter your agency name.</p>
+                </div>
+
+                <div class="field field-hidden" id="licenseNumber-field">
+                    <label class="lbl" for="licenseNumber">License Number</label>
+                    <div class="input-wrap">
+                        <svg class="left" viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="16" rx="2" />
+                            <path d="M7 9h10M7 13h6" />
+                        </svg>
+                        <input type="text" id="licenseNumber" name="licenseNumber" placeholder="e.g. LIC-2023-4456"
+                            maxlength="40" />
+                    </div>
+                    <p class="error-msg" id="licenseNumber-error">Please enter a valid license number.</p>
+                </div>
+
+                <div class="field">
+                    <label class="lbl" for="email">Email Address</label>
+                    <div class="input-wrap">
+                        <svg class="left" viewBox="0 0 24 24">
+                            <rect x="3" y="5" width="18" height="14" rx="2" />
+                            <path d="M3 7l9 7 9-7" />
+                        </svg>
+                        <input type="email" id="email" name="email" autocomplete="email"
+                            placeholder="e.g. james.clark@heritage.com" required maxlength="120" />
+                    </div>
+                    <p class="error-msg" id="email-error">Please enter a valid email address.</p>
+                </div>
+
+                <div class="field">
+                    <label class="lbl" for="phone">Phone Number</label>
+                    <div class="phone-row">
+                        <div class="input-wrap code">
+                            <select id="countryCode" aria-label="Country code" style="padding-left:14px;">
+                                <option value="+1">🇺🇸 +1</option>
+                                <option value="+44">🇬🇧 +44</option>
+                                <option value="+91">🇮🇳 +91</option>
+                                <option value="+61">🇦🇺 +61</option>
+                                <option value="+33">🇫🇷 +33</option>
+                                <option value="+49">🇩🇪 +49</option>
+                                <option value="+81">🇯🇵 +81</option>
+                                <option value="+971">🇦🇪 +971</option>
+                            </select>
+                        </div>
+                        <div class="input-wrap">
+                            <svg class="left" viewBox="0 0 24 24">
+                                <path
+                                    d="M5 4h3l2 5-2 1a12 12 0 0 0 6 6l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />
+                            </svg>
+                            <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="555 123 4567"
+                                inputmode="numeric" maxlength="15" required />
+                        </div>
+                    </div>
+                    <p class="error-msg" id="phone-error">Please enter a valid phone number.</p>
+                </div>
+
+                <div class="field">
+                    <label class="lbl" for="password">Password</label>
+                    <div class="input-wrap has-toggle">
+                        <svg class="left" viewBox="0 0 24 24">
+                            <rect x="4" y="11" width="16" height="10" rx="2" />
+                            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+                        </svg>
+                        <input type="password" id="password" name="password" autocomplete="new-password"
+                            placeholder="••••••••" required minlength="8" maxlength="72" />
+                        <button type="button" class="right" id="togglePwd" aria-label="Show password"
+                            aria-pressed="false">
+                            <svg id="eyeIcon" viewBox="0 0 24 24">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="strength" id="strength" data-level="0">
+                        <span class="strength-label" id="strengthLabel">Enter a password</span>
+                    </div>
+                    <p class="error-msg" id="password-error">Password must be at least 8 characters.</p>
+                </div>
+
+                <div class="field">
+                    <label class="lbl" for="confirm">Confirm Password</label>
+                    <div class="input-wrap has-toggle">
+                        <svg class="left" viewBox="0 0 24 24">
+                            <rect x="4" y="11" width="16" height="10" rx="2" />
+                            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+                        </svg>
+                        <input type="password" id="confirm" name="confirm" autocomplete="new-password"
+                            placeholder="••••••••" required />
+                        <svg class="status-icon" id="matchIcon" viewBox="0 0 24 24"></svg>
+                        <button type="button" class="right" id="toggleConfirm" aria-label="Show password"
+                            aria-pressed="false">
+                            <svg id="eyeIcon2" viewBox="0 0 24 24">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="error-msg" id="confirm-error">Passwords do not match.</p>
+                </div>
+
+                <label class="terms">
+                    <input type="checkbox" id="terms" />
+                    <span class="check" aria-hidden="true"><svg viewBox="0 0 24 24">
+                            <polyline points="4 12 10 18 20 6" />
+                        </svg></span>
+                    <span>I agree to the <a href="terms-condition.html" target="_blank">Terms &amp; Conditions</a> and
+                        <a href="privacy.html" target="_blank">Privacy Policy</a>.</span>
+                </label>
+
+                <button type="submit" class="btn-login" id="signupBtn" disabled>
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="btn-label">Create Account</span>
+                </button>
+            </form>
+
+            <div class="divider"><span>Or continue with</span></div>
+
+            <div class="social" aria-label="Social signup options">
+                <button type="button" aria-label="Sign up with Google">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#4285F4"
+                            d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.6c-.2 1.3-1 2.4-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.5z" />
+                        <path fill="#34A853"
+                            d="M12 22c2.8 0 5.2-.9 6.9-2.5l-3.4-2.6c-.9.6-2.1 1-3.5 1-2.7 0-5-1.8-5.8-4.3H2.7v2.7C4.4 19.7 7.9 22 12 22z" />
+                        <path fill="#FBBC05"
+                            d="M6.2 13.6c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V6.9H2.7C2 8.4 1.6 10.1 1.6 12s.4 3.6 1.1 5.1l3.5-2.7z" />
+                        <path fill="#EA4335"
+                            d="M12 5.8c1.5 0 2.9.5 4 1.5l3-3C17.2 2.6 14.8 1.6 12 1.6 7.9 1.6 4.4 3.9 2.7 7.3l3.5 2.7C7 7.6 9.3 5.8 12 5.8z" />
+                    </svg>
+                </button>
+                <button type="button" aria-label="Sign up with Apple">
+                    <svg viewBox="0 0 24 24" fill="#000">
+                        <path
+                            d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1 1-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.7 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.3.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.5-1-2.5-3.9zM14.3 5.4c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.2-.6 2.8-1.4z" />
+                    </svg>
+                </button>
+                <button type="button" aria-label="Continue as guest">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="1.8">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
+                    </svg>
+                </button>
+            </div>
+
+            <p class="signup">Already have an account? <a href="login.html">Log In</a></p>
+        </section>
+    </main>
+
+    <script>
+        (function () {
+            const $ = (s) => document.querySelector(s);
+            const form = $('#signupForm');
+            const formPanel = $('#formPanel');
+            const fullname = $('#fullname');
+            const email = $('#email');
+            const phone = $('#phone');
+            const password = $('#password');
+            const confirm = $('#confirm');
+            const terms = $('#terms');
+            const signupBtn = $('#signupBtn');
+            const tabs = document.querySelectorAll('.tab');
+            const strength = $('#strength');
+            const strengthLabel = $('#strengthLabel');
+            const matchIcon = $('#matchIcon');
+            const API = 'http://localhost:5000/api/human';
+
+            const EYE_OPEN = '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>';
+            const EYE_OFF = '<path d="M3 3l18 18"/><path d="M10.6 6.1A10.6 10.6 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-3.2 4M6.2 7.7A17 17 0 0 0 2 12s3.5 6 10 6c1.6 0 3-.3 4.2-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
+            const CHECK = '<polyline points="4 12 10 18 20 6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>';
+            const CROSS = '<line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round" stroke-width="2.5"/><line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round" stroke-width="2.5"/>';
+
+            function bindToggle(btnId, iconId, input) {
+                $(btnId).addEventListener('click', () => {
+                    const isPwd = input.type === 'password';
+                    input.type = isPwd ? 'text' : 'password';
+                    const btn = $(btnId);
+                    btn.setAttribute('aria-pressed', String(isPwd));
+                    btn.setAttribute('aria-label', isPwd ? 'Hide password' : 'Show password');
+                    $(iconId).innerHTML = isPwd ? EYE_OFF : EYE_OPEN;
+                });
+            }
+            bindToggle('#togglePwd', '#eyeIcon', password);
+            bindToggle('#toggleConfirm', '#eyeIcon2', confirm);
+
+            tabs.forEach(t => {
+                t.addEventListener('click', () => switchTab(t.dataset.tab));
+                t.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        const other = [...tabs].find(x => x !== t);
+                        other.focus();
+                        switchTab(other.dataset.tab);
+                    }
+                });
+            });
+
+            let currentAccountType = 'individual';
+            const fullnameField = fullname.closest('.field');
+            const agencyNameField = $('#agencyName-field');
+            const licenseNumberField = $('#licenseNumber-field');
+            const agencyName = $('#agencyName');
+            const licenseNumber = $('#licenseNumber');
+
+            function switchTab(name) {
+                currentAccountType = name;
+                tabs.forEach(t => {
+                    const active = t.dataset.tab === name;
+                    t.classList.toggle('active', active);
+                    t.setAttribute('aria-selected', active);
+                    t.tabIndex = active ? 0 : -1;
+                });
+
+                if (name === 'agent') {
+                    fullnameField.classList.add('field-hidden');
+                    agencyNameField.classList.remove('field-hidden');
+                    licenseNumberField.classList.remove('field-hidden');
+                    fullname.required = false;
+                    agencyName.required = true;
+                    licenseNumber.required = true;
+                } else {
+                    fullnameField.classList.remove('field-hidden');
+                    agencyNameField.classList.add('field-hidden');
+                    licenseNumberField.classList.add('field-hidden');
+                    fullname.required = true;
+                    agencyName.required = false;
+                    licenseNumber.required = false;
+                    clearError('agencyName');
+                    clearError('licenseNumber');
+                }
+            }
+
+            function setError(name, msg) {
+                const field = document.getElementById(name).closest('.field');
+                field.classList.add('has-error');
+                if (msg) document.getElementById(name + '-error').textContent = msg;
+            }
+
+            function clearError(name) {
+                document.getElementById(name).closest('.field').classList.remove('has-error');
+            }
+
+            function checkStrength(val) {
+                let score = 0;
+                if (val.length >= 8) score++;
+                if (/[a-z]/.test(val) && /[A-Z]/.test(val)) score++;
+                if (/\d/.test(val)) score++;
+                if (/[^a-zA-Z0-9]/.test(val)) score++;
+                return score;
+            }
+
+            password.addEventListener('input', () => {
+                const val = password.value;
+                clearError('password');
+
+                if (val.length > 0) {
+                    strength.style.display = 'flex';
+                    strength.style.flexDirection = 'column';
+                    strength.style.gap = '4px';
+                    let barHtml = '<div class="strength-bar"><span></span><span></span><span></span><span></span></div>';
+                    const lvl = checkStrength(val);
+                    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+                    strength.innerHTML = barHtml + '<span class="strength-label">' + labels[lvl] + '</span>';
+                    strength.setAttribute('data-level', lvl);
+                } else {
+                    strength.style.display = 'none';
+                    strength.setAttribute('data-level', '0');
+                }
+            });
+
+            confirm.addEventListener('input', () => {
+                clearError('confirm');
+                if (confirm.value.length > 0) {
+                    matchIcon.classList.add('show');
+                    if (confirm.value === password.value) {
+                        matchIcon.classList.add('ok');
+                        matchIcon.classList.remove('bad');
+                        matchIcon.innerHTML = CHECK;
+                    } else {
+                        matchIcon.classList.add('bad');
+                        matchIcon.classList.remove('ok');
+                        matchIcon.innerHTML = CROSS;
+                    }
+                } else {
+                    matchIcon.classList.remove('show', 'ok', 'bad');
+                }
+            });
+
+            [fullname, email, phone, agencyName, licenseNumber].forEach(el => {
+                el.addEventListener('input', () => clearError(el.id));
+            });
+
+            terms.addEventListener('change', () => {
+                signupBtn.disabled = !terms.checked;
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                let ok = true;
+
+                if (currentAccountType === 'individual') {
+                    if (fullname.value.trim().length < 2) {
+                        setError('fullname', 'Please enter your full name.');
+                        ok = false;
+                    }
+                } else {
+                    if (agencyName.value.trim().length < 2) {
+                        setError('agencyName', 'Please enter your agency name.');
+                        ok = false;
+                    }
+                    if (licenseNumber.value.trim().length < 3) {
+                        setError('licenseNumber', 'Please enter a valid license number.');
+                        ok = false;
+                    }
+                }
+
+                const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRe.test(email.value.trim())) {
+                    setError('email', 'Please enter a valid email address.');
+                    ok = false;
+                }
+
+                if (!/^[0-9]{7,15}$/.test(phone.value.replace(/\D/g, ''))) {
+                    setError('phone', 'Please enter a valid phone number.');
+                    ok = false;
+                }
+
+                if (password.value.length < 8) {
+                    setError('password', 'Password must be at least 8 characters.');
+                    ok = false;
+                } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password.value)) {
+                    setError('password', 'Password must contain uppercase, lowercase, and a number.');
+                    ok = false;
+                }
+
+                if (confirm.value !== password.value) {
+                    setError('confirm', 'Passwords do not match.');
+                    ok = false;
+                }
+
+                if (!terms.checked) {
+                    ok = false;
+                }
+
+                if (!ok) {
+                    formPanel.classList.add('shake');
+                    setTimeout(() => formPanel.classList.remove('shake'), 500);
+                    return;
+                }
+
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+                signupBtn.querySelector('.btn-label').textContent = 'Creating account…';
+
+                const body = {
+                    accountType: currentAccountType === 'agent' ? 'agent' : 'customer',
+                    email: email.value.trim(),
+                    phone: {
+                        countryCode: $('#countryCode').value,
+                        number: phone.value.replace(/\D/g, '')
+                    },
+                    password: password.value
+                };
+
+                if (currentAccountType === 'individual') {
+                    body.fullname = fullname.value.trim();
+                } else {
+                    body.agencyName = agencyName.value.trim();
+                    body.licenseNumber = licenseNumber.value.trim();
+                }
+
+                try {
+                    const res = await fetch(API + '/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    });
+
+                    const data = await res.json();
+
+                    if (!data.success) {
+                        if (data.errors && data.errors.length > 0) {
+                            data.errors.forEach(err => {
+                                const fieldMap = {
+                                    fullname: 'fullname',
+                                    agencyName: 'agencyName',
+                                    licenseNumber: 'licenseNumber',
+                                    email: 'email',
+                                    'phone.number': 'phone',
+                                    password: 'password'
+                                };
+                                const fieldId = fieldMap[err.field];
+                                if (fieldId) setError(fieldId, err.message);
+                            });
+                        } else {
+                            alert(data.message);
+                        }
+                        signupBtn.classList.remove('loading');
+                        signupBtn.disabled = false;
+                        signupBtn.querySelector('.btn-label').textContent = 'Create Account';
+                        formPanel.classList.add('shake');
+                        setTimeout(() => formPanel.classList.remove('shake'), 500);
+                        return;
+                    }
+
+                    localStorage.setItem('voyago_token', data.data.token);
+                    localStorage.setItem('voyago_user', JSON.stringify(data.data.user));
+
+                    if (data.data.user.accountType === 'agent') {
+                        alert('Agency account created! Your Agency ID is ' + data.data.user.agencyId + '. Save it for future logins.');
+                    }
+
+                    window.location.href = 'dashboard.html';
+
+                } catch (err) {
+                    alert('Network error. Please check your connection.');
+                    signupBtn.classList.remove('loading');
+                    signupBtn.disabled = false;
+                    signupBtn.querySelector('.btn-label').textContent = 'Create Account';
+                }
+            });
+
+            function handleGoogleSignup() {
+                const accountType = currentAccountType === 'agent' ? 'agent' : 'customer';
+                googleSignup(accountType);
+            }
+
+            function googleSignup(accountType) {
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+                signupBtn.querySelector('.btn-label').textContent = 'Connecting…';
+
+                try {
+                    google.accounts.id.initialize({
+                        client_id: 'YOUR_GOOGLE_CLIENT_ID_HERE',
+                        callback: async (response) => {
+                            try {
+                                const res = await fetch(API + '/google', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        token: response.credential,
+                                        accountType: accountType
+                                    })
+                                });
+
+                                const data = await res.json();
+
+                                if (!data.success) {
+                                    alert(data.message);
+                                    signupBtn.classList.remove('loading');
+                                    signupBtn.disabled = false;
+                                    signupBtn.querySelector('.btn-label').textContent = 'Create Account';
+                                    return;
+                                }
+
+                                localStorage.setItem('voyago_token', data.data.token);
+                                localStorage.setItem('voyago_user', JSON.stringify(data.data.user));
+                                window.location.href = 'dashboard.html';
+                            } catch (err) {
+                                alert('Network error. Please check your connection.');
+                                signupBtn.classList.remove('loading');
+                                signupBtn.disabled = false;
+                                signupBtn.querySelector('.btn-label').textContent = 'Create Account';
+                            }
+                        },
+                        auto_select: false,
+                    });
+
+                    google.accounts.id.prompt((notification) => {
+                        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                            signupBtn.classList.remove('loading');
+                            signupBtn.disabled = false;
+                            signupBtn.querySelector('.btn-label').textContent = 'Create Account';
+                        }
+                    });
+                } catch (err) {
+                    signupBtn.classList.remove('loading');
+                    signupBtn.disabled = false;
+                    signupBtn.querySelector('.btn-label').textContent = 'Create Account';
+                }
+            }
+
+            const socialBtns = document.querySelectorAll('.social button');
+            socialBtns.forEach(btn => {
+                const label = btn.getAttribute('aria-label') || '';
+                if (label.includes('Google')) {
+                    btn.addEventListener('click', handleGoogleSignup);
+                }
+            });
+
+            const gsScript = document.createElement('script');
+            gsScript.src = 'https://accounts.google.com/gsi/client';
+            gsScript.async = true;
+            gsScript.defer = true;
+            document.head.appendChild(gsScript);
+        })();
+    </script>
+</body>
+
+</html>
+
+register.html
