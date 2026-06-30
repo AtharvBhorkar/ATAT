@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -82,10 +82,9 @@
       <a href="home.html" class="logo">
         <span class="logo-icon">
           <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2.5" />
-            <path d="M8 20 Q12 10 16 14 Q20 18 24 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-              fill="none" />
-            <circle cx="16" cy="14" r="2.5" fill="currentColor" />
+            <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2.5"/>
+            <path d="M8 20 Q12 10 16 14 Q20 18 24 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <circle cx="16" cy="14" r="2.5" fill="currentColor"/>
           </svg>
         </span>
         <span>VOYAGO</span>
@@ -114,8 +113,8 @@
   <!-- ------------- HERO SECTION ------------- -->
   <header class="privacy-hero">
     <div class="hero-bg">
-      <img src="https://images.unsplash.com/photo-1517055748805-4db10034a742?auto=format&fit=crop&w=1920&q=100"
-        alt="Vintage Typewriter" loading="lazy">
+      <img src="assets/privacy_policy_bg.png"
+        alt="Privacy Policy Background" loading="lazy">
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content fade-up">
@@ -552,9 +551,7 @@
     }
   </script>
 
-  <script>
-/* -- NAVBAR SCROLL -- */ const navbar = document.getElementById('navbar'); const onScroll = () => { navbar.classList.toggle('scrolled', window.scrollY > 40); }; window.addEventListener('scroll', onScroll, { passive: true }); onScroll(); /* -- HAMBURGER MENU -- */ const hamburger = document.getElementById('hamburger'); const navLinks = document.getElementById('navLinks'); hamburger.addEventListener('click', () => { const open = hamburger.classList.toggle('open'); navLinks.classList.toggle('open', open); hamburger.setAttribute('aria-expanded', open); }); // Close on link click navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); })); // Close on outside click document.addEventListener('click', e => { if (!navbar.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
-  </script>
+
 </body>
 
 </html>
