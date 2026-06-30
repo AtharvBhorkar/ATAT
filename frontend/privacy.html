@@ -1,0 +1,560 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | Voyago - Premium Travel Experience</title>
+  <meta name="description" content="Voyago's commitment to protecting your privacy and personal data.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Mrs+Saint+Delafield&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/privacy.css">
+  <!-- Inline override for Navbar Background and Premium Animations -->
+  <style>
+    .navbar.scrolled {
+      background: #ffffff !important;
+    }
+
+    /* PREMIUM SECTION ANIMATIONS */
+    .premium-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      filter: blur(10px);
+      transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .premium-reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    .premium-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .premium-reveal.in-view .premium-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .premium-reveal.in-view .premium-item:nth-child(1) {
+      transition-delay: 0.1s;
+    }
+
+    .premium-reveal.in-view .premium-item:nth-child(2) {
+      transition-delay: 0.2s;
+    }
+
+    .premium-reveal.in-view .premium-item:nth-child(3) {
+      transition-delay: 0.3s;
+    }
+
+    .premium-reveal.in-view .premium-item:nth-child(4) {
+      transition-delay: 0.4s;
+    }
+
+    .premium-reveal.in-view .premium-item:nth-child(5) {
+      transition-delay: 0.5s;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ------------- NAVBAR ------------- -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="home.html" class="logo">
+        <span class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2.5" />
+            <path d="M8 20 Q12 10 16 14 Q20 18 24 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+              fill="none" />
+            <circle cx="16" cy="14" r="2.5" fill="currentColor" />
+          </svg>
+        </span>
+        <span>VOYAGO</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="vehicles.html">Vehicles</a></li>
+        <li><a href="packages.html">Packages</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn-ghost">Sign In</a>
+        <a href="booking.html" class="btn-primary">Book a Ride</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ------------- HERO SECTION ------------- -->
+  <header class="privacy-hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1517055748805-4db10034a742?auto=format&fit=crop&w=1920&q=100"
+        alt="Vintage Typewriter" loading="lazy">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content fade-up">
+      <h1>Privacy Policy</h1>
+    </div>
+  </header>
+
+  <!-- ------------- COMMITMENT SECTION ------------- -->
+  <section class="commitment-section section-padding">
+    <div class="container grid-2-col">
+      <div class="commitment-image fade-up">
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80"
+          alt="Business professionals reviewing documents">
+      </div>
+      <div class="commitment-text fade-up delay-1">
+        <span class="eyebrow">OUR COMMITMENT</span>
+        <h2>Discretion is our<br><span class="accent-italic">Signature</span></h2>
+        <div class="gold-divider"></div>
+        <p>At Voyago, we are committed to providing the highest standard of luxury transportation. That commitment
+          extends to how we protect the data of our valued clients.</p>
+        <p>We safeguard your personal information with the utmost discretion and responsibility, utilizing the most
+          advanced security protocols to ensure your privacy is never compromised during your journey.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------- THE DETAILS (ACCORDION) ------------- -->
+  <section class="details-section section-padding bg-beige">
+    <div class="container">
+      <div class="section-header text-center fade-up">
+        <h2>The <span class="accent-italic">Details</span></h2>
+        <p class="subtext">TRANSPARENCY IN HOW WE PROTECT YOUR DATA</p>
+      </div>
+
+      <div class="accordion-container fade-up delay-1">
+
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span class="acc-title"><i class="fa-solid fa-database"></i> Data Collection</span>
+            <span class="acc-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-inner">
+              <p>We collect information that you voluntarily provide to us when registering on the site, expressing an
+                interest in obtaining information about us, or when booking our premium services. This includes your
+                name, contact details, payment information, and specific travel preferences.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span class="acc-title"><i class="fa-solid fa-chart-pie"></i> Data Usage</span>
+            <span class="acc-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-inner">
+              <p>Your data allows us to curate a seamless and bespoke travel experience. We use this information to
+                manage reservations, process secure transactions, accommodate your personalized requests, and improve
+                our overall service quality.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span class="acc-title"><i class="fa-solid fa-cookie-bite"></i> Cookie Policy</span>
+            <span class="acc-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-inner">
+              <p>We use cookies and similar tracking technologies to enhance your browsing experience, analyze site
+                traffic, and personalize content. You can control cookie preferences through your browser settings at
+                any time.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span class="acc-title"><i class="fa-solid fa-scale-balanced"></i> Your Rights</span>
+            <span class="acc-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-inner">
+              <p>You have the right to access, rectify, or erase your personal data. You may also restrict processing or
+                request data portability. To exercise these rights, simply contact our Data Protection Officer.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span class="acc-title"><i class="fa-solid fa-clock-rotate-left"></i> Data Retention</span>
+            <span class="acc-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-inner">
+              <p>We retain personal information only for as long as necessary to fulfill the purposes outlined in this
+                policy, comply with our legal obligations, resolve disputes, and enforce our agreements.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header">
+            <span class="acc-title"><i class="fa-solid fa-globe"></i> Global Transfers</span>
+            <span class="acc-icon"><i class="fa-solid fa-chevron-down"></i></span>
+          </button>
+          <div class="accordion-content">
+            <div class="content-inner">
+              <p>As a global service provider, your information may be transferred to and maintained on servers located
+                outside of your jurisdiction. We ensure appropriate safeguards are in place for all international data
+                transfers.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------- TRUSTED & SECURED ------------- -->
+  <section class="trusted-section section-padding bg-white">
+    <div class="container">
+      <div class="section-header text-center fade-up">
+        <h2>Trusted & <span class="accent-italic">Secured</span></h2>
+        <p class="subtext">RIGOROUS STANDARDS OF DATA PROTECTION</p>
+      </div>
+
+      <div class="trusted-grid fade-up delay-1">
+        <div class="trust-card">
+          <div class="trust-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3>Bank-Level Security</h3>
+          <p>256-bit AES encryption ensures your digital safety at all times.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+          <h3>GDPR Compliant</h3>
+          <p>Fully compliant with EU data protection regulations.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon"><i class="fa-solid fa-certificate"></i></div>
+          <h3>ISO 27001</h3>
+          <p>Certified information security management systems.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------- GLOBAL COMPLIANCE ------------- -->
+  <section class="compliance-section section-padding bg-beige">
+    <div class="container">
+      <div class="section-header text-center fade-up">
+        <h2>Global <span class="accent-italic">Compliance</span></h2>
+        <p class="subtext">ADHERING TO THE STRICTEST INTERNATIONAL STANDARDS</p>
+      </div>
+
+      <div class="compliance-grid fade-up delay-1">
+        <div class="comp-card">
+          <div class="comp-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h3>GDPR (Europe)</h3>
+          <p>Your data is handled in strict compliance with the European Union's General Data Protection Regulation,
+            ensuring transparency and granting you full control.</p>
+        </div>
+        <div class="comp-card">
+          <div class="comp-icon"><i class="fa-solid fa-file-shield"></i></div>
+          <h3>CCPA (California)</h3>
+          <p>California residents have the right to know what personal information is collected, how it's used, and the
+            right to opt-out of the sale of their data.</p>
+        </div>
+        <div class="comp-card">
+          <div class="comp-icon"><i class="fa-solid fa-globe"></i></div>
+          <h3>Global Directives</h3>
+          <p>We continuously monitor international privacy laws to ensure our practices exceed the standard requirements
+            of every territory we operate in.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------- THE QUOTE SECTION ------------- -->
+  <section class="quote-section section-padding bg-beige">
+    <div class="container fade-up">
+      <div class="quote-card">
+        <div class="quote-image">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80"
+            alt="Vikram Malhotra">
+        </div>
+        <div class="quote-content">
+          <div class="quote-icon">"</div>
+          <blockquote>
+            At Voyago, we understand that for our clientele, privacy is not just a policy - it is a fundamental
+            expectation. We have built our entire operational framework around the absolute protection of your personal
+            and itinerary data. Your discretion is our signature.
+          </blockquote>
+          <div class="quote-author">
+            <strong>VIKRAM MALHOTRA</strong>
+            <span>Chief Privacy Officer, Voyago</span>
+          </div>
+          <div class="signature">
+            Vikram Malhotra
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------- CTA SECTION ------------- -->
+  <section class="privacy-cta">
+    <div class="cta-bg">
+      <img src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1920&q=80"
+        alt="Vintage Car" loading="lazy">
+    </div>
+    <div class="cta-overlay"></div>
+    <div class="cta-content container text-center fade-up">
+      <h2>Questions About Your Privacy?</h2>
+      <p>Our Data Protection Officer is available for any queries.</p>
+      <a href="mailto:privacy@voyago.com" class="btn-gold">CONTACT LEGAL TEAM <i
+          class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </section>
+
+  <!-- ------------- FOOTER ------------- -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="home.html" class="logo footer-logo">
+            <span class="logo-icon">
+              <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2.5" />
+                <path d="M8 20 Q12 10 16 14 Q20 18 24 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                  fill="none" />
+                <circle cx="16" cy="14" r="2.5" fill="currentColor" />
+              </svg>
+            </span>
+            VOYAGO
+          </a>
+          <p>Trusted vehicle rentals for tours, transfers and pilgrimages across India since 2012. Your journey, our
+            commitment.</p>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+              </svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg>
+            </a>
+            <a href="#" aria-label="WhatsApp">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h5>Quick Links</h5>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="vehicles.html">Our Fleet</a></li>
+            <li><a href="packages.html">Tour Packages</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="blog.html">Travel Blog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Services</h5>
+          <ul>
+            <li><a href="vehicles.html?type=sedan">Sedan Hire</a></li>
+            <li><a href="vehicles.html?type=suv">SUV Rental</a></li>
+            <li><a href="vehicles.html?type=tempo">Tempo Traveller</a></li>
+            <li><a href="vehicles.html?type=bus">Bus Charter</a></li>
+            <li><a href="packages.html?type=pilgrimage">Pilgrimage Tours</a></li>
+            <li><a href="booking.html">Corporate Bookings</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Get In Touch</h5>
+          <ul class="contact-list">
+            <li>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1C4.8 1 3 2.8 3 5c0 3.5 4 9 4 9s4-5.5 4-9c0-2.2-1.8-4-4-4z" stroke="currentColor"
+                  stroke-width="1.4" />
+                <circle cx="7" cy="5" r="1.5" fill="currentColor" />
+              </svg>
+              <span>42, Travel Hub, MG Road,<br>Pune, Maharashtra — 411001</span>
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 2h3l1 3-1.5 1.5a9 9 0 003 3L9 8l3 1v3a1 1 0 01-1 1C4.7 13 1 9.3 1 3a1 1 0 011-1z"
+                  stroke="currentColor" stroke-width="1.4" />
+              </svg>
+              <a href="tel:+911800000000">+91 1800-000-0000</a>
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4" />
+                <path d="M1 4l6 4.5L13 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+              </svg>
+              <a href="mailto:hello@voyago.in">hello@voyago.in</a>
+            </li>
+          </ul>
+          <div class="footer-hours">
+            <strong>Business Hours</strong>
+            <span>Mon – Sat: 9 AM to 8 PM</span>
+            <span>Sun: 10 AM to 5 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-inner">
+          <p>&copy; 2026 Voyago Tours &amp; Travels. All rights reserved.</p>
+          <div class="footer-legal">
+            <a href="terms-condition.html">Terms &amp; Conditions</a>
+            <a href="privacy.html" class="active">Privacy Policy</a>
+            <a href="cancellation-policy.html">Cancellation Policy</a>
+            <a href="faq.html">FAQ</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
+  <!-- Custom Script for Accordion & Animations -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+
+      // Intersection Observer for fade animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.fade-up').forEach(el => {
+        observer.observe(el);
+      });
+
+      // Accordion Logic
+      const accordions = document.querySelectorAll('.accordion-header');
+
+      accordions.forEach(acc => {
+        acc.addEventListener('click', function () {
+          // Close all others
+          accordions.forEach(other => {
+            if (other !== this) {
+              other.classList.remove('active');
+              other.nextElementSibling.style.maxHeight = null;
+              other.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
+            }
+          });
+
+          // Toggle current
+          this.classList.toggle('active');
+          const content = this.nextElementSibling;
+          const icon = this.querySelector('.fa-chevron-down');
+
+          if (this.classList.contains('active')) {
+            content.style.maxHeight = content.scrollHeight + "px";
+            icon.style.transform = 'rotate(180deg)';
+          } else {
+            content.style.maxHeight = null;
+            icon.style.transform = 'rotate(0deg)';
+          }
+        });
+      });
+    });
+  </script>
+  <script>
+    {
+      /* ------- PREMIUM ANIMATIONS ------- */
+      const premiumSections = document.querySelectorAll('section, .section, .hero, .footer-col');
+      premiumSections.forEach(sec => {
+        sec.classList.add('premium-reveal');
+        sec.querySelectorAll('h1, h2, h3, p, .card, .stat-card').forEach(el => el.classList.add('premium-item'));
+      });
+      const premiumObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            premiumObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+      premiumSections.forEach(sec => premiumObs.observe(sec));
+
+      /* ------- NAVBAR SCROLL ------- */
+      const navbar = document.getElementById('navbar');
+      const onScroll = () => { if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 40); };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      /* ------- HAMBURGER MENU ------- */
+      const hamburger = document.getElementById('hamburger');
+      const navLinks = document.getElementById('navLinks');
+      if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+          const open = hamburger.classList.toggle('open');
+          navLinks.classList.toggle('open', open);
+          hamburger.setAttribute('aria-expanded', open);
+        });
+        // Close on link click
+        navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); }));
+        // Close on outside click
+        document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
+      }
+    }
+  </script>
+
+  <script>
+/* -- NAVBAR SCROLL -- */ const navbar = document.getElementById('navbar'); const onScroll = () => { navbar.classList.toggle('scrolled', window.scrollY > 40); }; window.addEventListener('scroll', onScroll, { passive: true }); onScroll(); /* -- HAMBURGER MENU -- */ const hamburger = document.getElementById('hamburger'); const navLinks = document.getElementById('navLinks'); hamburger.addEventListener('click', () => { const open = hamburger.classList.toggle('open'); navLinks.classList.toggle('open', open); hamburger.setAttribute('aria-expanded', open); }); // Close on link click navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); })); // Close on outside click document.addEventListener('click', e => { if (!navbar.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
+  </script>
+</body>
+
+</html>

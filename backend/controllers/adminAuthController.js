@@ -1,0 +1,334 @@
+const jwt = require('jsonwebtoken');
+const Admin = require('../models/Admin');
+
+
+
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '7d'
+  });
+};
+
+// @desc    Register a new admin
+// @route   POST /api/admin/register
+// @access  Public
+exports.register = async (req, res) => {
+  try {
+    const { name, email, password, secretKey } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide name, email and password."
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters."
+      });
+    }
+
+    // Normalize both keys
+    const cleanKey = (secretKey || "")
+      .replace(/[^A-Za-z0-9]/g, "")
+      .toUpperCase();
+
+    const cleanEnvKey = (process.env.ADMIN_SECRET_KEY || "")
+      .replace(/[^A-Za-z0-9]/g, "")
+      .toUpperCase();
+
+    if (!cleanKey || cleanKey !== cleanEnvKey) {
+      console.log("Received:", cleanKey);
+      console.log("Expected:", cleanEnvKey);
+
+      return res.status(403).json({
+        success: false,
+        message: "Invalid or expired admin registration key."
+      });
+    }
+
+    const existingAdmin = await Admin.findOne({ email });
+
+    if (existingAdmin) {
+      return res.status(400).json({
+        success: false,
+        message: "An admin with this email already exists."
+      });
+    }
+
+    const admin = await Admin.create({
+      name,
+      email,
+      password
+    });
+
+    const token = generateToken(admin._id);
+
+    res.status(201).json({
+      success: true,
+      message: "Admin registered successfully.",
+      data: {
+        token,
+        admin
+      }
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Login admin
+// @route   POST /api/admin/login
+// @access  Public
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide email and password.'
+      });
+    }
+
+    const admin = await Admin.findOne({ email }).select('+password');
+    if (!admin) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password.'
+      });
+    }
+
+    const isMatch = await admin.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password.'
+      });
+    }
+
+    admin.lastLogin = new Date();
+    await admin.save({ validateBeforeSave: false });
+    const token = generateToken(admin._id);
+
+    res.json({
+      success: true,
+      message: 'Login successful.',
+      data: {
+        token,
+        admin: {
+          id: admin._id,
+          name: admin.name,
+          email: admin.email,
+          role: admin.role,
+          lastLogin: admin.lastLogin
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+
+// @desc    Logout admin
+// @route   POST /api/admin/logout
+// @access  Private/Public
+exports.logout = async (req, res) => {
+  try {
+    // If you're using cookies
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Logged out successfully.'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+
+// @desc    Get admin dashboard stats
+// @route   GET /api/admin/dashboard
+// @access  Private
+exports.dashboard = async (req, res) => {
+  try {
+    const Vehicle = require('../models/Vehicle');
+    const Package = require('../models/Package');
+    const Booking = require('../models/Booking');
+    const Contact = require('../models/Contact');
+    const Payment = require('../models/Payment');
+
+    // Count unique emails from bookings to estimate total users
+    const uniqueEmails = await Booking.distinct('email');
+    const totalUsersCount = uniqueEmails.length;
+
+    // Count totals
+    const [totalVehicles, totalPackages, totalBookings, pendingBookings, confirmedBookings, completedBookings, cancelledBookings, totalContacts, unreadContacts, totalRevenue] = await Promise.all([
+      Vehicle.countDocuments(),
+      Vehicle.countDocuments({ available: true }),          // ADDED
+      Package.countDocuments(),
+      Package.countDocuments({ active: true }),              // ADDED
+      Booking.countDocuments(),
+      Booking.countDocuments({ status: 'pending' }),
+      Booking.countDocuments({ status: 'confirmed' }),
+      Booking.countDocuments({ status: 'completed' }),
+      Booking.countDocuments({ status: 'cancelled' }),
+      Booking.countDocuments({ status: 'in-progress' }),
+      Contact.countDocuments(),
+      Contact.countDocuments({ isRead: false }),
+      Booking.aggregate([
+        { $match: { status: { $in: ['confirmed', 'completed'] } } },
+        { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+      ]),
+      Booking.aggregate([
+        { $match: { paymentStatus: { $ne: 'paid' }, status: { $ne: 'cancelled' } } },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: { $subtract: ['$totalPrice', '$advancePaid'] }
+            }
+          }
+        }
+      ])
+    ]);
+
+    const recentBookings = await Booking.find()
+      .populate('vehicleId', 'name type brand')
+      .populate('packageId', 'title destination')
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    const recentContacts = await Contact.find()
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    const vehicleBookings = await Booking.countDocuments({ bookingType: 'vehicle' });
+    const packageBookings = await Booking.countDocuments({ bookingType: 'package' });
+
+    const vehicleRevenue = await Booking.aggregate([
+      { $match: { bookingType: 'vehicle', status: { $in: ['confirmed', 'completed'] } } },
+      { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+    ]);
+    const packageRevenue = await Booking.aggregate([
+      { $match: { bookingType: 'package', status: { $in: ['confirmed', 'completed'] } } },
+      { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+    ]);
+
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    const monthlyBookings = await Booking.aggregate([
+      { $match: { createdAt: { $gte: sixMonthsAgo } } },
+      {
+        $group: {
+          _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+          count: { $sum: 1 },
+          cancellations: {
+            $sum: { $cond: [{ $eq: ['$status', 'cancelled'] }, 1, 0] }
+          },
+          revenue: { $sum: '$totalPrice' }
+        }
+      },
+      { $sort: { '_id.year': 1, '_id.month': 1 } }
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        stats: {
+          totalVehicles,
+          availableVehicles,       // ADDED
+          totalPackages,
+          activePackages,          // ADDED
+          totalBookings,
+          pendingBookings,
+          confirmedBookings,
+          completedBookings,
+          cancelledBookings,
+          activeRentals,
+          totalContacts,
+          unreadContacts,
+          totalRevenue: revenueAggregation[0]?.total || 0,
+          pendingPayments: pendingPaymentsAggregation[0]?.total || 0,
+          totalUsers: totalUsersCount,
+          vehicleBookings,
+          packageBookings,
+          vehicleRevenue: vehicleRevenue[0]?.total || 0,
+          packageRevenue: packageRevenue[0]?.total || 0
+        },
+        recentBookings,
+        recentContacts,
+        monthlyBookings
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Get current admin profile
+// @route   GET /api/admin/me
+// @access  Private
+exports.getMe = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.admin._id);
+    res.json({
+      success: true,
+      data: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+        lastLogin: admin.lastLogin,
+        createdAt: admin.createdAt
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Seed default admin from .env
+exports.seedDefaultAdmin = async () => {
+  try {
+    const existingAdmin = await Admin.findOne({ email: process.env.ADMIN_EMAIL });
+    if (!existingAdmin) {
+      await Admin.create({
+        name: 'Super Admin',
+        email: process.env.ADMIN_EMAIL,
+        password: process.env.ADMIN_PASSWORD,
+        role: 'superadmin'
+      });
+      console.log('Default admin seeded successfully.');
+    } else {
+      console.log('Default admin already exists.');
+    }
+  } catch (error) {
+    console.error('Error seeding default admin:', error.message);
+  }
+};
