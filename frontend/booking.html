@@ -8,11 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/home.css" />
-  <link rel="stylesheet" href="css/booking.css?v=5" />
+  <link rel="stylesheet" href="css/booking.css?v=6" />
 </head>
 <body>
-
-  <!-- ══════════════ NAVBAR ══════════════ -->
+  <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
       <a href="home.html" class="logo">
@@ -37,7 +36,7 @@
 
       <div class="nav-actions">
         <a href="login.html" class="btn-ghost">Sign In</a>
-        <a href="booking.html" class="btn-primary" style="background: var(--maroon-dark); border-color: var(--maroon-dark);">Book a Ride</a>
+        <a href="booking.html" class="btn-primary">Book a Ride</a>
       </div>
 
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -45,12 +44,11 @@
       </button>
     </div>
   </nav>
-
-  <!-- ══════════════ MAIN BOOKING CONTENT ══════════════ -->
+  <!-- MAIN BOOKING CONTENT  -->
   <main class="booking-page-container">
     <div class="container">
       
-      <!-- ─── BREADCRUMBS / STEP INDICATOR ─── -->
+      <!-- BREADCRUMBS / STEP INDICATOR -->
       <div class="steps-progress-wrapper">
         <div class="steps-progress-line">
           <div class="steps-progress-fill" id="progressFill" style="width: 0%;"></div>
@@ -74,12 +72,12 @@
           </div>
           <div class="step-item" data-step="5" id="stepIndicator5">
             <div class="step-circle">5</div>
-            <span class="step-label">Payment</span>
+            <span class="step-label">Confirm Booking</span>
           </div>
         </div>
       </div>
 
-      <!-- ─── MAIN BOOKING GRID ─── -->
+      <!-- MAIN BOOKING GRID -->
       <div class="booking-grid">
         
         <!-- LEFT COLUMN: DYNAMIC FORM WIZARD -->
@@ -91,7 +89,79 @@
               <h2 class="step-title">Step 1: Trip Details</h2>
               <p class="step-subtitle">Please provide your trip information</p>
               
-              <div class="form-grid">
+              <!-- PACKAGE DETAILS PANEL (integrated preview) -->
+              <div class="package-details-panel" id="packageDetailsPanel">
+                <div class="pkg-preview-hero" id="pkgPreviewHero" style="background-image: url('');">
+                  <div class="pkg-preview-hero-content">
+                    <span class="pkg-preview-category" id="pkgPreviewCategory">Hill Station</span>
+                    <h1 class="pkg-preview-title" id="pkgPreviewTitle">Package Title</h1>
+                    <div class="pkg-preview-meta">
+                      <span class="pkg-preview-duration" id="pkgPreviewDuration">6 Days / 5 Nights</span>
+                      <span class="pkg-preview-stars" id="pkgPreviewStars">★★★★★</span>
+                      <span id="pkgPreviewReviews">4.8 (2.4k reviews)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="pkg-preview-body">
+                  <p class="pkg-preview-description" id="pkgPreviewDescription">Package Description...</p>
+                  
+                  <h4 class="pkg-preview-section-title">Package Highlights</h4>
+                  <ul class="pkg-preview-highlights-list" id="pkgPreviewHighlights">
+                    <!-- Highlights populated dynamically -->
+                  </ul>
+
+                  <div class="pkg-preview-tabs-header">
+                    <button type="button" class="pkg-preview-tab-btn active" data-pkg-tab="itinerary">Itinerary</button>
+                    <button type="button" class="pkg-preview-tab-btn" data-pkg-tab="inclusions">Inclusions &amp; Exclusions</button>
+                    <button type="button" class="pkg-preview-tab-btn" data-pkg-tab="stays">Stays &amp; Hotels</button>
+                  </div>
+
+                  <div class="pkg-preview-tabs-content">
+                    <!-- ITINERARY TAB -->
+                    <div class="pkg-preview-tab-view active" id="pkgTabItinerary">
+                      <div class="itinerary-timeline" id="pkgPreviewTimeline">
+                        <!-- Populated dynamically -->
+                      </div>
+                    </div>
+
+                    <!-- INCLUSIONS & EXCLUSIONS TAB -->
+                    <div class="pkg-preview-tab-view" id="pkgTabInclusions">
+                      <div class="inc-exc-grid">
+                        <div>
+                          <h5 style="margin: 0 0 10px 0; font-size: 13.5px; color: #2E7D32; font-weight: 700;">What's Included:</h5>
+                          <ul class="inc-exc-list inc-list" id="pkgPreviewInclusions">
+                            <!-- Populated dynamically -->
+                          </ul>
+                        </div>
+                        <div>
+                          <h5 style="margin: 0 0 10px 0; font-size: 13.5px; color: #C62828; font-weight: 700;">What's Excluded:</h5>
+                          <ul class="inc-exc-list exc-list" id="pkgPreviewExclusions">
+                            <!-- Populated dynamically -->
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- STAYS TAB -->
+                    <div class="pkg-preview-tab-view" id="pkgTabStays">
+                      <div class="stays-preview-card">
+                        <div class="stays-icon">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        </div>
+                        <div class="stays-details-text">
+                          <span class="stays-label">Stay Accommodations</span>
+                          <span class="stays-value" id="pkgPreviewStays">Standard 3-Star Hotels</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <!-- STANDARD RIDE BOOKING INPUTS -->
+              <div class="standard-locations-grid form-grid" id="standardLocationsGrid">
                 <!-- Location Row -->
                 <div class="locations-row span-full">
                   <div class="form-group location-group">
@@ -283,122 +353,31 @@
                   <span>Go Back</span>
                 </button>
                 <button type="button" class="btn-step-next" id="goToStep5Btn">
-                  <span>Continue to Payment</span>
+                  <span>Continue to Confirm Booking</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </button>
               </div>
             </div>
 
-            <!-- STEP 5: PAYMENT -->
+            <!-- STEP 5: CONFIRMATION -->
             <div class="form-step-view" id="stepView5">
-              <h2 class="step-title">Step 5: Secure Payment</h2>
-              <p class="step-subtitle">Complete your transaction using our safe checkout</p>
+              <h2 class="step-title">Step 5: Confirm Booking</h2>
+              <p class="step-subtitle">Please review your details and confirm your reservation</p>
               
-              <div class="payment-method-selector">
-                <label class="payment-method-card active">
-                  <input type="radio" name="paymentMethod" value="card" checked />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="2" y="5" width="20" height="14" rx="2" />
-                      <line x1="2" y1="10" x2="22" y2="10" />
-                      <rect x="6" y="14" width="3" height="2" rx="0.5" />
-                    </svg>
-                    <strong>Credit / Debit Card</strong>
-                  </span>
-                </label>
-
-                <label class="payment-method-card">
-                  <input type="radio" name="paymentMethod" value="upi" />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="5" y="2" width="14" height="20" rx="2" />
-                      <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
-                      <path d="M9 10l2 2 4-4" />
-                    </svg>
-                    <strong>UPI (Instant Pay)</strong>
-                  </span>
-                </label>
-
-                <label class="payment-method-card">
-                  <input type="radio" name="paymentMethod" value="cash" />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="2" y="6" width="20" height="12" rx="2" />
-                      <circle cx="12" cy="12" r="3" />
-                      <path d="M6 12h.01M18 12h.01" stroke-width="2.5" />
-                    </svg>
-                    <strong>Pay to Driver</strong>
-                  </span>
-                </label>
-              </div>
-
-              <!-- Card form inputs container -->
-              <div class="card-details-form" id="cardDetailsForm">
-                <div class="form-grid">
-                  <div class="form-group span-full">
-                    <label for="cardNumber" class="form-label">Card Number</label>
-                    <div class="input-wrapper">
-                      <span class="input-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                      </span>
-                      <input type="text" id="cardNumber" class="form-input-text" placeholder="4111 2222 3333 4444" maxlength="19" />
-                    </div>
-                    <div class="error-msg" id="cardNumError">Please enter a valid card number.</div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="cardExpiry" class="form-label">Expiry Date</label>
-                    <input type="text" id="cardExpiry" class="form-input-text" placeholder="MM/YY" maxlength="5" />
-                    <div class="error-msg" id="cardExpiryError">Enter date in MM/YY format.</div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="cardCvv" class="form-label">CVV / CVV2</label>
-                    <input type="password" id="cardCvv" class="form-input-text" placeholder="***" maxlength="4" />
-                    <div class="error-msg" id="cardCvvError">Enter 3 or 4 digit CVV.</div>
-                  </div>
+              <div class="booking-confirmation-notice">
+                <div class="confirm-icon-wrap">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--maroon)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
                 </div>
+                <h3>Ready to Confirm Your Ride?</h3>
+                <p>By confirming, you agree to our booking policies. Your driver details and trip verification code will be sent to your contact email and phone number shortly.</p>
               </div>
 
-              <!-- UPI Info -->
-              <div class="upi-info-container" id="upiInfoContainer" style="display: none;">
-                <div class="form-group">
-                  <label for="upiId" class="form-label">UPI ID *</label>
-                  <input type="text" id="upiId" class="form-input-text" placeholder="username@upi" />
-                  <div class="error-msg" id="upiError">Please enter a valid UPI ID (e.g. name@okaxis).</div>
-                </div>
-                <div style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">
-                  We will send a payment request to your UPI app. Open Google Pay, PhonePe, or BHIM to approve it.
-                </div>
-              </div>
-
-              <!-- Cash Info -->
-              <div class="cash-info-container" id="cashInfoContainer" style="display: none;">
-                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 8px;">
-                  You can pay the full amount of <strong id="cashPayableAmt">₹ 4,800</strong> directly to the driver at the end of the trip via Cash, UPI, or Card.
-                </p>
-                <div style="background: rgba(110,31,43,.04); border-left: 3px solid var(--maroon); padding: 12px; border-radius: 4px; font-size: 13px;">
-                  <strong>Note:</strong> A verification OTP will be sent to your mobile number prior to dispatch.
-                </div>
-              </div>
-
-              <!-- Terms checkbox -->
-              <div class="terms-acceptance-checkbox">
-                <label class="custom-checkbox-container">
-                  <input type="checkbox" id="termsCheck" required />
-                  <span class="checkmark"></span>
-                  <span class="checkbox-text">I agree to the <a href="terms-condition.html" target="_blank">Terms &amp; Conditions</a>, <a href="privacy.html" target="_blank">Privacy Policy</a>, and <a href="cancellation-policy.html" target="_blank">Cancellation Policy</a>.</span>
-                </label>
-                <div class="error-msg" id="termsError">You must agree to the terms to proceed.</div>
-              </div>
-
-              <div class="step-actions">
-                <button type="button" class="btn-step-prev-nav" id="backToStep4Btn">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                  <span>Go Back</span>
-                </button>
-                <button type="button" class="btn-step-next" id="confirmPaymentBtn">
-                  <span>Pay &amp; Confirm Booking</span>
+              <div class="step-actions" style="justify-content: center; margin-top: 32px;">
+                <button type="button" class="btn-step-next" id="confirmPaymentBtn" style="width: 100%; max-width: 320px; justify-content: center;">
+                  <span>Confirm Booking</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 </button>
               </div>
@@ -408,7 +387,7 @@
             <div class="form-step-view" id="stepViewLoading">
               <div class="payment-processing-loader">
                 <div class="spinner-ring"></div>
-                <h3>Processing Payment...</h3>
+                <h3>Processing Booking....</h3>
                 <p>Securing connection with bank server. Please do not refresh this page or close your browser.</p>
               </div>
             </div>
@@ -565,6 +544,94 @@
           </div>
         </div>
 
+        <!-- RIGHT COLUMN: PACKAGE TOUR CHECKOUT CARD -->
+        <div class="package-checkout-card" id="packageCheckoutCard">
+          <div class="checkout-card-header">
+            <h3>Package Checkout</h3>
+          </div>
+          <div class="checkout-card-body">
+            
+            <h4 class="checkout-card-section-title">1. Travel Information</h4>
+            <div class="form-group">
+              <label for="pkgDateInput" class="form-label">Travel Start Date *</label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </span>
+                <input type="date" id="pkgDateInput" />
+              </div>
+              <div class="error-msg" id="pkgDateError">Please select a travel start date.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="pkgTravelersCount" class="form-label">Number of People *</label>
+              <select id="pkgTravelersCount" class="form-select">
+                <option value="1">1 Person</option>
+                <option value="2">2 People</option>
+                <option value="3">3 People</option>
+                <option value="4" selected>4 People</option>
+                <option value="5">5 People</option>
+                <option value="6">6 People</option>
+                <option value="7">7 People</option>
+                <option value="8">8 People</option>
+                <option value="9">9 People</option>
+                <option value="10">10+ People</option>
+              </select>
+            </div>
+
+            <h4 class="checkout-card-section-title" style="margin-top: 24px;">2. Contact Details</h4>
+            <div class="form-group">
+              <label for="pkgName" class="form-label">Full Name *</label>
+              <input type="text" id="pkgName" class="form-input-text" placeholder="John Doe" style="padding-left: 14px;" />
+              <div class="error-msg" id="pkgNameError">Please enter your full name.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="pkgEmail" class="form-label">Email Address *</label>
+              <input type="email" id="pkgEmail" class="form-input-text" placeholder="johndoe@example.com" style="padding-left: 14px;" />
+              <div class="error-msg" id="pkgEmailError">Please enter a valid email address.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="pkgPhone" class="form-label">Mobile Number *</label>
+              <div class="phone-input-group">
+                <span class="phone-prefix">+91</span>
+                <input type="tel" id="pkgPhone" class="form-input-text" placeholder="9876543210" pattern="[6-9][0-9]{9}" />
+              </div>
+              <div class="error-msg" id="pkgPhoneError">Please enter a valid 10-digit mobile number.</div>
+            </div>
+
+            <div class="checkout-price-display">
+              <div class="checkout-price-row">
+                <span class="price-lbl">Price per person</span>
+                <span class="price-val" id="pkgPricePerPerson">₹ 0</span>
+              </div>
+              <div class="checkout-price-row">
+                <span class="price-lbl">Travelers count</span>
+                <span class="price-val" id="pkgTravelersMultiplier">x 4</span>
+              </div>
+              <div class="checkout-price-row">
+                <span class="price-lbl">Subtotal</span>
+                <span class="price-val" id="pkgSubtotal">₹ 0</span>
+              </div>
+              <div class="checkout-price-row">
+                <span class="price-lbl">Taxes &amp; Fees (5% GST)</span>
+                <span class="price-val" id="pkgTaxes">₹ 0</span>
+              </div>
+              <div class="checkout-price-row checkout-price-total">
+                <span class="total-lbl">Total Price</span>
+                <span class="price-val" id="pkgTotalPrice">₹ 0</span>
+              </div>
+            </div>
+
+            <button type="button" class="btn-secure-booking" id="bookPackageBtn">
+              <span class="btn-lock-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              </span>
+              <span>Book the Package</span>
+            </button>
+          </div>
+
       </div>
 
     </div>
@@ -647,6 +714,6 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <script src="js/booking.js?v=5"></script>
+  <script src="js/booking.js?v=6"></script>
 </body>
 </html>
