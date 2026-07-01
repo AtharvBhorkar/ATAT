@@ -59,7 +59,7 @@ if (process.env.NODE_ENV === 'development') {
 ROOT → HOME PAGE
 ─────────────────────────────── */
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/home.html'));
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 /* ───────────────────────────────
@@ -84,8 +84,17 @@ app.get('/admin/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/admin-dashboard.html'));
 });
 
-// SPA refresh fix
-app.get('/admin/*', (req, res) => {
+/* ───────────────────────────────
+SPA REFRESH FIX (FIXED)
+─────────────────────────────── */
+app.get('/admin/*', (req, res, next) => {
+  // ✅ Skip static file requests - let 404 handler deal with them
+  const staticFilePattern = /\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|json|map)$/i;
+  
+  if (staticFilePattern.test(req.path)) {
+    return next(); // Skip to 404 handler
+  }
+  
   res.sendFile(path.join(__dirname, '../frontend/admin-dashboard.html'));
 });
 
@@ -107,7 +116,7 @@ app.use('/api/settings', settingsRoutes);
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: `API Route ${req.method} ${req.path} not found`
+    message: `Route ${req.method} ${req.path} not found`
   });
 });
 

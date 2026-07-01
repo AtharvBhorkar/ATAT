@@ -1,253 +1,189 @@
 /* ═══════════════════════════════════════════════
-   VOYAGO — Shared API Utility
-   Used by both admin dashboard and public pages
-════════════════════════════════════════════════ */
+   VOYAGO — Shared API Utility (FIXED)
+═══════════════════════════════════════════════ */
 
 const API = (() => {
-  /* Change this to match your backend — include or exclude /admin/ prefix as needed */
-  const BASE = window.location.origin + '/api';
 
-  function getToken() {
+const BASE = window.location.origin + '/api';
+
+/* ───────── TOKEN HELPERS ───────── */
+
+function getToken() {
     try {
-      return localStorage.getItem('voyago_token') || sessionStorage.getItem('voyago_token');
+        return localStorage.getItem('voyago_token') ||
+               sessionStorage.getItem('voyago_token');
     } catch (e) {
-      return null;
+        return null;
     }
-  }
+}
 
-  function setToken(token, remember) {
+function setToken(token, remember) {
     try {
-      if (remember) {
-        localStorage.setItem('voyago_token', token);
-        sessionStorage.removeItem('voyago_token');
-      } else {
-        sessionStorage.setItem('voyago_token', token);
+        if (remember) {
+            localStorage.setItem('voyago_token', token);
+            sessionStorage.removeItem('voyago_token');
+        } else {
+            sessionStorage.setItem('voyago_token', token);
+            localStorage.removeItem('voyago_token');
+        }
+    } catch (e) {}
+}
+
+function clearToken() {
+    try {
         localStorage.removeItem('voyago_token');
-      }
-    } catch (e) {
-      /* storage full or blocked — ignore */
-    }
-  }
+        sessionStorage.removeItem('voyago_token');
+    } catch (e) {}
+}
 
-  function clearToken() {
-    try {
-      localStorage.removeItem('voyago_token');
-      sessionStorage.removeItem('voyago_token');
-    } catch (e) { /* ignore */ }
-  }
+/* ───────── CORE REQUEST ───────── */
 
-  /* Core request — returns parsed JSON or error object */
-  async function request(endpoint, options) {
-    if (options === undefined) options = {};
-    var url = endpoint.indexOf('http') === 0 ? endpoint : BASE + endpoint;
-    var token = getToken();
+async function request(endpoint, options = {}) {
 
-    var config = {
-      method: options.method || 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+    const url = endpoint.startsWith('http')
+        ? endpoint
+        : BASE + endpoint;
+
+    const token = getToken();
+
+    const config = {
+        method: options.method || 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
     };
 
-    /* Merge caller headers */
+    /* custom headers */
     if (options.headers) {
-      var keys = Object.keys(options.headers);
-      for (var i = 0; i < keys.length; i++) {
-        config.headers[keys[i]] = options.headers[keys[i]];
-      }
+        Object.assign(config.headers, options.headers);
     }
 
-    /* Attach auth token */
+    /* auth header */
     if (token) {
-      config.headers['Authorization'] = 'Bearer ' + token;
+        config.headers['Authorization'] = 'Bearer ' + token;
     }
 
-    /* Serialize body (skip if already a string, e.g. FormData) */
-    if (options.body !== undefined && options.body !== null) {
-      if (typeof options.body === 'string') {
-        config.body = options.body;
-      } else if (options.body instanceof FormData) {
-        config.body = options.body;
-        delete config.headers['Content-Type']; /* let browser set multipart boundary */
-      } else {
-        config.body = JSON.stringify(options.body);
-      }
+    /* body handling */
+    if (options.body != null) {
+        if (options.body instanceof FormData) {
+            config.body = options.body;
+            delete config.headers['Content-Type'];
+        } else if (typeof options.body === 'string') {
+            config.body = options.body;
+        } else {
+            config.body = JSON.stringify(options.body);
+        }
     }
 
     try {
-      var res = await fetch(url, config);
+        const res = await fetch(url, config);
 
-      /* 204 No Content */
-      if (res.status === 204) {
-        return { success: true };
-      }
-
-      /* Try to parse JSON */
-      var data;
-      var text = await res.text();
-      try {
-        data = JSON.parse(text);
-      } catch (parseErr) {
-        if (res.ok) {
-          return { success: true, raw: text };
+        /* 204 */
+        if (res.status === 204) {
+            return { success: true };
         }
-        return { success: false, message: 'Invalid server response (' + res.status + ')' };
-      }
 
-      /* If backend returns success flag, use it; otherwise infer from HTTP status */
-      if (data.success === undefined) {
-        data.success = res.ok;
-      }
+        const text = await res.text();
+        let data;
 
-      /* 401 — session expired */
-      if (res.status === 401) {
-        clearToken();
-        data.unauthenticated = true;
-        if (window.location.pathname.indexOf('dashboard') !== -1) {
-          setTimeout(function () {
-            window.location.href = '/admin';
-          }, 800);
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            return res.ok
+                ? { success: true, raw: text }
+                : { success: false, message: 'Invalid response (' + res.status + ')' };
         }
-      }
 
-      return data;
+        if (data.success === undefined) {
+            data.success = res.ok;
+        }
+
+        /* ❌ IMPORTANT FIX: NO REDIRECT HERE (prevents loop) */
+        if (res.status === 401) {
+            clearToken();
+            data.unauthenticated = true;
+        }
+
+        return data;
 
     } catch (err) {
-      console.error('API Error:', endpoint, err);
-      return { success: false, message: 'Network error. Please check your connection.' };
+        console.error('API Error:', endpoint, err);
+        return {
+            success: false,
+            message: 'Network error'
+        };
     }
-  }
+}
 
-  /* ─── PUBLIC ENDPOINTS (no auth required) ─── */
-  var publicApi = {
-    getVehicles: function (params) {
-      return request('/public/vehicles' + (params ? '?' + params : ''));
-    },
-    getVehicle: function (id) {
-      return request('/public/vehicles/' + id);
-    },
-    getPackages: function (params) {
-      return request('/public/packages' + (params ? '?' + params : ''));
-    },
-    getPackage: function (slug) {
-      return request('/public/packages/' + slug);
-    },
-    getStats: function () {
-      return request('/public/stats');
-    },
-    createBooking: function (data) {
-      return request('/bookings', { method: 'POST', body: data });
-    },
-    createContact: function (data) {
-      return request('/contacts', { method: 'POST', body: data });
-    }
-  };
+/* ───────── PUBLIC API ───────── */
 
-  /* ─── ADMIN ENDPOINTS (auth required) ─── */
-  var adminApi = {
-    /* Auth */
-    login: function (data) {
-      return request('/admin/login', { method: 'POST', body: data });
-    },
-    getMe: function () {
-      return request('/admin/me');
-    },
-    changePassword: function (data) {
-      return request('/admin/change-password', { method: 'PUT', body: data });
-    },
+const publicApi = {
+    getVehicles: (p) => request('/public/vehicles' + (p ? '?' + p : '')),
+    getVehicle: (id) => request('/public/vehicles/' + id),
+    getPackages: (p) => request('/public/packages' + (p ? '?' + p : '')),
+    getPackage: (slug) => request('/public/packages/' + slug),
+    getStats: () => request('/public/stats'),
+    createBooking: (d) => request('/bookings', { method: 'POST', body: d }),
+    createContact: (d) => request('/contacts', { method: 'POST', body: d })
+};
 
-    /* Dashboard */
-    getDashboard: function () {
-      return request('/admin/dashboard');
-    },
+/* ───────── ADMIN API ───────── */
 
-    /* Vehicles — adjust prefix if your backend uses /admin/vehicles */
-    getVehicles: function (params) {
-      return request('/vehicles' + (params ? '?' + params : ''));
-    },
-    getVehicle: function (id) {
-      return request('/vehicles/' + id);
-    },
-    createVehicle: function (data) {
-      return request('/vehicles', { method: 'POST', body: data });
-    },
-    updateVehicle: function (id, data) {
-      return request('/vehicles/' + id, { method: 'PUT', body: data });
-    },
-    deleteVehicle: function (id) {
-      return request('/vehicles/' + id, { method: 'DELETE' });
-    },
-    toggleVehicle: function (id) {
-      return request('/vehicles/' + id + '/toggle', { method: 'PATCH' });
-    },
+const adminApi = {
+
+    login: (d) => request('/admin/login', { method: 'POST', body: d }),
+    getMe: () => request('/admin/me'),
+
+    changePassword: (d) =>
+        request('/admin/change-password', { method: 'PUT', body: d }),
+
+    getDashboard: () => request('/admin/dashboard'),
+
+    /* Vehicles */
+    getVehicles: (p) => request('/vehicles' + (p ? '?' + p : '')),
+    getVehicle: (id) => request('/vehicles/' + id),
+    createVehicle: (d) => request('/vehicles', { method: 'POST', body: d }),
+    updateVehicle: (id, d) => request('/vehicles/' + id, { method: 'PUT', body: d }),
+    deleteVehicle: (id) => request('/vehicles/' + id, { method: 'DELETE' }),
+    toggleVehicle: (id) => request('/vehicles/' + id + '/toggle', { method: 'PATCH' }),
 
     /* Packages */
-    getPackages: function (params) {
-      return request('/packages' + (params ? '?' + params : ''));
-    },
-    getPackage: function (id) {
-      return request('/packages/' + id);
-    },
-    createPackage: function (data) {
-      return request('/packages', { method: 'POST', body: data });
-    },
-    updatePackage: function (id, data) {
-      return request('/packages/' + id, { method: 'PUT', body: data });
-    },
-    deletePackage: function (id) {
-      return request('/packages/' + id, { method: 'DELETE' });
-    },
-    togglePackage: function (id) {
-      return request('/packages/' + id + '/toggle', { method: 'PATCH' });
-    },
-    toggleFeatured: function (id) {
-      return request('/packages/' + id + '/featured', { method: 'PATCH' });
-    },
+    getPackages: (p) => request('/packages' + (p ? '?' + p : '')),
+    getPackage: (id) => request('/packages/' + id),
+    createPackage: (d) => request('/packages', { method: 'POST', body: d }),
+    updatePackage: (id, d) => request('/packages/' + id, { method: 'PUT', body: d }),
+    deletePackage: (id) => request('/packages/' + id, { method: 'DELETE' }),
+    togglePackage: (id) => request('/packages/' + id + '/toggle', { method: 'PATCH' }),
+    toggleFeatured: (id) => request('/packages/' + id + '/featured', { method: 'PATCH' }),
 
     /* Bookings */
-    getBookings: function (params) {
-      return request('/bookings' + (params ? '?' + params : ''));
-    },
-    getBooking: function (id) {
-      return request('/bookings/' + id);
-    },
-    updateBooking: function (id, data) {
-      return request('/bookings/' + id, { method: 'PUT', body: data });
-    },
-    updateBookingStatus: function (id, data) {
-      return request('/bookings/' + id + '/status', { method: 'PATCH', body: data });
-    },
-    deleteBooking: function (id) {
-      return request('/bookings/' + id, { method: 'DELETE' });
-    },
+    getBookings: (p) => request('/bookings' + (p ? '?' + p : '')),
+    getBooking: (id) => request('/bookings/' + id),
+    updateBooking: (id, d) => request('/bookings/' + id, { method: 'PUT', body: d }),
+    updateBookingStatus: (id, d) =>
+        request('/bookings/' + id + '/status', { method: 'PATCH', body: d }),
+    deleteBooking: (id) => request('/bookings/' + id, { method: 'DELETE' }),
 
     /* Contacts */
-    getContacts: function (params) {
-      return request('/contacts' + (params ? '?' + params : ''));
-    },
-    getContact: function (id) {
-      return request('/contacts/' + id);
-    },
-    deleteContact: function (id) {
-      return request('/contacts/' + id, { method: 'DELETE' });
-    },
-    markRead: function (id) {
-      return request('/contacts/' + id + '/read', { method: 'PATCH' });
-    },
-    markUnread: function (id) {
-      return request('/contacts/' + id + '/unread', { method: 'PATCH' });
-    }
-  };
+    getContacts: (p) => request('/contacts' + (p ? '?' + p : '')),
+    getContact: (id) => request('/contacts/' + id),
+    deleteContact: (id) => request('/contacts/' + id, { method: 'DELETE' }),
+    markRead: (id) => request('/contacts/' + id + '/read', { method: 'PATCH' }),
+    markUnread: (id) => request('/contacts/' + id + '/unread', { method: 'PATCH' })
+};
 
-  return {
-    request: request,
-    getToken: getToken,
-    setToken: setToken,
-    clearToken: clearToken,
+/* ───────── EXPORT ───────── */
+
+return {
+    request,
+    getToken,
+    setToken,
+    clearToken,
     public: publicApi,
     admin: adminApi
-  };
+};
+
 })();
 
 window.API = API;

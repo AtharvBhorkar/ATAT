@@ -1,104 +1,248 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const vehicleSchema = new mongoose.Schema(
+const reviewSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Vehicle name is required'],
-      trim: true
+      trim: true,
     },
+    stars: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 5,
+    },
+    comment: {
+      type: String,
+    },
+  },
+  { _id: false }
+);
+
+const vehicleSchema = new mongoose.Schema(
+  {
+    // ===============================
+    // BASIC DETAILS
+    // ===============================
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     slug: {
       type: String,
       unique: true,
-      lowercase: true
+      lowercase: true,
+      trim: true,
     },
+
     type: {
       type: String,
-      required: [true, 'Vehicle type is required'],
-      enum: ['sedan', 'suv', 'muv', 'tempo', 'bus', 'luxury', 'hatchback', 'van', 'bike']
+      required: true,
+      enum: [
+        "sedan",
+        "suv",
+        "muv",
+        "tempo",
+        "bus",
+        "luxury",
+        "hatchback",
+        "van",
+        "bike",
+      ],
     },
-    brand: {
-      type: String,
-      trim: true
-    },
-    model: {
-      type: String,
-      trim: true
-    },
-    year: {
-      type: Number
-    },
+
+    brand: String,
+
+    model: String,
+
+    year: Number,
+
+    // ===============================
+    // SPECIFICATIONS
+    // ===============================
+
     seats: {
       type: Number,
-      default: 4
+      default: 4,
     },
+
     bags: {
       type: Number,
-      default: 0
+      default: 2,
     },
+
     fuelType: {
       type: String,
-      enum: ['petrol', 'diesel', 'electric', 'hybrid', 'cng']
+      enum: ["petrol", "diesel", "cng", "electric", "hybrid"],
     },
+
     transmission: {
       type: String,
-      enum: ['manual', 'automatic']
+      enum: ["manual", "automatic"],
     },
+
+    mileage: String,
+
     ac: {
       type: Boolean,
-      default: true
+      default: true,
     },
-    pricePerDay: {
-      type: Number
-    },
-    dailyRate: {
-      type: Number
-    },
+
+    // ===============================
+    // PRICING
+    // ===============================
+
     pricePerKm: {
-      type: Number
+      type: Number,
+      required: true,
     },
-    image: {
-      type: String
+
+    pricePerDay: {
+      type: Number,
+      required: true,
     },
-    images: [{
-      type: String
-    }],
-    features: [{
-      type: String
-    }],
+
+    minimumFare: {
+      type: Number,
+      default: 0,
+    },
+
+    advance: {
+      type: Number,
+      default: 0,
+    },
+
+    advancePercentage: {
+      type: Number,
+      default: 10,
+    },
+
+    driverCharges: {
+      type: String,
+      default: "Included",
+    },
+
+    tollParking: {
+      type: String,
+      default: "Extra",
+    },
+
+    balanceDue: {
+      type: String,
+      default: "Journey Day",
+    },
+
+    // ===============================
+    // IMAGES
+    // ===============================
+
+    image: String,
+
+    images: [
+      {
+        type: String,
+      },
+    ],
+
+    // ===============================
+    // CONTENT
+    // ===============================
+
+    description: String,
+
+    whyChoose: String,
+
+    // ===============================
+    // FEATURES
+    // ===============================
+
+    features: [
+      {
+        type: String,
+      },
+    ],
+
+    amenities: [
+      {
+        type: String,
+      },
+    ],
+
+    highlights: [
+      {
+        type: String,
+      },
+    ],
+
+    idealFor: [
+      {
+        type: String,
+      },
+    ],
+
+    // ===============================
+    // POLICY
+    // ===============================
+
+    cancellationPolicy: {
+      type: String,
+      default: "Free cancellation up to 24 hours before pickup.",
+    },
+
+    // ===============================
+    // REVIEW
+    // ===============================
+
+    reviews: [reviewSchema],
+
+    // ===============================
+    // STATUS
+    // ===============================
+
     available: {
       type: Boolean,
-      default: true
+      default: true,
     },
+
+    featured: {
+      type: Boolean,
+      default: false,
+    },
+
     badge: {
       type: String,
-      default: ''
+      default: "",
     },
+
     badgeClass: {
       type: String,
-      default: ''
+      default: "",
     },
-    description: {
-      type: String
-    },
+
+    // ===============================
+    // STATS
+    // ===============================
+
     rating: {
       type: Number,
       default: 0,
-      min: 0,
-      max: 5
     },
+
     totalTrips: {
       type: Number,
-      default: 0
+      default: 0,
     },
+
     totalKmLakhs: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-module.exports = mongoose.model('Vehicle', vehicleSchema);
+module.exports = mongoose.model("Vehicle", vehicleSchema);
