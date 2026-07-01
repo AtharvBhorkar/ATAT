@@ -43,7 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 /* ───────────────────────────────
 STATIC FRONTEND (IMPORTANT)
 ─────────────────────────────── */
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../frontend'), { index: false }));
 
 /* ───────────────────────────────
 DEV LOGGING
