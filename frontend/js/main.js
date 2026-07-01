@@ -2,43 +2,64 @@
    VOYAGO — main.js
 ═══════════════════════════════════════ */
 
-document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
 
-  /* ─── NAVBAR SCROLL ─── */
-  const navbar = document.getElementById('navbar');
-  const onScroll = () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+      /* ─── NAVBAR SCROLL ─── */
+      const navbar = document.getElementById('navbar');
+      const onScroll = () => {
+        if (navbar) {
+          navbar.classList.toggle('scrolled', window.scrollY > 40);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
 
+      /* ─── HAMBURGER MENU ─── */
+      const hamburger = document.getElementById('hamburger');
+      const navLinks  = document.getElementById('navLinks');
 
-  /* ─── HAMBURGER MENU ─── */
-  const hamburger = document.getElementById('hamburger');
-  const navLinks  = document.getElementById('navLinks');
+      if (hamburger && navLinks) {
+        // Generate mobile helper buttons dynamically if they don't exist
+        const mobileOnlyItems = navLinks.querySelectorAll('.mobile-only');
+        if (mobileOnlyItems.length === 0) {
+          const signInLi = document.createElement('li');
+          signInLi.className = 'mobile-only';
+          signInLi.innerHTML = '<a href="login.html" class="nav-btn-signin">Sign In</a>';
 
-  hamburger.addEventListener('click', () => {
-    const open = hamburger.classList.toggle('open');
-    navLinks.classList.toggle('open', open);
-    hamburger.setAttribute('aria-expanded', open);
-  });
+          const bookLi = document.createElement('li');
+          bookLi.className = 'mobile-only';
+          bookLi.innerHTML = '<a href="booking.html" class="nav-btn-book">Book a Ride</a>';
 
-  // Close on link click
-  navLinks.querySelectorAll('a').forEach(a =>
-    a.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-    })
-  );
+          navLinks.appendChild(signInLi);
+          navLinks.appendChild(bookLi);
+        }
 
-  // Close on outside click
-  document.addEventListener('click', e => {
-    if (!navbar.contains(e.target)) {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-    }
-  });
+        // Toggle menu visibility
+        hamburger.addEventListener('click', () => {
+          const open = hamburger.classList.toggle('open');
+          navLinks.classList.toggle('open', open);
+          hamburger.setAttribute('aria-expanded', open);
+        });
 
+        // Close menu when a link inside is clicked
+        navLinks.querySelectorAll('a').forEach(a =>
+          a.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            navLinks.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', false);
+          })
+        );
+
+        // Close menu when clicking outside the navbar
+        document.addEventListener('click', e => {
+          if (navbar && !navbar.contains(e.target)) {
+            hamburger.classList.remove('open');
+            navLinks.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', false);
+          }
+        });
+      }
+  
 
   /* ─── HERO PARALLAX ─── */
   const heroBg = document.getElementById('heroBg');
@@ -406,5 +427,6 @@ counters.forEach(counter => observer.observe(counter));
 
   window.addEventListener('scroll', updateActiveNavLink, { passive: true });
   updateActiveNavLink();
-
+  
 });
+

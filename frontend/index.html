@@ -3,162 +3,165 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Voyago — Tours & Travel Vehicle Rentals</title>
+  <title>ATAT — Tours & Travel Vehicle Rentals</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/vehicle-modal.css" />
+ 
+
 </head>
 <body>
 
-  <!-- ══════════════ FLASH BANNER ══════════════ -->
-  <div class="flash-banner" id="flashBanner">
-    <div class="flash-inner">
-      <span class="flash-dot"></span>
-      <p><span class="flash-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1l1.2 3.6H12L9.1 6.9l1.2 3.6L7 8.2l-3.3 2.3 1.2-3.6L2 4.6h3.8z" fill="#D9A441"/></svg></span> <strong>Monsoon Special:</strong> Up to 20% off on hill station packages — <a href="packages.html">Book Now</a></p>
-      <button class="flash-close" onclick="document.getElementById('flashBanner').style.display='none'" aria-label="Close">&times;</button>
+
+<!-- ══════════════ NAVBAR ══════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <!-- Updated Logo Link with Image -->
+    <a href="index.html" class="logo-brand">
+      <img src="../assets/logo.png" alt="ATAT Aman Tour and Travels" class="logo-img" />
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="vehicles.html">Vehicles</a></li>
+      <li><a href="packages.html">Packages</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li class="mobile-only"><a href="login.html" class="nav-btn-signin">Sign In</a></li>
+      <li class="mobile-only"><a href="booking.html" class="nav-btn-book">Book a Ride</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-ghost">Sign In</a>
+      <a href="booking.html" class="btn-primary">Book a Ride</a>
     </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+</nav>
 
-  <!-- ══════════════ NAVBAR ══════════════ -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-inner">
-      <a href="home.html" class="logo">
-        <span class="logo-icon">
-          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2.5"/>
-            <path d="M8 20 Q12 10 16 14 Q20 18 24 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <circle cx="16" cy="14" r="2.5" fill="currentColor"/>
-          </svg>
-        </span>
-        <span>VOYAGO</span>
-      </a>
-
-      <ul class="nav-links" id="navLinks">
-        <li><a href="home.html" class="active">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="vehicles.html">Vehicles</a></li>
-        <li><a href="packages.html">Packages</a></li>
-        <li><a href="pricing.html">Pricing</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <a href="login.html" class="btn-ghost">Sign In</a>
-        <a href="booking.html" class="btn-primary">Book a Ride</a>
-      </div>
-
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- ══════════════ HERO ══════════════ -->
+  <!-- ══════════════ HERO (ENHANCED) ══════════════ -->
   <section class="hero">
+    <canvas id="heroParticles"></canvas>
     <div class="hero-bg" id="heroBg"></div>
     <div class="hero-overlay"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-diagonal"></div>
 
     <div class="hero-content container">
-      <p class="hero-eyebrow">Premium Tours &amp; Travel</p>
-      <h1 class="hero-headline">Journey Beyond<br><em>Every Horizon</em></h1>
-      <p class="hero-sub">Comfortable, reliable vehicle rentals for every adventure — hill stations, pilgrimages, city transfers and more.</p>
 
-      <!-- Search Widget -->
-      <!-- <div class="search-widget">
-        <div class="search-field">
-          <label for="fromCity">From</label>
-          <input type="text" id="fromCity" placeholder="Departure city" />
+      <!-- LEFT: Copy -->
+      <div class="hero-copy">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          <span>Premium Tours &amp; Travel</span>
         </div>
-        <div class="search-divider">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+        <h1 class="hero-headline">Journey Beyond<br><em>Every Horizon</em></h1>
+        <p class="hero-sub">Comfortable, reliable vehicle rentals for every adventure — hill stations, pilgrimages, city transfers and more.</p>
+
+        <div class="hero-ctas">
+          <a href="booking.html" class="hero-btn-primary">
+            Book a Ride
+            <span class="btn-arrow">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 5h6M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
+          <a href="packages.html" class="hero-btn-ghost">
+            Explore Packages
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
         </div>
-        <div class="search-field">
-          <label for="toCity">To</label>
-          <input type="text" id="toCity" placeholder="Destination" />
+
+        <!-- Trust strip -->
+        <div class="hero-trust">
+          <div class="hero-trust-item">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1L3 2.8v4.5C3 9.9 4.8 11.9 7 12.6c2.2-.7 4-2.7 4-5.3V2.8L7 1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+              <path d="M4.5 6.5l2 2 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Verified Drivers
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1l1.1 3.3H12L9.1 6.4l1.1 3.3L7 7.6l-3.2 2.1 1.1-3.3L2 4.3h3.9z" fill="currentColor" opacity="0.9"/>
+            </svg>
+            4.8 ★ Rated
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M7 4v3.2l2 1.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            24/7 Support
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7.5l2.5 2.5 7.5-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            No Hidden Charges
+          </div>
         </div>
-        <div class="search-divider">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M2 7h12M6 3V1M10 3V1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+
+      <!-- RIGHT: Floating stat cards -->
+      <!-- <div class="hero-cards" aria-hidden="true">
+
+        <div class="hero-stat-card card-featured">
+          <div class="stat-card-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9 2l1.5 4.5H15L11.5 9l1.5 4.5L9 11 5 13.5l1.5-4.5L3 6.5h4.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="stat-card-num">15K<span>+</span></div>
+          <div class="stat-card-label">Happy Travellers</div>
+          <div class="stat-card-tag">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 6L4 2l2.5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Across India
+          </div>
         </div>
-        <div class="search-field">
-          <label for="travelDate">Date</label>
-          <input type="date" id="travelDate" />
+
+        <div class="hero-stat-card">
+          <div class="stat-card-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="7" width="14" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M5 7V5.5a4 4 0 018 0V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="9" cy="11.5" r="1.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="stat-card-num">85<span>+</span></div>
+          <div class="stat-card-label">Fleet Vehicles</div>
         </div>
-        <div class="search-divider">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 6h10M7 10h2M8 2v2M4 2v2M12 2v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="2" y="3" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/></svg>
+
+        <div class="hero-stat-card">
+          <div class="stat-card-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M9 2C5.7 2 3 4.7 3 8c0 4.5 6 10 6 10s6-5.5 6-10c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="9" cy="8" r="2" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="stat-card-num">320<span>+</span></div>
+          <div class="stat-card-label">Destinations</div>
         </div>
-        <div class="search-field">
-          <label for="vehicleType">Vehicle</label>
-          <select id="vehicleType">
-            <option value="">Any Type</option>
-            <option>Sedan</option>
-            <option>SUV</option>
-            <option>Tempo Traveller</option>
-            <option>Bus</option>
-          </select>
-        </div>
-        <button class="search-btn" onclick="handleSearch()">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 12l3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          Search
-        </button>
+
       </div> -->
     </div>
 
-    <!-- Wave divider -->
-    <!-- <div class="hero-wave">
-      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,100 L0,100 Z" fill="#F5EFE6"/>
-      </svg>
-    </div> -->
-  </section>
-
-  <!-- ══════════════ WHO ARE YOU ══════════════ -->
-  <!-- <section class="who-section">
-    <div class="container">
-      <div class="who-tags">
-        <button class="who-tag active" data-filter="all">I AM …</button>
-        <button class="who-tag" data-filter="tourist">I WANT …</button>
-      </div>
-      <div class="who-grid">
-        <a href="packages.html?type=tourist" class="who-card" data-type="tourist">
-          <div class="who-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="6" y="10" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M10 10V8a4 4 0 018 0v2" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="16" r="2" fill="currentColor"/></svg>
-          </div>
-          <span>A Tourist</span>
-        </a>
-        <a href="packages.html?type=family" class="who-card" data-type="family">
-          <div class="who-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="10" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="18" cy="9" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="19" r="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M5 22c0-3.3 2.2-5 5-5M23 22c0-3.3-2.2-5-5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </div>
-          <span>A Family</span>
-        </a>
-        <a href="packages.html?type=corporate" class="who-card" data-type="corporate">
-          <div class="who-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="5" y="8" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M10 8V6a4 4 0 018 0v2M14 14v4M12 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </div>
-          <span>A Corporate</span>
-        </a>
-        <a href="packages.html?type=pilgrimage" class="who-card" data-type="pilgrimage">
-          <div class="who-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-          </div>
-          <span>A Pilgrim</span>
-        </a>
-        <a href="vehicles.html?type=group" class="who-card" data-type="group">
-          <div class="who-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="8" cy="10" r="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="8" r="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="20" cy="10" r="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 22c0-3 2-4.5 5-4.5M25 22c0-3-2-4.5-5-4.5M14 13.5c3 0 5 1.5 5 4.5M14 13.5c-3 0-5 1.5-5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </div>
-          <span>A Group</span>
-        </a>
-        <a href="vehicles.html" class="who-card" data-type="solo">
-          <div class="who-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="9" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M6 24c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          </div>
-          <span>Solo Traveller</span>
-        </a>
-      </div>
+    <!-- Scroll hint -->
+    <div class="hero-scroll" onclick="document.querySelector('.stats-strip')?.scrollIntoView({behavior:'smooth'})">
+      <span class="hero-scroll-text">Scroll</span>
+      <div class="hero-scroll-line"></div>
     </div>
-  </section> -->
+  </section>
 
   <!-- ══════════════ STATS STRIP ══════════════ -->
   <div class="stats-strip">
@@ -211,13 +214,13 @@
               <span><span class="meta-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="4" width="9" height="7" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 4V3a2 2 0 014 0v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M5 7.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> 2 Bags</span>
             </div>
             <div class="vehicle-price">From <strong>₹12 / km</strong></div>
-            <a href="vehicle-detail.html?type=sedan" class="btn-primary btn-sm">View Details</a>
+            <a href="#" data-vehicle="sedan-dzire" class="btn-primary btn-sm">View Details</a>
           </div>
         </div>
 
         <div class="vehicle-card" data-reveal>
           <div class="vehicle-img-wrap">
-            <img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80" alt="SUV" loading="lazy" />
+            <img src="https://i.pinimg.com/736x/b5/c1/11/b5c111a5c5ee4d4feeaf0fd72b07802f.jpg" alt="SUV" loading="lazy" />
             <span class="vehicle-badge">Popular</span>
           </div>
           <div class="vehicle-info">
@@ -229,13 +232,13 @@
               <span><span class="meta-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="4" width="9" height="7" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 4V3a2 2 0 014 0v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M5 7.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> 4 Bags</span>
             </div>
             <div class="vehicle-price">From <strong>₹18 / km</strong></div>
-            <a href="vehicle-detail.html?type=suv" class="btn-primary btn-sm">View Details</a>
+            <a href="#" data-vehicle="suv-innova" class="btn-primary btn-sm">View Details</a>
           </div>
         </div>
 
         <div class="vehicle-card" data-reveal>
           <div class="vehicle-img-wrap">
-            <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&q=80" alt="Tempo Traveller" loading="lazy" />
+            <img src="https://i.pinimg.com/1200x/95/21/36/952136df3d713a2c7ec0e5a5e9177e53.jpg" alt="Tempo Traveller" loading="lazy" />
           </div>
           <div class="vehicle-info">
             <h3>Tempo Traveller</h3>
@@ -246,13 +249,13 @@
               <span><span class="meta-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="4" width="9" height="7" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 4V3a2 2 0 014 0v1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M5 7.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> Group Luggage</span>
             </div>
             <div class="vehicle-price">From <strong>₹28 / km</strong></div>
-            <a href="vehicle-detail.html?type=tempo" class="btn-primary btn-sm">View Details</a>
+            <a href="#" data-vehicle="tempo-12" class="btn-primary btn-sm">View Details</a>
           </div>
         </div>
 
         <div class="vehicle-card" data-reveal>
           <div class="vehicle-img-wrap">
-            <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=600&q=80" alt="Bus" loading="lazy" />
+            <img src="https://i.pinimg.com/1200x/4b/1a/de/4b1ade82d48e2b24c530590684bc3373.jpg" alt="Bus" loading="lazy" />
           </div>
           <div class="vehicle-info">
             <h3>Luxury Bus</h3>
@@ -263,7 +266,7 @@
               <span><span class="meta-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1.5" y="2" width="10" height="7.5" rx="1.2" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 9.5L4 11.5M8.5 9.5L9 11.5M3.5 11.5h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> Entertainment</span>
             </div>
             <div class="vehicle-price">From <strong>₹55 / km</strong></div>
-            <a href="vehicle-detail.html?type=bus" class="btn-primary btn-sm">View Details</a>
+            <a href="#" data-vehicle="bus" class="btn-primary btn-sm">View Details</a>
           </div>
         </div>
       </div>
@@ -273,13 +276,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Wave up -->
-  <!-- <div class="wave-up">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,40 C360,80 720,0 1080,40 C1260,60 1380,30 1440,40 L1440,80 L0,80 Z" fill="#6E1F2B"/>
-    </svg>
-  </div> -->
 
   <!-- ══════════════ POPULAR PACKAGES ══════════════ -->
   <section class="section packages-section" id="packages">
@@ -398,24 +394,17 @@
 
         </div>
       </div>
-     <div class="slider-controls">
+      <div class="slider-controls">
         <button class="slider-prev" id="sliderPrev" aria-label="Previous">&#8592;</button>
         <div class="slider-dots" id="sliderDots"></div>
         <button class="slider-next" id="sliderNext" aria-label="Next">&#8594;</button>
-      </div>   
+      </div>
 
       <div class="section-cta" data-reveal>
         <a href="packages.html" class="btn-white">Explore All Packages</a>
       </div>
     </div>
   </section>
-
-  <!-- Wave down -->
-  <!-- <div class="wave-down">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,40 C360,0 720,80 1080,40 C1260,20 1380,50 1440,40 L1440,0 L0,0 Z" fill="#6E1F2B"/>
-    </svg>
-  </div> -->
 
   <!-- ══════════════ WHY CHOOSE US ══════════════ -->
   <section class="why-section" id="why">
@@ -425,14 +414,12 @@
     <div class="why-overlay"></div>
     <div class="why-content container">
 
-      <!-- LEFT PANEL -->
       <div class="why-left" data-reveal>
-        <div class="why-watermark" aria-hidden="true">VOYAGO</div>
-        <p class="section-eyebrow light">Why Voyago</p>
+        <div class="why-watermark" aria-hidden="true">ATAT</div>
+        <p class="section-eyebrow light">Why AMAN TOUR AND TRAVEL</p>
         <h2 class="section-title light">Travel Smarter,<br><em>Arrive Happier</em></h2>
         <p class="section-desc light">We don't just drive you there — we make the journey worth talking about.</p>
 
-        <!-- Micro-stats row -->
         <div class="why-micro-stats">
           <div class="why-micro-stat">
             <span class="why-stat-num">12+</span>
@@ -455,12 +442,10 @@
         </a>
       </div>
 
-      <!-- RIGHT PANEL -->
       <div class="why-right">
 
         <div class="feature-item" data-reveal style="--reveal-delay:0.05s">
           <div class="feature-icon">
-            <!-- Shield + checkmark (Verified Drivers) -->
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M11 2L3 5.5v6C3 15.97 6.6 19.66 11 21c4.4-1.34 8-5.03 8-9.5v-6L11 2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
               <path d="M7.5 11l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -474,7 +459,6 @@
 
         <div class="feature-item" data-reveal style="--reveal-delay:0.15s">
           <div class="feature-icon">
-            <!-- Headset / 24-7 Support -->
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 11a8 8 0 0116 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
               <rect x="2" y="11" width="3.5" height="6" rx="1.5" stroke="currentColor" stroke-width="1.7"/>
@@ -491,7 +475,6 @@
 
         <div class="feature-item" data-reveal style="--reveal-delay:0.25s">
           <div class="feature-icon">
-            <!-- Price tag + checkmark (Transparent Pricing) -->
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12.5 2H19v6.5l-9.3 9.3a2 2 0 01-2.8 0l-3.7-3.7a2 2 0 010-2.8L12.5 2z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
               <circle cx="15.5" cy="6.5" r="1.3" fill="currentColor"/>
@@ -506,7 +489,6 @@
 
         <div class="feature-item" data-reveal style="--reveal-delay:0.35s">
           <div class="feature-icon">
-            <!-- Sparkle star over van (Fleet) -->
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2 15V10l2-5h12l2 5v5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
               <circle cx="6" cy="15.5" r="1.8" stroke="currentColor" stroke-width="1.5"/>
@@ -583,65 +565,66 @@
               </div>
             </div>
           </div>
+
           <div class="testimonial-card">
-    <div class="stars">★★★★★</div>
-    <blockquote>"Our Rajasthan road trip was perfectly organized. The vehicle was luxurious, the driver was knowledgeable, and every destination was reached on time. Highly recommended."</blockquote>
-    <div class="reviewer">
-        <div class="reviewer-avatar">NS</div>
-        <div>
-            <strong>Neha Sharma</strong>
-            <span>Jaipur → Udaipur</span>
-        </div>
-    </div>
-</div>
+            <div class="stars">★★★★★</div>
+            <blockquote>"Our Rajasthan road trip was perfectly organized. The vehicle was luxurious, the driver was knowledgeable, and every destination was reached on time. Highly recommended."</blockquote>
+            <div class="reviewer">
+              <div class="reviewer-avatar">NS</div>
+              <div>
+                <strong>Neha Sharma</strong>
+                <span>Jaipur → Udaipur</span>
+              </div>
+            </div>
+          </div>
 
-<div class="testimonial-card">
-    <div class="stars">★★★★★</div>
-    <blockquote>"Excellent airport transfer service. The driver arrived before time, helped with luggage, and the journey was smooth from start to finish."</blockquote>
-    <div class="reviewer">
-        <div class="reviewer-avatar">VK</div>
-        <div>
-            <strong>Vikas Kumar</strong>
-            <span>Bangalore Airport</span>
-        </div>
-    </div>
-</div>
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <blockquote>"Excellent airport transfer service. The driver arrived before time, helped with luggage, and the journey was smooth from start to finish."</blockquote>
+            <div class="reviewer">
+              <div class="reviewer-avatar">VK</div>
+              <div>
+                <strong>Vikas Kumar</strong>
+                <span>Bangalore Airport</span>
+              </div>
+            </div>
+          </div>
 
-<div class="testimonial-card">
-    <div class="stars">★★★★★</div>
-    <blockquote>"Our Goa vacation became even better because of Voyago. Clean SUV, professional chauffeur, and transparent pricing. We'll definitely book again."</blockquote>
-    <div class="reviewer">
-        <div class="reviewer-avatar">AS</div>
-        <div>
-            <strong>Ananya Singh</strong>
-            <span>Mumbai → Goa</span>
-        </div>
-    </div>
-</div>
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <blockquote>"Our Goa vacation became even better because of Voyago. Clean SUV, professional chauffeur, and transparent pricing. We'll definitely book again."</blockquote>
+            <div class="reviewer">
+              <div class="reviewer-avatar">AS</div>
+              <div>
+                <strong>Ananya Singh</strong>
+                <span>Mumbai → Goa</span>
+              </div>
+            </div>
+          </div>
 
-<div class="testimonial-card">
-    <div class="stars">★★★★★</div>
-    <blockquote>"We booked a luxury coach for a wedding. Everything was punctual, comfortable, and professionally managed. Guests appreciated the smooth journey."</blockquote>
-    <div class="reviewer">
-        <div class="reviewer-avatar">RM</div>
-        <div>
-            <strong>Rohit Malhotra</strong>
-            <span>Chandigarh Wedding Tour</span>
-        </div>
-    </div>
-</div>
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <blockquote>"We booked a luxury coach for a wedding. Everything was punctual, comfortable, and professionally managed. Guests appreciated the smooth journey."</blockquote>
+            <div class="reviewer">
+              <div class="reviewer-avatar">RM</div>
+              <div>
+                <strong>Rohit Malhotra</strong>
+                <span>Chandigarh Wedding Tour</span>
+              </div>
+            </div>
+          </div>
 
-<div class="testimonial-card">
-    <div class="stars">★★★★★</div>
-    <blockquote>"The booking process was simple, customer support was responsive, and the vehicle exceeded our expectations. One of the best travel experiences we've had."</blockquote>
-    <div class="reviewer">
-        <div class="reviewer-avatar">DP</div>
-        <div>
-            <strong>Deepika Patel</strong>
-            <span>Ahmedabad → Mount Abu</span>
-        </div>
-    </div>
-</div>
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <blockquote>"The booking process was simple, customer support was responsive, and the vehicle exceeded our expectations. One of the best travel experiences we've had."</blockquote>
+            <div class="reviewer">
+              <div class="reviewer-avatar">DP</div>
+              <div>
+                <strong>Deepika Patel</strong>
+                <span>Ahmedabad → Mount Abu</span>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
@@ -658,7 +641,7 @@
     </div>
   </section>
 
-  <!-- ══════════════ UPCOMING TRIPS EVENTS (events-style like reference══════════════ -->
+  <!-- ══════════════ UPCOMING DEPARTURES ══════════════ -->
   <section class="section events-section" id="upcoming">
     <div class="container">
       <div class="events-header" data-reveal>
@@ -752,10 +735,102 @@
     </div>
   </section>
 
+  <!-- ══════════════ FOUNDER SECTION ══════════════ -->
+  <section class="founder-section" id="founder">
+    <div class="container">
+      <div class="founder-inner">
+
+        <!-- Image Column -->
+        <div class="founder-img-col">
+          <div class="founder-img-wrap">
+            <!-- Professional stock photo placeholder — replace src with real founder photo -->
+            <img
+              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=85&auto=format&fit=crop"
+              alt="Aman Sharma — Founder & Managing Director, ATAT Tours & Travels"
+              loading="lazy"
+            />
+            <!-- Floating name badge over image -->
+            <div class="founder-badge">
+              <div class="founder-badge-dot"></div>
+              <div class="founder-badge-text">
+                Aman Sharma
+                <span>Founder & MD</span>
+              </div>
+            </div>
+          </div>
+          <!-- Decorative oversized quote marks -->
+          <div class="founder-quote-deco" aria-hidden="true">&ldquo;</div>
+        </div>
+
+        <!-- Content Column -->
+        <div class="founder-content-col">
+          <p class="founder-eyebrow">From the Founder</p>
+
+          <h2 class="founder-headline">
+            Built on Trust,<br><em>Driven by Passion</em>
+          </h2>
+
+          <p class="founder-body">
+            When I started ATAT in 2012 with a single vehicle and an unwavering belief that every traveller deserves a safe, comfortable, and honest ride — I never imagined it would grow into the family we are today. Over a decade later, that core belief hasn't changed one bit.
+          </p>
+          <p class="founder-body">
+            Every driver we onboard is verified, every vehicle is maintained with care, and every journey we undertake is a promise — that you'll arrive safely, on time, and with a smile. We don't just provide transport; we make memories you'll carry for life.
+          </p>
+
+          <!-- Key stats -->
+          <div class="founder-stats">
+            <div class="founder-stat">
+              <div class="founder-stat-num">12+</div>
+              <div class="founder-stat-label">Years of Service</div>
+            </div>
+            <div class="founder-stat-divider"></div>
+            <div class="founder-stat">
+              <div class="founder-stat-num">15K+</div>
+              <div class="founder-stat-label">Happy Travellers</div>
+            </div>
+            <div class="founder-stat-divider"></div>
+            <div class="founder-stat">
+              <div class="founder-stat-num">85+</div>
+              <div class="founder-stat-label">Fleet Vehicles</div>
+            </div>
+            <div class="founder-stat-divider"></div>
+            <div class="founder-stat">
+              <div class="founder-stat-num">4.8★</div>
+              <div class="founder-stat-label">Avg. Rating</div>
+            </div>
+          </div>
+
+          <!-- Signature -->
+          <div class="founder-sig">
+            <img
+              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&q=80&auto=format&fit=crop"
+              alt="Aman Sharma"
+              class="founder-sig-avatar"
+              loading="lazy"
+            />
+            <div>
+              <div class="founder-sig-name">Aman Sharma</div>
+              <div class="founder-sig-title">Founder &amp; Managing Director — ATAT Tours &amp; Travels</div>
+            </div>
+          </div>
+
+          <!-- CTA link -->
+          <a href="about.html" class="founder-link">
+            Learn Our Story
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ══════════════ CTA BANNER ══════════════ -->
   <section class="cta-banner">
     <div class="cta-bg">
-      <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1600&q=80" alt="Open road" loading="lazy" />
+      <img src="https://i.pinimg.com/1200x/94/43/0b/94430b7bd3ff5f966892d8f3ba073f2d.jpg" alt="Open road" loading="lazy" />
     </div>
     <div class="cta-overlay"></div>
     <div class="cta-content container">
@@ -777,32 +852,28 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
-        <!-- Brand -->
         <div class="footer-brand">
-          <a href="home.html" class="logo footer-logo">
-            <span class="logo-icon">
-              <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2.5"/><path d="M8 20 Q12 10 16 14 Q20 18 24 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="16" cy="14" r="2.5" fill="currentColor"/></svg>
-            </span>
-            VOYAGO
-          </a>
+           <!-- Updated Logo Link with Image in Footer -->
+        <a href="index.html" class="logo-brand footer-logo">
+          <img src="../assets/logo.png" alt="ATAT Aman Tour and Travels" class="logo-img-footer" />
+        </a>
           <p>Trusted vehicle rentals for tours, transfers and pilgrimages across India since 2012. Your journey, our commitment.</p>
-         <div class="social-links">
-          <a href="#" aria-label="Facebook">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-          </a>
-          <a href="#" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </a>
-          <a href="#" aria-label="WhatsApp">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </a>
-          <a href="#" aria-label="YouTube">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
-          </a>
-        </div>
+          <div class="social-links">
+            <a href="#" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="WhatsApp">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+            </a>
+          </div>
         </div>
 
-        <!-- Links -->
         <div class="footer-col">
           <h5>Quick Links</h5>
           <ul>
@@ -815,7 +886,6 @@
           </ul>
         </div>
 
-        <!-- Services -->
         <div class="footer-col">
           <h5>Services</h5>
           <ul>
@@ -828,21 +898,20 @@
           </ul>
         </div>
 
-        <!-- Contact -->
         <div class="footer-col">
           <h5>Get In Touch</h5>
           <ul class="contact-list">
             <li>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1C4.8 1 3 2.8 3 5c0 3.5 4 9 4 9s4-5.5 4-9c0-2.2-1.8-4-4-4z" stroke="currentColor" stroke-width="1.4"/><circle cx="7" cy="5" r="1.5" fill="currentColor"/></svg>
-              <span>42, Travel Hub, MG Road,<br>Pune, Maharashtra — 411001</span>
+              <span>Y-325B,Sector 12,<br>Noida, — 201301</span>
             </li>
             <li>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h3l1 3-1.5 1.5a9 9 0 003 3L9 8l3 1v3a1 1 0 01-1 1C4.7 13 1 9.3 1 3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.4"/></svg>
-              <a href="tel:+911800000000">+91 1800-000-0000</a>
+              <a href="tel:+916205956801">+91 6205956801</a>
             </li>
             <li>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M1 4l6 4.5L13 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-              <a href="mailto:hello@voyago.in">hello@voyago.in</a>
+              <a href="mailto:amantourandtravelsncr@gmail.com">amantourandtravelsncr@gmail.com</a>
             </li>
           </ul>
           <div class="footer-hours">
@@ -855,7 +924,7 @@
 
       <div class="footer-bottom">
         <div class="footer-bottom-inner">
-          <p>&copy; 2026 Voyago Tours &amp; Travels. All rights reserved.</p>
+          <p>&copy; 2026 Aman Tours &amp; Travels. All rights reserved.</p>
           <div class="footer-legal">
             <a href="terms-condition.html">Terms &amp; Conditions</a>
             <a href="privacy.html">Privacy Policy</a>
@@ -868,5 +937,6 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/vehicle-modal.js"></script>
 </body>
 </html>
