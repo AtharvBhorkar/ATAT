@@ -4,7 +4,10 @@ const packageSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, 'Package title is required'],
+      trim: true
+    },
+    name: {
+      type: String,
       trim: true
     },
     slug: {
@@ -13,12 +16,10 @@ const packageSchema = new mongoose.Schema(
       lowercase: true
     },
     description: {
-      type: String,
-      required: [true, 'Description is required']
+      type: String
     },
     destination: {
       type: String,
-      required: [true, 'Destination is required'],
       trim: true
     },
     state: {
@@ -74,8 +75,11 @@ const packageSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ['adventure', 'pilgrimage', 'beach', 'hill-station', 'wildlife', 'heritage', 'honeymoon', 'family'],
-      required: true
+      enum: ['adventure', 'pilgrimage', 'beach', 'hill-station', 'wildlife', 'heritage', 'honeymoon', 'family']
+    },
+    vehicles: {
+      type: Number,
+      default: 0
     },
     featured: {
       type: Boolean,
@@ -103,8 +107,15 @@ const packageSchema = new mongoose.Schema(
 
 // Auto-generate slug before saving
 packageSchema.pre('save', function (next) {
-  if (this.isModified('title') && !this.slug) {
-    this.slug = this.title
+  if (this.name && !this.title) {
+    this.title = this.name;
+  } else if (this.title && !this.name) {
+    this.name = this.title;
+  }
+
+  const slugSource = this.title || this.name || '';
+  if (!this.slug && slugSource) {
+    this.slug = slugSource
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');

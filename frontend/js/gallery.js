@@ -1,4 +1,36 @@
-// ===== SCROLL REVEAL =====
+/* ─── NAVBAR SCROLL ─── */
+const navbar = document.getElementById('navbar');
+const onScroll = () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 40);
+};
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* ─── HAMBURGER MENU ─── */
+const hamburger = document.getElementById('hamburger');
+const navLinks  = document.getElementById('navLinks');
+
+hamburger.addEventListener('click', () => {
+  const open = hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', open);
+});
+
+navLinks.querySelectorAll('a').forEach(a =>
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  })
+);
+
+document.addEventListener('click', e => {
+  if (!navbar.contains(e.target)) {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  }
+});
+
+/* ─── SCROLL REVEAL ─── */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -9,12 +41,12 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
 
 document.querySelectorAll(
-  '.behind-title, .behind-desc, .cta-box-content, .behind-card'
+  '.behind-title, .behind-desc, .cta-box-content'
 ).forEach(el => revealObserver.observe(el));
 
-// ===== FILTER =====
+/* ─── FILTER ─── */
 const filterBtns = document.querySelectorAll('.filter-btn');
-const allItems = document.querySelectorAll('.gallery-item');
+const allItems   = document.querySelectorAll('.gallery-item');
 
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
@@ -32,10 +64,11 @@ filterBtns.forEach(btn => {
   });
 });
 
-// ===== LOAD MORE / SHOW LESS =====
+/* ─── LOAD MORE / SHOW LESS ─── */
 const INITIAL_COUNT = 14;
-const LOAD_STEP = 10;
-let shownCount = INITIAL_COUNT;
+const LOAD_STEP     = 10;
+let shownCount      = INITIAL_COUNT;
+
 const loadMoreBtn = document.getElementById('loadMoreBtn');
 const showLessBtn = document.getElementById('showLessBtn');
 
@@ -53,8 +86,8 @@ function applyLoadMore() {
       item.classList.add('hidden');
     }
   });
-  loadMoreBtn.style.display = shownCount < visible.length ? 'inline-block' : 'none';
-  showLessBtn.style.display = shownCount > INITIAL_COUNT ? 'inline-block' : 'none';
+  loadMoreBtn.style.display = shownCount < visible.length  ? 'inline-block' : 'none';
+  showLessBtn.style.display = shownCount > INITIAL_COUNT   ? 'inline-block' : 'none';
 }
 
 loadMoreBtn.addEventListener('click', () => { shownCount += LOAD_STEP; applyLoadMore(); });
@@ -66,71 +99,8 @@ showLessBtn.addEventListener('click', () => {
 
 applyLoadMore();
 
-// ===== LIGHTBOX =====
-const lightbox = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImg');
-const lbCaption = document.getElementById('lbCaption');
-const lbClose = document.getElementById('lbClose');
-const lbPrev = document.getElementById('lbPrev');
-const lbNext = document.getElementById('lbNext');
-const lbLoader = document.getElementById('lbLoader');
-const lbBackdrop = document.getElementById('lightboxBackdrop');
-
-let lbItems = [];
-let lbIndex = 0;
-
-function buildLbItems() {
-  lbItems = [];
-  document.querySelectorAll('.gallery-item:not(.hidden) .gallery-card').forEach(card => {
-    const img = card.querySelector('img');
-    const title = card.querySelector('.card-title');
-    lbItems.push({
-      src: img.src.replace('w=700', 'w=1400').replace('w=1000', 'w=1400'),
-      title: title ? title.textContent : ''
-    });
-  });
-}
-
-function openLb(index) {
-  buildLbItems();
-  lbIndex = index;
-  showLbImg(lbIndex);
-  lightbox.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeLb() {
-  lightbox.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function showLbImg(index) {
-  lbLoader.classList.add('loading');
-  lbImg.style.opacity = '0';
-  const item = lbItems[index];
-  lbImg.onload = () => { lbLoader.classList.remove('loading'); lbImg.style.opacity = '1'; };
-  lbImg.src = item.src;
-  lbCaption.textContent = item.title;
-}
-
-document.querySelectorAll('.gallery-card').forEach((card, i) => {
-  card.addEventListener('click', () => openLb(i));
-});
-
-lbClose.addEventListener('click', closeLb);
-lbBackdrop.addEventListener('click', closeLb);
-lbPrev.addEventListener('click', e => { e.stopPropagation(); lbIndex = (lbIndex - 1 + lbItems.length) % lbItems.length; showLbImg(lbIndex); });
-lbNext.addEventListener('click', e => { e.stopPropagation(); lbIndex = (lbIndex + 1) % lbItems.length; showLbImg(lbIndex); });
-
-document.addEventListener('keydown', e => {
-  if (!lightbox.classList.contains('open')) return;
-  if (e.key === 'Escape') closeLb();
-  if (e.key === 'ArrowLeft') { lbIndex = (lbIndex - 1 + lbItems.length) % lbItems.length; showLbImg(lbIndex); }
-  if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbItems.length; showLbImg(lbIndex); }
-});
-
-// ===== BEHIND CARDS STAGGERED REVEAL =====
-const behindCards = document.querySelectorAll('.behind-card');
+/* ─── BEHIND CARDS STAGGERED REVEAL ─── */
+const behindCards   = document.querySelectorAll('.behind-card');
 const behindObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry, idx) => {
     if (entry.isIntersecting) {
@@ -144,11 +114,9 @@ const behindObserver = new IntersectionObserver((entries) => {
 
 behindCards.forEach(card => behindObserver.observe(card));
 
-// == BEHIND THE JOURNEY ==//
-
-
+/* ─── BEHIND TITLE + DESC REVEAL ─── */
 const revealEls = document.querySelectorAll('.behind-title, .behind-desc');
-const revObs = new IntersectionObserver(entries => {
+const revObs    = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       e.target.classList.add('in-view');

@@ -22,6 +22,16 @@
   --card-border: #E8E0D8;
   --tr: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --tr-fast: 0.25s ease;
+
+  /* ===== NAVBAR + FOOTER REQUIRED VARIABLES (home.css se same) ===== */
+  --nav-h: 76px;
+  --transition: 0.35s ease;
+  --font-display: 'Playfair Display', serif;
+  --white: #ffffff;
+  --text: var(--text-dark);
+  --dark: #1a1010;
+  --rust: #D9A441;
+  --shadow-md: 0 8px 32px rgba(26,16,16,.14);
 }
 
 html {
@@ -33,6 +43,51 @@ body {
   background: var(--bg);
   color: var(--text-dark);
   overflow-x: hidden;
+}
+
+/* ===== GLOBAL LINK RESET ===== */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ===== NAV ACTION BUTTONS (Sign In / Book a Ride) ===== */
+.btn-ghost {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 50px;
+  transition: all var(--transition);
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.navbar.scrolled .btn-ghost:hover {
+  background: rgba(110, 31, 43, 0.08);
+}
+
+.btn-primary {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 26px;
+  background: var(--maroon);
+  color: var(--white) !important;
+  border-radius: 50px;
+  transition: all var(--transition);
+  display: inline-block;
+}
+.btn-primary:hover {
+  background: var(--maroon-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(110, 31, 43, 0.35);
+}
+
+/* ===== CONTAINER (FOOTER KE LIYE ZAROORI) ===== */
+.container {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 /* ===== SECTION EYEBROW ===== */
@@ -50,6 +105,8 @@ body {
   color: rgba(255, 255, 255, 0.6);
 }
 
+
+
 /* ===== HERO ===== */
 .hero {
   position: relative;
@@ -64,7 +121,7 @@ body {
 .hero-bg-img {
   position: absolute;
   inset: 0;
-  background: url('https://img.magnific.com/premium-photo/along-picturesque-mountain-road-drives-white-tourist-bus_958297-48587.jpg?w=1480') center/cover no-repeat;
+  background: url('https://i.pinimg.com/1200x/4b/b3/ae/4bb3aef902d81ec4a7dddb288a9def1c.jpg') center/cover no-repeat;
   transform: scale(1.08);
   animation: heroZoom 14s ease-out forwards;
   z-index: 0;
@@ -191,7 +248,7 @@ body {
 /* ===== GALLERY INTRO ===== */
 .gallery-intro {
   background: var(--bg);
-  padding: 25px 40px 0;
+  padding: 40px 40px 0;
 }
 
 .gallery-intro-inner {
@@ -778,141 +835,9 @@ body {
   transform: translateY(-3px);
 }
 
-/* ===== LIGHTBOX ===== */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
-}
 
-.lightbox.open {
-  opacity: 1;
-  pointer-events: all;
-}
 
-.lightbox-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 5, 8, 0.96);
-  backdrop-filter: blur(10px);
-}
-
-.lightbox-box {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform: scale(0.88);
-  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.lightbox.open .lightbox-box {
-  transform: scale(1);
-}
-
-.lb-img-wrap {
-  position: relative;
-}
-
-.lb-img-wrap img {
-  max-width: 88vw;
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 12px;
-  display: block;
-  transition: opacity 0.3s ease;
-}
-
-.lb-loader {
-  position: absolute;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-.lb-loader.loading {
-  display: flex;
-}
-
-.lb-loader::after {
-  content: '';
-  width: 34px;
-  height: 34px;
-  border: 3px solid rgba(217, 164, 65, 0.3);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.lb-caption {
-  font-family: 'Playfair Display', serif;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: 16px;
-}
-
-.lb-close,
-.lb-prev,
-.lb-next {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.25s ease;
-  font-size: 20px;
-}
-
-.lb-close {
-  top: -18px;
-  right: -18px;
-  width: 40px;
-  height: 40px;
-}
-
-.lb-prev,
-.lb-next {
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
-  font-size: 22px;
-}
-
-.lb-prev {
-  left: -68px;
-}
-
-.lb-next {
-  right: -68px;
-}
-
-.lb-close:hover,
-.lb-prev:hover,
-.lb-next:hover {
-  background: var(--maroon);
-  border-color: var(--maroon-mid);
-}
-
-/* ===== RESPONSIVE ===== */
+/* ===== GALLERY RESPONSIVE (gallery items, filter, lightbox) ===== */
 @media (max-width: 1024px) {
   .filter-tabs {
     justify-content: flex-start;
@@ -980,4 +905,237 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+
+/* ════════════════════════════════════════════════════
+   NAVBAR  (home.css se exactly copy kiya gaya hai)
+════════════════════════════════════════════════════ */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  height: var(--nav-h);
+  display: flex; align-items: center;
+  transition: background var(--transition), box-shadow var(--transition);
+}
+.navbar.scrolled {
+  background: rgba(245,239,230,0.97);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 2px 24px rgba(26,16,16,.1);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  text-transform: uppercase;
+  transition: color var(--transition);
+  flex-shrink: 0;
+}
+.navbar.scrolled .logo { color: var(--maroon-dark); }
+.logo-icon { color: var(--gold); transition: color var(--transition); }
+.navbar.scrolled .logo-icon { color: var(--maroon); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+  list-style: none;
+}
+.nav-links a {
+  color: rgba(255,255,255,.88);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 50px;
+  transition: all var(--transition);
+  display: block;
+}
+.navbar.scrolled .nav-links a { color: var(--text); }
+.nav-links a:hover, .nav-links a.active {
+  color: var(--white);
+  background: rgba(255,255,255,.14);
+}
+.navbar.scrolled .nav-links a:hover,
+.navbar.scrolled .nav-links a.active {
+  color: var(--maroon);
+  background: rgba(110,31,43,.08);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.nav-actions .btn-ghost { color: rgba(255,255,255,.88); }
+.navbar.scrolled .nav-actions .btn-ghost { color: var(--text); }
+.nav-actions .btn-primary { font-size: 13px; padding: 10px 22px; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  margin-left: auto;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: all var(--transition);
+}
+.navbar.scrolled .hamburger span { background: var(--dark); }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+
+/* ════════════════════════════════════════════════════
+   NAVBAR — RESPONSIVE (home.css ke @media (max-width:900px) se same)
+════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .nav-links, .nav-actions .btn-ghost { display: none; }
+  .hamburger { display: flex; }
+
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    background: rgba(245,239,230,.98);
+    backdrop-filter: blur(20px);
+    padding: 24px;
+    border-bottom: 1px solid var(--card-border);
+    box-shadow: var(--shadow-md);
+    gap: 4px;
+    align-items: flex-start;
+    z-index: 999;
+  }
+  .nav-links.open a {
+    color: var(--dark);
+    font-size: 15px;
+    padding: 12px 16px;
+    width: 100%;
+    border-radius: 8px;
+  }
+  .nav-links.open a:hover { background: rgba(110,31,43,.08); color: var(--maroon); }
+}
+
+/* ════════════════════════════════════════════════════
+   NAVBAR — RESPONSIVE (home.css ke @media (max-width:500px) se same)
+   Bahut chhoti screens pe "Book a Ride" button bhi hide
+════════════════════════════════════════════════════ */
+@media (max-width: 500px) {
+  .nav-actions { display: none; }
+}
+
+
+/* ════════════════════════════════════════════════════
+   FOOTER  (home.css se exactly copy kiya gaya hai)
+════════════════════════════════════════════════════ */
+.footer { background: var(--dark); padding-top: 80px; }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.footer-brand .footer-logo { color: var(--white); margin-bottom: 20px; }
+.footer-brand .footer-logo .logo-icon { color: var(--gold); }
+.footer-brand p { font-size: 13.5px; color: rgba(255,255,255,.5); line-height: 1.75; max-width: 300px; margin-bottom: 28px; }
+
+.social-links { display: flex; gap: 12px; }
+.social-links a {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.12);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.5);
+  transition: all var(--transition);
+}
+.social-links a:hover { background: var(--maroon); border-color: var(--maroon); color: var(--white); }
+
+.footer-col h5 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.footer-col ul li { margin-bottom: 20px; }
+.footer-col ul a { font-size: 13.5px; color: rgba(255,255,255,.5); transition: color var(--transition); }
+.footer-col ul a:hover { color: var(--white); }
+
+.contact-list li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 22px; }
+.contact-list li svg { flex-shrink: 0; color: var(--rust); margin-top: 2px; }
+.contact-list li a, .contact-list li span { font-size: 13.5px; color: rgba(255,255,255,.55); transition: color var(--transition); }
+.contact-list li a:hover { color: var(--white); }
+
+.footer-hours { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+.footer-hours strong { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.footer-hours span { font-size: 13px; color: rgba(255,255,255,.45); }
+
+.footer-bottom { padding: 22px 0; }
+.footer-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-bottom p { font-size: 12.5px; color: rgba(255,255,255,.3); }
+.footer-legal { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-legal a { font-size: 12.5px; color: rgba(255,255,255,.35); transition: color var(--transition); }
+.footer-legal a:hover { color: rgba(255,255,255,.7); }
+
+
+/* ════════════════════════════════════════════════════
+   FOOTER — RESPONSIVE (home.css ke @media (max-width:1100px) se same)
+════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+
+/* ════════════════════════════════════════════════════
+   FOOTER — RESPONSIVE (home.css ke @media (max-width:700px) se same)
+════════════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom-inner { flex-direction: column; text-align: center; }
+  .footer-legal { justify-content: center; }
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }

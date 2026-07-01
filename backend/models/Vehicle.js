@@ -7,14 +7,18 @@ const vehicleSchema = new mongoose.Schema(
       required: [true, 'Vehicle name is required'],
       trim: true
     },
+    slug: {
+      type: String,
+      unique: true,
+      lowercase: true
+    },
     type: {
       type: String,
       required: [true, 'Vehicle type is required'],
-      enum: ['sedan', 'suv', 'hatchback', 'van', 'bus', 'tempo-traveller', 'bike', 'luxury']
+      enum: ['sedan', 'suv', 'muv', 'tempo', 'bus', 'luxury', 'hatchback', 'van', 'bike']
     },
     brand: {
       type: String,
-      required: [true, 'Brand is required'],
       trim: true
     },
     model: {
@@ -26,7 +30,11 @@ const vehicleSchema = new mongoose.Schema(
     },
     seats: {
       type: Number,
-      required: [true, 'Seat count is required']
+      default: 4
+    },
+    bags: {
+      type: Number,
+      default: 0
     },
     fuelType: {
       type: String,
@@ -41,8 +49,10 @@ const vehicleSchema = new mongoose.Schema(
       default: true
     },
     pricePerDay: {
-      type: Number,
-      required: [true, 'Price per day is required']
+      type: Number
+    },
+    dailyRate: {
+      type: Number
     },
     pricePerKm: {
       type: Number
@@ -60,6 +70,14 @@ const vehicleSchema = new mongoose.Schema(
       type: Boolean,
       default: true
     },
+    badge: {
+      type: String,
+      default: ''
+    },
+    badgeClass: {
+      type: String,
+      default: ''
+    },
     description: {
       type: String
     },
@@ -70,6 +88,10 @@ const vehicleSchema = new mongoose.Schema(
       max: 5
     },
     totalTrips: {
+      type: Number,
+      default: 0
+    },
+    totalKmLakhs: {
       type: Number,
       default: 0
     }

@@ -1,19 +1,4 @@
 
-.navbar {
-  background: rgba(245, 239, 230, 0.97) !important;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 2px 24px rgba(26, 16, 16, 0.1) !important;
-}
-.navbar .logo { color: var(--maroon-dark) !important; }
-.navbar .logo-icon { color: var(--maroon) !important; }
-.navbar .nav-links a { color: var(--text) !important; }
-.navbar .nav-actions .btn-ghost { color: var(--text) !important; }
-.navbar .nav-links a:hover,
-.navbar .nav-links a.active {
-  color: var(--maroon) !important;
-  background: rgba(110,31,43,.08) !important;
-}
-.navbar .hamburger span { background: var(--text) !important; }
 
 /* ── MAIN LAYOUT CONTAINER ── */
 .booking-page-container {
