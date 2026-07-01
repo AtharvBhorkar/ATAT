@@ -33,8 +33,8 @@
   function updateStats(stats) {
     if (!stats) return;
 
-    var vc = stats.vehicleCount || 0;
-    var pc = stats.activePackageCount || stats.packageCount || 0;
+    var vc = stats.totalVehicles || stats.vehicleCount || 0;
+    var pc = stats.totalPackages || stats.activePackageCount || stats.packageCount || 0;
 
     /* Stats strip — .count-up elements: [Years, Vehicles, Destinations, Travellers] */
     var counts = $$('.count-up');
@@ -194,7 +194,7 @@
       btn.parentNode.replaceChild(clone, btn);
 
       clone.addEventListener('click', function () {
-        tabs.forEach(function (t) { t.classList.remove('active'); });
+        $$('.tab-btn').forEach(function (t) { t.classList.remove('active'); });
         clone.classList.add('active');
 
         var tab = clone.dataset.tab;
