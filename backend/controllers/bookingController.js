@@ -3,14 +3,9 @@ const { sendAllNotifications } = require('../utils/notifications');
 
 /* ─── Helper: populate vehicle/package for notifications ─── */
 async function populateForNotification(booking) {
-  // ✅ FIXED: Removed .execPopulate() — deprecated in Mongoose 6+
-  // ✅ FIXED — Booking.findById() returns a Query
-  // Query.populate() returns a Query (chainable)
-  // Query.exec() or await resolves to Document
   return await Booking.findById(booking._id)
-    .populate('vehicleId', 'name type model brand image seats luggage pricePerKm')   // returns Query
-    .populate('packageId', 'title destination image duration');  // returns Query → resolves to Document
-  
+    .populate('vehicleId', 'name type model brand image seats luggage pricePerKm')
+    .populate('packageId', 'title destination image duration');
 }
 
 

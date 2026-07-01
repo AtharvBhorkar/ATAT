@@ -37,6 +37,43 @@ function mapVehicle(v) {
   };
 }
 
+function normalizeVehicleData(body) {
+  const data = { ...body };
+
+  if (data.fuel && !data.fuelType) {
+    data.fuelType = data.fuel;
+  }
+
+  if (data.type) {
+    data.type = data.type.toLowerCase().trim();
+    if (data.type === 'motorcycle') data.type = 'bike';
+  }
+
+  if (data.fuelType) {
+    data.fuelType = data.fuelType.toLowerCase().trim();
+  }
+
+  if (data.transmission) {
+    data.transmission = data.transmission.toLowerCase().trim();
+  }
+
+  if (!data.slug && data.name) {
+    const baseSlug = data.name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    const randomSuffix = Math.random().toString(36).substring(2, 7);
+    data.slug = `${baseSlug}-${randomSuffix}`;
+  }
+
+  if (data.status) {
+    data.available = data.status === 'active';
+  }
+
+  return data;
+}
+
 // ✅ PUBLIC — booking page needs this without auth
 router.get('/', async (req, res) => {
   try {
@@ -97,11 +134,16 @@ router.get('/:id', async (req, res) => {
 // ✅ PROTECTED — admin-only write operations
 router.post('/', verifyAdmin, async (req, res) => {
   try {
-    const vehicle = await Vehicle.create(req.body);
+    const normalizedData = normalizeVehicleData(req.body);
+    const vehicle = await Vehicle.create(normalizedData);
     res.status(201).json({ success: true, data: mapVehicle(vehicle) });
   } catch (error) {
     if (error.code === 11000) {
       return res.status(400).json({ success: false, message: 'Vehicle slug already exists.' });
+    }
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({ success: false, message: messages.join(', ') });
     }
     res.status(500).json({ success: false, message: error.message });
   }
@@ -109,10 +151,15 @@ router.post('/', verifyAdmin, async (req, res) => {
 
 router.put('/:id', verifyAdmin, async (req, res) => {
   try {
-    const vehicle = await Vehicle.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const normalizedData = normalizeVehicleData(req.body);
+    const vehicle = await Vehicle.findByIdAndUpdate(req.params.id, normalizedData, { new: true, runValidators: true });
     if (!vehicle) return res.status(404).json({ success: false, message: 'Vehicle not found.' });
     res.json({ success: true, data: mapVehicle(vehicle) });
   } catch (error) {
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({ success: false, message: messages.join(', ') });
+    }
     res.status(500).json({ success: false, message: error.message });
   }
 });
