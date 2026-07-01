@@ -2,18 +2,133 @@ const express = require('express');
 const router = express.Router();
 const Vehicle = require('../models/Vehicle');
 const Package = require('../models/Package');
+const Booking = require('../models/Booking');
+const Contact = require('../models/Contact');
 
-// ─── VEHICLES (Public) ───
+function mapVehicle(v) {
+  return {
+    _id: v._id,
+    name: v.name || '',
+    type: v.type || '',
+    brand: v.brand || '',
+    model: v.model || '',
+    year: v.year || null,
+    seats: v.seats || 4,
+    luggage: v.luggage || v.bags || 2,
+    fuel: v.fuel || v.fuelType || '',
+    transmission: v.transmission || '',
+    mileage: v.mileage || '',
+    ac: v.ac !== false,
+    pricePerKm: v.pricePerKm || 0,
+    pricePerDay: v.pricePerDay || v.dailyRate || 0,
+    minFare: v.minFare || 0,
+    rating: v.rating || 0,
+    totalTrips: v.totalTrips || 0,
+    image: v.image || '',
+    images: v.images || [],
+    features: v.features || [],
+    description: v.description || '',
+    note: v.note || v.description || '',
+    availability: v.available !== undefined ? v.available : true,
+    badge: v.badge || '',
+    badgeClass: v.badgeClass || '',
+    featured: v.featured || false,
+    slug: v.slug || '',
+    createdAt: v.createdAt,
+    updatedAt: v.updatedAt
+  };
+}
 
-// Get all vehicles
+function mapPackage(p) {
+  return {
+    _id: p._id,
+    title: p.title || p.name || '',
+    name: p.name || p.title || '',
+    slug: p.slug || '',
+    category: p.category || '',
+    destination: p.destination || '',
+    state: p.state || '',
+    duration: p.duration || '',
+    durationNights: p.durationNights || p.durationDays || 1,
+    price: p.price || 0,
+    originalPrice: p.originalPrice || p.discountPrice || null,
+    discountPrice: p.discountPrice || p.originalPrice || null,
+    description: p.description || '',
+    includes: p.includes || [],
+    excludes: p.excludes || [],
+    image: p.image || '',
+    images: p.images || [],
+    active: p.active !== false,
+    featured: p.featured || false,
+    rating: p.rating || 0,
+    totalBookings: p.totalBookings || 0,
+    maxPeople: p.maxPeople || 10,
+    minPeople: p.minPeople || 1,
+    difficulty: p.difficulty || 'easy',
+    itinerary: p.itinerary || [],
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt
+  };
+}
+
+/* ═══ STATS ═══ */
+router.get('/stats', async (req, res) => {
+  try {
+    const [totalBookings, totalVehicles, totalPackages, totalContacts, availableVehicles] = await Promise.all([
+      Booking.countDocuments(),
+      Vehicle.countDocuments(),
+      Package.countDocuments(),
+      Contact.countDocuments(),
+      Vehicle.countDocuments({ available: true })
+    ]);
+
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const recentBookings = await Booking.countDocuments({
+      createdAt: { $gte: thirtyDaysAgo }
+    });
+
+    const featuredVehicles = await Vehicle.find({ available: true })
+      .sort({ totalTrips: -1 })
+      .limit(4);
+    const featuredPackages = await Package.find({ active: true, featured: true })
+      .sort({ totalBookings: -1 })
+      .limit(6);
+
+    res.json({
+      success: true,
+      data: {
+        totalBookings,
+        totalVehicles,
+        totalPackages,
+        totalContacts,
+        availableVehicles,
+        recentBookings,
+        featuredVehicles: featuredVehicles.map(mapVehicle),
+        featuredPackages: featuredPackages.map(mapPackage)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/* ═══ VEHICLES ═══ */
 router.get('/vehicles', async (req, res) => {
   try {
-    const { type, fuelType, transmission, available, search, sort, page = 1, limit = 100 } = req.query;
+    const { available, limit, type, sort, search } = req.query;
     const query = {};
-    if (type && type !== 'all') query.type = type;
-    if (fuelType) query.fuelType = fuelType;
-    if (transmission) query.transmission = transmission;
-    if (available !== undefined) query.available = available === 'true';
+
+    if (available === 'true') {
+      query.available = true;
+    } else if (available === 'false') {
+      query.available = false;
+    }
+
+    if (type) {
+      query.type = { $regex: type, $options: 'i' };
+    }
+
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
@@ -23,102 +138,140 @@ router.get('/vehicles', async (req, res) => {
       ];
     }
 
-    let sortOption = { createdAt: -1 };
-    if (sort === 'price-low') sortOption = { pricePerKm: 1 };
-    if (sort === 'price-high') sortOption = { pricePerKm: -1 };
-    if (sort === 'seats-asc') sortOption = { seats: 1 };
-    if (sort === 'seats-desc') sortOption = { seats: -1 };
-    if (sort === 'popular') sortOption = { totalTrips: -1 };
-    if (sort === 'rating') sortOption = { rating: -1 };
+    let vehicleQuery = Vehicle.find(query);
 
-    const vehicles = await Vehicle.find(query).sort(sortOption).limit(parseInt(limit));
-    res.json({ success: true, data: vehicles, total: vehicles.length });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-// Get single vehicle by ID or slug
-router.get('/vehicles/:id', async (req, res) => {
-  try {
-    const vehicle = await Vehicle.findOne({
-      $or: [{ _id: req.params.id }, { slug: req.params.id }]
-    });
-    if (!vehicle) {
-      return res.status(404).json({ success: false, message: 'Vehicle not found.' });
+    if (sort === 'price-low') {
+      vehicleQuery = vehicleQuery.sort({ pricePerKm: 1 });
+    } else if (sort === 'price-high') {
+      vehicleQuery = vehicleQuery.sort({ pricePerKm: -1 });
+    } else if (sort === 'seats') {
+      vehicleQuery = vehicleQuery.sort({ seats: 1 });
+    } else if (sort === 'popular') {
+      vehicleQuery = vehicleQuery.sort({ totalTrips: -1 });
+    } else if (sort === 'rating') {
+      vehicleQuery = vehicleQuery.sort({ rating: -1 });
+    } else {
+      vehicleQuery = vehicleQuery.sort({ createdAt: -1 });
     }
-    const similar = await Vehicle.find({
-      type: vehicle.type,
-      _id: { $ne: vehicle._id },
-      available: true
-    }).sort({ totalTrips: -1 }).limit(3);
-    res.json({ success: true, data: vehicle, similar });
+
+    if (limit) {
+      vehicleQuery = vehicleQuery.limit(parseInt(limit));
+    }
+
+    const vehicles = await vehicleQuery;
+    const mapped = vehicles.map(mapVehicle);
+
+    res.json({
+      success: true,
+      vehicles: mapped,
+      data: mapped
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// ─── PACKAGES (Public) ───
-
-// Get all active packages
+/* ═══ PACKAGES ═══ */
 router.get('/packages', async (req, res) => {
   try {
-    const { category, search, featured, sort, page = 1, limit = 100 } = req.query;
-    const query = { active: true };
-    if (category && category !== 'all') query.category = category;
-    if (featured !== undefined) query.featured = featured === 'true';
+    const { limit, destination, active, sort, category, search, minPrice, maxPrice } = req.query;
+    const query = {};
+
+    if (active === 'true') {
+      query.active = true;
+    } else if (active === 'false') {
+      query.active = false;
+    } else {
+      query.active = true;
+    }
+
+    if (category && category !== 'all') {
+      query.category = { $regex: category, $options: 'i' };
+    }
+
+    if (destination) {
+      query.destination = { $regex: destination, $options: 'i' };
+    }
+
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
+        { name: { $regex: search, $options: 'i' } },
         { destination: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } },
         { state: { $regex: search, $options: 'i' } }
       ];
     }
 
-    let sortOption = { createdAt: -1 };
-    if (sort === 'price-low') sortOption = { price: 1 };
-    if (sort === 'price-high') sortOption = { price: -1 };
-    if (sort === 'popular') sortOption = { totalBookings: -1 };
-    if (sort === 'rating') sortOption = { rating: -1 };
+    if (minPrice) {
+      query.price = { ...query.price, $gte: Number(minPrice) };
+    }
+    if (maxPrice) {
+      query.price = { ...query.price, $lte: Number(maxPrice) };
+    }
 
-    const packages = await Package.find(query).sort(sortOption).limit(parseInt(limit));
-    res.json({ success: true, data: packages, total: packages.length });
+    let packageQuery = Package.find(query);
+
+    if (sort === 'price-low') {
+      packageQuery = packageQuery.sort({ price: 1 });
+    } else if (sort === 'price-high') {
+      packageQuery = packageQuery.sort({ price: -1 });
+    } else if (sort === 'duration') {
+      packageQuery = packageQuery.sort({ durationNights: 1 });
+    } else if (sort === 'popular') {
+      packageQuery = packageQuery.sort({ totalBookings: -1 });
+    } else if (sort === 'rating') {
+      packageQuery = packageQuery.sort({ rating: -1 });
+    } else {
+      packageQuery = packageQuery.sort({ createdAt: -1 });
+    }
+
+    if (limit) {
+      packageQuery = packageQuery.limit(parseInt(limit));
+    }
+
+    const packages = await packageQuery;
+    const mapped = packages.map(mapPackage);
+
+    res.json({
+      success: true,
+      packages: mapped,
+      data: mapped
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// Get single package by ID or slug
-router.get('/packages/:slug', async (req, res) => {
+/* ═══ SINGLE VEHICLE ═══ */
+router.get('/vehicles/:id', async (req, res) => {
+  try {
+    const vehicle = await Vehicle.findOne({
+      $or: [{ _id: req.params.id }, { slug: req.params.id }]
+    });
+
+    if (!vehicle) {
+      return res.status(404).json({ success: false, message: 'Vehicle not found.' });
+    }
+
+    res.json({ success: true, data: mapVehicle(vehicle) });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+/* ═══ SINGLE PACKAGE ═══ */
+router.get('/packages/:id', async (req, res) => {
   try {
     const pkg = await Package.findOne({
-      $or: [{ _id: req.params.slug }, { slug: req.params.slug }]
+      $or: [{ _id: req.params.id }, { slug: req.params.id }]
     });
+
     if (!pkg) {
       return res.status(404).json({ success: false, message: 'Package not found.' });
     }
-    res.json({ success: true, data: pkg });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
 
-// ─── STATS (Public) ───
-
-router.get('/stats', async (req, res) => {
-  try {
-    const [vehicleCount, packageCount, activePackageCount] = await Promise.all([
-      Vehicle.countDocuments({ available: true }),
-      Package.countDocuments(),
-      Package.countDocuments({ active: true })
-    ]);
-    const vehicles = await Vehicle.find({ available: true }).sort({ totalTrips: -1 }).limit(4);
-    const packages = await Package.find({ active: true, featured: true }).sort({ totalBookings: -1 }).limit(6);
-    res.json({
-      success: true,
-      data: { vehicleCount, packageCount, activePackageCount, featuredVehicles: vehicles, featuredPackages: packages }
-    });
+    res.json({ success: true, data: mapPackage(pkg) });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

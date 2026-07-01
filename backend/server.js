@@ -13,9 +13,6 @@ const vehicleRoutes = require('./routes/vehicles');
 const packageRoutes = require('./routes/packages');
 const bookingRoutes = require('./routes/bookings');
 const contactRoutes = require('./routes/contacts');
-const publicRoutes = require('./routes/publicApi');
-const paymentRoutes = require('./routes/payments');
-const settingsRoutes = require('./routes/settings');
 
 const app = express();
 
@@ -97,9 +94,6 @@ app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/packages', packageRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/contacts', contactRoutes);
-app.use('/api/public', publicRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/api/settings', settingsRoutes);
 
 /* ───────────────────────────────
 404 HANDLER

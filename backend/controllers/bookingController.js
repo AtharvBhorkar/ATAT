@@ -1,4 +1,18 @@
 const Booking = require('../models/Booking');
+const { sendAllNotifications } = require('../utils/notifications');
+
+/* ─── Helper: populate vehicle/package for notifications ─── */
+async function populateForNotification(booking) {
+  // ✅ FIXED: Removed .execPopulate() — deprecated in Mongoose 6+
+  // ✅ FIXED — Booking.findById() returns a Query
+  // Query.populate() returns a Query (chainable)
+  // Query.exec() or await resolves to Document
+  return await Booking.findById(booking._id)
+    .populate('vehicleId', 'name type model brand image seats luggage pricePerKm')   // returns Query
+    .populate('packageId', 'title destination image duration');  // returns Query → resolves to Document
+  
+}
+
 
 exports.getAllBookings = async (req, res) => {
   try {
@@ -25,7 +39,11 @@ exports.getAllBookings = async (req, res) => {
         .sort({ createdAt: -1 }).skip(skip).limit(limitNum),
       Booking.countDocuments(query)
     ]);
-    res.json({ success: true, data: bookings, pagination: { total, page: pageNum, pages: Math.ceil(total / limitNum), limit: limitNum } });
+    res.json({
+      success: true,
+      data: bookings,
+      pagination: { total, page: pageNum, pages: Math.ceil(total / limitNum), limit: limitNum }
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -33,7 +51,9 @@ exports.getAllBookings = async (req, res) => {
 
 exports.getBookingById = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id).populate('vehicleId').populate('packageId');
+    const booking = await Booking.findById(req.params.id)
+      .populate('vehicleId')
+      .populate('packageId');
     if (!booking) return res.status(404).json({ success: false, message: 'Booking not found.' });
     res.json({ success: true, data: booking });
   } catch (error) {
@@ -44,7 +64,24 @@ exports.getBookingById = async (req, res) => {
 exports.createBooking = async (req, res) => {
   try {
     const booking = await Booking.create(req.body);
-    res.status(201).json({ success: true, message: 'Booking created successfully.', data: booking });
+
+    /* ─── Send notifications (non-blocking but LOGGED) ─── */
+    try {
+      const populated = await populateForNotification(booking);
+      console.log('📧 Sending notifications for booking:', booking.bookingId);
+      
+      sendAllNotifications(populated).catch(err => {
+        console.error('❌ Notification batch error:', err.message);
+      });
+    } catch (notifErr) {
+      console.error('❌ Could not populate for notifications:', notifErr.message);
+    }
+
+    res.status(201).json({
+      success: true,
+      message: 'Booking created successfully.',
+      data: booking
+    });
   } catch (error) {
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map(val => val.message);
@@ -56,7 +93,11 @@ exports.createBooking = async (req, res) => {
 
 exports.updateBooking = async (req, res) => {
   try {
-    const booking = await Booking.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
     if (!booking) return res.status(404).json({ success: false, message: 'Booking not found.' });
     res.json({ success: true, message: 'Booking updated successfully.', data: booking });
   } catch (error) {
@@ -83,14 +124,33 @@ exports.updateBookingStatus = async (req, res) => {
     const { status, cancelReason } = req.body;
     const validStatuses = ['pending', 'confirmed', 'in-progress', 'completed', 'cancelled'];
     if (!validStatuses.includes(status)) {
-      return res.status(400).json({ success: false, message: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
+      return res.status(400).json({
+        success: false,
+        message: `Invalid status. Must be one of: ${validStatuses.join(', ')}`
+      });
     }
     const booking = await Booking.findById(req.params.id);
     if (!booking) return res.status(404).json({ success: false, message: 'Booking not found.' });
+
+    const previousStatus = booking.status;
     booking.status = status;
     if (status === 'cancelled' && cancelReason) booking.cancelReason = cancelReason;
     await booking.save();
-    res.json({ success: true, message: `Booking status updated to "${status}".`, data: booking });
+
+    if (previousStatus !== status) {
+      try {
+        const populated = await populateForNotification(booking);
+        sendAllNotifications(populated).catch(e => console.warn('Status update notification failed:', e.message));
+      } catch (e) {
+        console.warn('Could not send status update notification:', e.message);
+      }
+    }
+
+    res.json({
+      success: true,
+      message: `Booking status updated to "${status}".`,
+      data: booking
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

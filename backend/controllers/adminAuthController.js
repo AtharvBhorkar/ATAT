@@ -211,16 +211,32 @@ exports.dashboard = async (req, res) => {
       Contact.countDocuments(),
       Contact.countDocuments({ isRead: false }),
       Booking.aggregate([
-        { $match: { status: { $in: ['confirmed', 'completed'] } } },
-        { $group: { _id: null, total: { $sum: '$totalPrice' } } }
+        {
+          $match: {
+            status: { $in: ['confirmed', 'completed'] }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$totalPrice' }
+          }
+        }
       ]),
       Booking.aggregate([
-        { $match: { paymentStatus: { $ne: 'paid' }, status: { $ne: 'cancelled' } } },
+        {
+          $match: {
+            paymentStatus: { $ne: 'paid' },
+            status: { $ne: 'cancelled' }
+          }
+        },
         {
           $group: {
             _id: null,
             total: {
-              $sum: { $subtract: ['$totalPrice', '$advancePaid'] }
+              $sum: {
+                $subtract: ['$totalPrice', '$advancePaid']
+              }
             }
           }
         }
@@ -340,9 +356,12 @@ exports.dashboard = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error(error);
+  
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
+      stack: error.stack
     });
   }
 };
