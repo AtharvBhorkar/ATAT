@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════
-   VOYAGO — Shared API Utility (FIXED)
+   VOYAGO — Shared API Utility (IMPROVED)
+   Added: Better token handling, debugging, error messages
 ═══════════════════════════════════════════════ */
 
 const API = (() => {
@@ -10,9 +11,12 @@ const BASE = window.location.origin + '/api';
 
 function getToken() {
     try {
-        return localStorage.getItem('voyago_token') ||
+        const token = localStorage.getItem('voyago_token') ||
                sessionStorage.getItem('voyago_token');
+        console.log('🔐 Token retrieved:', token ? '✓' : '✗');
+        return token;
     } catch (e) {
+        console.error('❌ Token retrieval error:', e);
         return null;
     }
 }
@@ -22,18 +26,25 @@ function setToken(token, remember) {
         if (remember) {
             localStorage.setItem('voyago_token', token);
             sessionStorage.removeItem('voyago_token');
+            console.log('💾 Token saved to localStorage');
         } else {
             sessionStorage.setItem('voyago_token', token);
             localStorage.removeItem('voyago_token');
+            console.log('💾 Token saved to sessionStorage');
         }
-    } catch (e) {}
+    } catch (e) {
+        console.error('❌ Token save error:', e);
+    }
 }
 
 function clearToken() {
     try {
         localStorage.removeItem('voyago_token');
         sessionStorage.removeItem('voyago_token');
-    } catch (e) {}
+        console.log('🗑️ Token cleared');
+    } catch (e) {
+        console.error('❌ Token clear error:', e);
+    }
 }
 
 /* ───────── CORE REQUEST ───────── */
@@ -59,9 +70,10 @@ async function request(endpoint, options = {}) {
         Object.assign(config.headers, options.headers);
     }
 
-    /* auth header */
+    /* auth header - CRITICAL */
     if (token) {
         config.headers['Authorization'] = 'Bearer ' + token;
+        console.log(`🔑 Adding Authorization header for ${options.method || 'GET'} ${endpoint}`);
     }
 
     /* body handling */
@@ -76,11 +88,14 @@ async function request(endpoint, options = {}) {
         }
     }
 
+    console.log(`📡 ${config.method} ${endpoint}`);
+
     try {
         const res = await fetch(url, config);
 
-        /* 204 */
+        /* 204 No Content */
         if (res.status === 204) {
+            console.log(`✅ ${res.status} OK (No content)`);
             return { success: true };
         }
 
@@ -88,8 +103,9 @@ async function request(endpoint, options = {}) {
         let data;
 
         try {
-            data = JSON.parse(text);
+            data = text ? JSON.parse(text) : {};
         } catch (e) {
+            console.error('❌ JSON parse error:', text);
             return res.ok
                 ? { success: true, raw: text }
                 : { success: false, message: 'Invalid response (' + res.status + ')' };
@@ -99,19 +115,24 @@ async function request(endpoint, options = {}) {
             data.success = res.ok;
         }
 
-        /* ❌ IMPORTANT FIX: NO REDIRECT HERE (prevents loop) */
+        /* STATUS HANDLING */
         if (res.status === 401) {
+            console.warn('⚠️ 401 Unauthorized - clearing token');
             clearToken();
             data.unauthenticated = true;
+        } else if (res.ok) {
+            console.log(`✅ ${res.status} ${endpoint}`, data);
+        } else {
+            console.error(`❌ ${res.status} ${endpoint}`, data);
         }
 
         return data;
 
     } catch (err) {
-        console.error('API Error:', endpoint, err);
+        console.error('❌ Network error:', endpoint, err.message);
         return {
             success: false,
-            message: 'Network error'
+            message: 'Network error: ' + err.message
         };
     }
 }
@@ -131,15 +152,13 @@ const publicApi = {
 /* ───────── ADMIN API ───────── */
 
 const adminApi = {
-
     login: (d) => request('/admin/login', { method: 'POST', body: d }),
     getMe: () => request('/admin/me'),
-
-    changePassword: (d) =>
-        request('/admin/change-password', { method: 'PUT', body: d }),
-
     getDashboard: () => request('/admin/dashboard'),
-
+  
+    changePassword: (d) =>
+      request('/admin/change-password', { method: 'PUT', body: d }),
+  
     /* Vehicles */
     getVehicles: (p) => request('/vehicles' + (p ? '?' + p : '')),
     getVehicle: (id) => request('/vehicles/' + id),
@@ -147,7 +166,7 @@ const adminApi = {
     updateVehicle: (id, d) => request('/vehicles/' + id, { method: 'PUT', body: d }),
     deleteVehicle: (id) => request('/vehicles/' + id, { method: 'DELETE' }),
     toggleVehicle: (id) => request('/vehicles/' + id + '/toggle', { method: 'PATCH' }),
-
+  
     /* Packages */
     getPackages: (p) => request('/packages' + (p ? '?' + p : '')),
     getPackage: (id) => request('/packages/' + id),
@@ -156,22 +175,22 @@ const adminApi = {
     deletePackage: (id) => request('/packages/' + id, { method: 'DELETE' }),
     togglePackage: (id) => request('/packages/' + id + '/toggle', { method: 'PATCH' }),
     toggleFeatured: (id) => request('/packages/' + id + '/featured', { method: 'PATCH' }),
-
+  
     /* Bookings */
     getBookings: (p) => request('/bookings' + (p ? '?' + p : '')),
     getBooking: (id) => request('/bookings/' + id),
     updateBooking: (id, d) => request('/bookings/' + id, { method: 'PUT', body: d }),
     updateBookingStatus: (id, d) =>
-        request('/bookings/' + id + '/status', { method: 'PATCH', body: d }),
+      request('/bookings/' + id + '/status', { method: 'PATCH', body: d }),
     deleteBooking: (id) => request('/bookings/' + id, { method: 'DELETE' }),
-
+  
     /* Contacts */
     getContacts: (p) => request('/contacts' + (p ? '?' + p : '')),
     getContact: (id) => request('/contacts/' + id),
     deleteContact: (id) => request('/contacts/' + id, { method: 'DELETE' }),
     markRead: (id) => request('/contacts/' + id + '/read', { method: 'PATCH' }),
     markUnread: (id) => request('/contacts/' + id + '/unread', { method: 'PATCH' })
-};
+  };
 
 /* ───────── EXPORT ───────── */
 
@@ -187,3 +206,4 @@ return {
 })();
 
 window.API = API;
+console.log('✅ API module loaded');
