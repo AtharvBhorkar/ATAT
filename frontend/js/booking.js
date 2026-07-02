@@ -5,6 +5,20 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   
+  let dbVehicles = [];
+  let dbPackages = [];
+
+  // Fetch real database records to resolve ObjectIDs
+  fetch('/api/vehicles')
+    .then(r => r.json())
+    .then(res => { if (res.success) dbVehicles = res.data || []; })
+    .catch(err => console.warn('Could not load vehicles from DB:', err));
+
+  fetch('/api/public/packages')
+    .then(r => r.json())
+    .then(res => { if (res.success) dbPackages = res.data || []; })
+    .catch(err => console.warn('Could not load packages from DB:', err));
+
   // ─── STATE MANAGEMENT ───
   let currentStep = 1;
   let selectedVehicleId = 'sedan'; // default selection
@@ -763,29 +777,51 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isValid) {
           showStep('loading');
 
-          setTimeout(() => {
-            showStep('success');
+          const matchedPkg = dbPackages.find(p => p.slug === selectedPackageId || p._id === selectedPackageId) || dbPackages[0];
+          
+          const totalText = pkgTotalPrice.textContent || "0";
+          const totalPrice = parseInt(totalText.replace(/[^0-9]/g, ''), 10) || 0;
+          
+          const payload = {
+            name: pkgName.value.trim(),
+            email: pkgEmail.value.trim(),
+            phone: pkgPhone.value.trim(),
+            bookingType: 'package',
+            packageId: matchedPkg ? matchedPkg._id : null,
+            pickupDate: new Date(pkgDateInput.value).toISOString(),
+            numberOfPeople: parseInt(pkgTravelersCount.value, 10) || 1,
+            totalPrice: totalPrice,
+            advancePaid: 0,
+            paymentStatus: 'pending',
+            status: 'pending'
+          };
 
-            if (packageDetailsPanel) packageDetailsPanel.style.display = 'none';
-            const checkoutCard = document.getElementById('packageCheckoutCard');
-            if (checkoutCard) checkoutCard.style.display = 'none';
+          fetch('/api/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+            .then(r => r.json())
+            .then(res => {
+              if (res.success) {
+                showStep('success');
+                if (packageDetailsPanel) packageDetailsPanel.style.display = 'none';
+                const checkoutCard = document.getElementById('packageCheckoutCard');
+                if (checkoutCard) checkoutCard.style.display = 'none';
+                document.querySelector('.booking-grid').style.gridTemplateColumns = '1fr';
 
-            document.querySelector('.booking-grid').style.gridTemplateColumns = '1fr';
-
-            const journeyVal = pkgDateInput.value;
-            let dateCode = "250525";
-            if (journeyVal) {
-              const parts = journeyVal.split('-');
-              if (parts.length === 3) {
-                dateCode = parts[2] + parts[1] + parts[0].substring(2);
+                successResId.textContent = res.data.bookingId;
+                successEmail.textContent = res.data.email;
+              } else {
+                showStep(1);
+                alert('Booking failed: ' + res.message);
               }
-            }
-            const randomCode = Math.floor(1000 + Math.random() * 9000);
-            const refId = 'VOY' + dateCode + randomCode;
-
-            successResId.textContent = refId;
-            successEmail.textContent = pkgEmail.value;
-          }, 2500);
+            })
+            .catch(err => {
+              showStep(1);
+              console.error(err);
+              alert('A network error occurred. Please try again.');
+            });
         }
       });
     }
@@ -964,7 +1000,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   confirmPaymentBtn.addEventListener('click', () => {
     if (validateStep5()) {
-      processMockPayment();
+      processRealPayment();
     }
   });
 
@@ -1515,40 +1551,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ─── PROCESS TRANSACTION & CONFIRM BOOKING ───
-  function processMockPayment() {
-    // Show mock loading step
+  function processRealPayment() {
     showStep('loading');
     
-    // Hide progress bar wrapper during final verification or completed state
     document.querySelector('.steps-progress-wrapper').style.opacity = '0.3';
     sidebarSecureBtn.disabled = true;
 
-    // Simulate bank loading animation for 2.5 seconds
-    setTimeout(() => {
-      // Transition to success screen
-      showStep('success');
-      document.querySelector('.steps-progress-wrapper').style.display = 'none';
-      document.querySelector('.booking-summary-sidebar').style.display = 'none';
-      
-      // Make grid span full width for clean invoice display
-      document.querySelector('.booking-grid').style.gridTemplateColumns = '1fr';
+    const matchedVehicle = dbVehicles.find(v => v.type === selectedVehicleId) || dbVehicles[0];
+    
+    const totalText = summaryTotal.textContent || "0";
+    const totalPrice = parseInt(totalText.replace(/[^0-9]/g, ''), 10) || 0;
 
-      // Populate success page with real details
-      const journeyVal = journeyDateInput.value; // e.g. "2025-05-25"
-      let dateCode = "250525";
-      if (journeyVal) {
-        const parts = journeyVal.split('-'); // ["2025", "05", "25"]
-        if (parts.length === 3) {
-          dateCode = parts[2] + parts[1] + parts[0].substring(2); // "25" + "05" + "25" = "250525"
+    let pickupDate = new Date();
+    if (journeyDateInput.value && journeyTimeInput.value) {
+      pickupDate = new Date(`${journeyDateInput.value}T${journeyTimeInput.value}`);
+    }
+
+    const payload = {
+      name: custName.value.trim(),
+      email: custEmail.value.trim(),
+      phone: custPhone.value.trim(),
+      bookingType: 'vehicle',
+      vehicleId: matchedVehicle ? matchedVehicle._id : null,
+      pickupLocation: pickupInput.value.trim(),
+      dropoffLocation: dropoffInput.value.trim(),
+      pickupDate: pickupDate.toISOString(),
+      totalPrice: totalPrice,
+      advancePaid: 0,
+      paymentStatus: 'pending',
+      status: 'pending'
+    };
+
+    if (tripType === 'Round Trip' && returnDateInput.value) {
+      payload.returnDate = new Date(`${returnDateInput.value}T00:00:00`).toISOString();
+    }
+
+    const gstVal = document.getElementById('custGst') ? document.getElementById('custGst').value.trim() : '';
+    if (gstVal) {
+      payload.gstNumber = gstVal;
+    }
+
+    fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          showStep('success');
+          document.querySelector('.steps-progress-wrapper').style.display = 'none';
+          document.querySelector('.booking-summary-sidebar').style.display = 'none';
+          document.querySelector('.booking-grid').style.gridTemplateColumns = '1fr';
+
+          successResId.textContent = res.data.bookingId;
+          successEmail.textContent = res.data.email;
+        } else {
+          showStep(5);
+          document.querySelector('.steps-progress-wrapper').style.opacity = '1';
+          sidebarSecureBtn.disabled = false;
+          alert('Booking failed: ' + res.message);
         }
-      }
-      const randomCode = Math.floor(1000 + Math.random() * 9000); // 4 digits e.g. "4876"
-      const refId = 'VOY' + dateCode + randomCode;
-
-      successResId.textContent = refId;
-      successEmail.textContent = custEmail.value || 'customer@email.com';
-
-    }, 2500);
+      })
+      .catch(err => {
+        showStep(5);
+        document.querySelector('.steps-progress-wrapper').style.opacity = '1';
+        sidebarSecureBtn.disabled = false;
+        console.error(err);
+        alert('A network error occurred. Please try again.');
+      });
   }
 
   // Recalculate package/ride fares when passenger count changes in Step 3
