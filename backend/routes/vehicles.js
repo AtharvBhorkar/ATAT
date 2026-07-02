@@ -28,6 +28,8 @@ function mapVehicle(v) {
     description: v.description || '',
     note: v.note || v.description || '',
     availability: v.available !== undefined ? v.available : true,
+    isActive: v.status ? v.status === 'active' : v.available !== false,
+    status: v.status || (v.available !== false ? 'active' : 'disabled'),
     badge: v.badge || '',
     badgeClass: v.badgeClass || '',
     featured: v.featured || false,
@@ -77,13 +79,22 @@ function normalizeVehicleData(body) {
 // ✅ PUBLIC — booking page needs this without auth
 router.get('/', async (req, res) => {
   try {
-    const { type, fuelType, transmission, available, search, sort, page = 1, limit = 100 } = req.query;
+    const { type, fuelType, transmission, available, status, search, sort, page = 1, limit = 100 } = req.query;
     const query = {};
 
-    if (type && type !== 'all') query.type = type;
+    if (type && type !== 'all') {
+      let normalizedType = type.toLowerCase().trim();
+      if (normalizedType === 'motorcycle') normalizedType = 'bike';
+      query.type = normalizedType;
+    }
     if (fuelType) query.fuelType = fuelType;
     if (transmission) query.transmission = transmission;
-    if (available !== undefined) query.available = available === 'true';
+    
+    if (status) {
+      query.status = status;
+    } else if (available !== undefined) {
+      query.available = available === 'true';
+    }
 
     if (search) {
       query.$or = [
@@ -160,6 +171,19 @@ router.put('/:id', verifyAdmin, async (req, res) => {
       const messages = Object.values(error.errors).map(val => val.message);
       return res.status(400).json({ success: false, message: messages.join(', ') });
     }
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Toggle vehicle active status
+router.patch('/:id/toggle', verifyAdmin, async (req, res) => {
+  try {
+    const vehicle = await Vehicle.findById(req.params.id);
+    if (!vehicle) return res.status(404).json({ success: false, message: 'Vehicle not found.' });
+    vehicle.available = !vehicle.available;
+    await vehicle.save();
+    res.json({ success: true, data: mapVehicle(vehicle) });
+  } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
