@@ -3,14 +3,9 @@ const { sendAllNotifications } = require('../utils/notifications');
 
 /* ─── Helper: populate vehicle/package for notifications ─── */
 async function populateForNotification(booking) {
-  // ✅ FIXED: Removed .execPopulate() — deprecated in Mongoose 6+
-  // ✅ FIXED — Booking.findById() returns a Query
-  // Query.populate() returns a Query (chainable)
-  // Query.exec() or await resolves to Document
   return await Booking.findById(booking._id)
-    .populate('vehicleId', 'name type model brand image seats luggage pricePerKm')   // returns Query
-    .populate('packageId', 'title destination image duration');  // returns Query → resolves to Document
-  
+    .populate('vehicleId', 'name type model brand image seats luggage pricePerKm')
+    .populate('packageId', 'title destination image duration');
 }
 
 
@@ -39,9 +34,19 @@ exports.getAllBookings = async (req, res) => {
         .sort({ createdAt: -1 }).skip(skip).limit(limitNum),
       Booking.countDocuments(query)
     ]);
+
+    const mapped = bookings.map(b => {
+      const obj = b.toObject();
+      obj.type = b.bookingType;
+      obj.fullName = b.name;
+      obj.vehicleName = b.vehicleId ? b.vehicleId.name : null;
+      obj.packageName = b.packageId ? (b.packageId.title || b.packageId.name) : null;
+      return obj;
+    });
+
     res.json({
       success: true,
-      data: bookings,
+      data: mapped,
       pagination: { total, page: pageNum, pages: Math.ceil(total / limitNum), limit: limitNum }
     });
   } catch (error) {
@@ -55,7 +60,14 @@ exports.getBookingById = async (req, res) => {
       .populate('vehicleId')
       .populate('packageId');
     if (!booking) return res.status(404).json({ success: false, message: 'Booking not found.' });
-    res.json({ success: true, data: booking });
+
+    const mapped = booking.toObject();
+    mapped.type = booking.bookingType;
+    mapped.fullName = booking.name;
+    mapped.vehicleName = booking.vehicleId ? booking.vehicleId.name : null;
+    mapped.packageName = booking.packageId ? (booking.packageId.title || booking.packageId.name) : null;
+
+    res.json({ success: true, data: mapped });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

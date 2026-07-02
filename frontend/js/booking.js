@@ -1,8 +1,25 @@
+/* ═══════════════════════════════════════════════════
+   VOYAGO — booking.js
+   Dynamic form transitions, autocomplete, and pricing calculator
+   ═══════════════════════════════════════════════════ */
+
 document.addEventListener('DOMContentLoaded', () => {
+  
+  let dbVehicles = [];
+  let dbPackages = [];
 
-  const API_BASE = window.location.origin + '/api';
+  // Fetch real database records to resolve ObjectIDs
+  fetch('/api/vehicles')
+    .then(r => r.json())
+    .then(res => { if (res.success) dbVehicles = res.data || []; })
+    .catch(err => console.warn('Could not load vehicles from DB:', err));
 
-  /* ══════════════ STATE ══════════════ */
+  fetch('/api/public/packages')
+    .then(r => r.json())
+    .then(res => { if (res.success) dbPackages = res.data || []; })
+    .catch(err => console.warn('Could not load packages from DB:', err));
+
+  // ─── STATE MANAGEMENT ───
   let currentStep = 1;
   let selectedVehicleId = 'sedan'; // default selection
   let tripType = 'One Way'; // 'One Way' or 'Round Trip'
@@ -387,60 +404,95 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Popular Maharashtra travel locations for autocomplete
-  let selectedVehicle = null;
-  let vehiclesList = [];
-  let lastBookingFare = null;
-  let realPackageObjectId = null;
-
-  const fallbackVehicles = [
-    { _id: 'sedan', name: 'Sedan', type: 'Sedan', model: 'Dezire / Etios or similar', seats: 4, luggage: 2, pricePerKm: 12, image: '', availability: true, note: 'Comfortable for small groups' },
-    { _id: 'suv', name: 'SUV', type: 'SUV', model: 'Ertiga / Marazzo or similar', seats: 6, luggage: 4, pricePerKm: 16, image: '', availability: true, note: 'Great for families' },
-    { _id: 'premium-suv', name: 'Premium SUV', type: 'Premium SUV', model: 'Innova Crysta or similar', seats: 7, luggage: 5, pricePerKm: 22, image: '', availability: true, note: 'Extra comfort & space' },
-    { _id: 'tempo', name: 'Tempo Traveller', type: 'Tempo Traveller', model: '12 / 17 Seater', seats: 17, luggage: 10, pricePerKm: 28, image: '', availability: true, note: 'Best for large groups' }
-  ];
-
   const popularLocations = [
-    'Mumbai, Maharashtra', 'Pune, Maharashtra', 'Lonavala, Maharashtra', 'Shirdi, Maharashtra',
-    'Nashik, Maharashtra', 'Mahabaleshwar, Maharashtra', 'Goa', 'Alibaug, Maharashtra',
-    'Panchgani, Maharashtra', 'Kolhapur, Maharashtra', 'Aurangabad, Maharashtra',
-    'Thane, Maharashtra', 'Nagpur, Maharashtra', 'Trimbakeshwar, Maharashtra'
+    'Mumbai, Maharashtra',
+    'Pune, Maharashtra',
+    'Lonavala, Maharashtra',
+    'Shirdi, Maharashtra',
+    'Nashik, Maharashtra',
+    'Mahabaleshwar, Maharashtra',
+    'Goa',
+    'Alibaug, Maharashtra',
+    'Panchgani, Maharashtra',
+    'Kolhapur, Maharashtra',
+    'Aurangabad, Maharashtra'
   ];
 
-  const distanceMap = {
-    'mumbai-pune': 150, 'pune-mumbai': 150,
-    'mumbai-lonavala': 83, 'lonavala-mumbai': 83,
-    'mumbai-shirdi': 245, 'shirdi-mumbai': 245,
-    'mumbai-nashik': 210, 'nashik-mumbai': 210,
-    'mumbai-mahabaleshwar': 265, 'mahabaleshwar-mumbai': 265,
-    'mumbai-goa': 560, 'goa-mumbai': 560,
-    'mumbai-alibaug': 96, 'alibaug-mumbai': 96,
-    'mumbai-panchgani': 250, 'panchgani-mumbai': 250,
-    'mumbai-kolhapur': 380, 'kolhapur-mumbai': 380,
-    'mumbai-aurangabad': 335, 'aurangabad-mumbai': 335,
-    'mumbai-thane': 30, 'thane-mumbai': 30,
-    'mumbai-nagpur': 830, 'nagpur-mumbai': 830,
-    'pune-lonavala': 65, 'lonavala-pune': 65,
-    'pune-shirdi': 190, 'shirdi-pune': 190,
-    'pune-nashik': 210, 'nashik-pune': 210,
-    'pune-mahabaleshwar': 120, 'mahabaleshwar-pune': 120,
-    'pune-goa': 450, 'goa-pune': 450,
-    'pune-kolhapur': 240, 'kolhapur-pune': 240,
-    'pune-aurangabad': 260, 'aurangabad-pune': 260
+  // Vehicles list config
+  const vehiclesData = {
+    'sedan': {
+      id: 'sedan',
+      name: 'Sedan',
+      model: 'Dezire / Etios or similar',
+      rate: 18,
+      baseFare: 2850, // Covers up to 100 km
+      driverAllowance: 400,
+      tollParking: 350,
+      capacity: 4,
+      luggage: 2,
+      img: 'assets/sedan.png'
+    },
+    'suv': {
+      id: 'suv',
+      name: 'SUV',
+      model: 'Ertiga / Marazzo or similar',
+      rate: 24,
+      baseFare: 3600,
+      driverAllowance: 500,
+      tollParking: 450,
+      capacity: 6,
+      luggage: 4,
+      img: 'assets/suv.png'
+    },
+    'premium-suv': {
+      id: 'premium-suv',
+      name: 'Premium SUV',
+      model: 'Innova Crysta or similar',
+      rate: 28,
+      baseFare: 4200,
+      driverAllowance: 600,
+      tollParking: 500,
+      capacity: 7,
+      luggage: 5,
+      img: 'assets/premium_suv.png'
+    },
+    'tempo': {
+      id: 'tempo',
+      name: 'Tempo Traveller',
+      model: '12 / 17 Seater',
+      rate: 35,
+      baseFare: 5500,
+      driverAllowance: 800,
+      tollParking: 600,
+      capacity: 17,
+      luggage: 10,
+      img: 'assets/tempo.png'
+    }
   };
 
-  /* ══════════════ DOM REFS ══════════════ */
-  const stepIndicators = [1, 2, 3, 4, 5].map(n => document.getElementById('stepIndicator' + n));
+
+  // ─── UI ELEMENTS DOM REFERENCE ───
+  const stepIndicators = [
+    document.getElementById('stepIndicator1'),
+    document.getElementById('stepIndicator2'),
+    document.getElementById('stepIndicator3'),
+    document.getElementById('stepIndicator4'),
+    document.getElementById('stepIndicator5')
+  ];
+
   const stepViews = {
     1: document.getElementById('stepView1'),
     2: document.getElementById('stepView2'),
     3: document.getElementById('stepView3'),
     4: document.getElementById('stepView4'),
     5: document.getElementById('stepView5'),
-    loading: document.getElementById('stepViewLoading'),
-    success: document.getElementById('stepViewSuccess')
+    'loading': document.getElementById('stepViewLoading'),
+    'success': document.getElementById('stepViewSuccess')
   };
+
   const progressFill = document.getElementById('progressFill');
 
+  // Step 1 Controls
   const pickupInput = document.getElementById('pickupInput');
   const dropoffInput = document.getElementById('dropoffInput');
   const journeyDateInput = document.getElementById('journeyDateInput');
@@ -449,36 +501,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const typeOneWayBtn = document.getElementById('typeOneWayBtn');
   const typeRoundTripBtn = document.getElementById('typeRoundTripBtn');
   const returnDateInput = document.getElementById('returnDateInput');
-  const returnDateWrapper = document.getElementById('returnDateWrapper');
+  const returnDateGroup = document.getElementById('returnDateGroup');
   const returnDateLabel = document.getElementById('returnDateLabel');
+  const returnDateWrapper = document.getElementById('returnDateWrapper');
   const pickupSuggestions = document.getElementById('pickupSuggestions');
   const dropoffSuggestions = document.getElementById('dropoffSuggestions');
+
+  // Step 2 Controls
   const vehiclesContainer = document.getElementById('vehiclesContainer');
 
+  // Step 4 Errors
   const custName = document.getElementById('custName');
   const custEmail = document.getElementById('custEmail');
   const custPhone = document.getElementById('custPhone');
-  const custGst = document.getElementById('custGst');
   const nameError = document.getElementById('nameError');
   const emailError = document.getElementById('emailError');
   const phoneError = document.getElementById('phoneError');
 
-  const passengerCount = document.getElementById('passengerCount');
-  const luggageCount = document.getElementById('luggageCount');
-  const specialInstructions = document.getElementById('specialInstructions');
-
+  // Step 5 Controls
+  const paymentMethods = document.getElementsByName('paymentMethod');
+  const cardDetailsForm = document.getElementById('cardDetailsForm');
+  const upiInfoContainer = document.getElementById('upiInfoContainer');
+  const cashInfoContainer = document.getElementById('cashInfoContainer');
+  const cashPayableAmt = document.getElementById('cashPayableAmt');
+  
+  const cardNumber = document.getElementById('cardNumber');
+  const cardExpiry = document.getElementById('cardExpiry');
+  const cardCvv = document.getElementById('cardCvv');
+  const upiId = document.getElementById('upiId');
   const termsCheck = document.getElementById('termsCheck');
+  
+  const cardNumError = document.getElementById('cardNumError');
+  const cardExpiryError = document.getElementById('cardExpiryError');
+  const cardCvvError = document.getElementById('cardCvvError');
+  const upiError = document.getElementById('upiError');
   const termsError = document.getElementById('termsError');
-  const reviewSummary = document.getElementById('reviewSummary');
 
+  // Sidebar Fare Summary Elements
   const summaryRoute = document.getElementById('summaryRoute');
-  const summaryDateTime = document.getElementById('summaryDateTime');
   const summaryDistance = document.getElementById('summaryDistance');
   const summaryDuration = document.getElementById('summaryDuration');
   const summaryTripType = document.getElementById('summaryTripType');
-  const summaryVehicle = document.getElementById('summaryVehicle');
-  const summaryPassengers = document.getElementById('summaryPassengers');
-  const summaryLuggage = document.getElementById('summaryLuggage');
   const summaryBaseFare = document.getElementById('summaryBaseFare');
   const summaryDistanceCharge = document.getElementById('summaryDistanceCharge');
   const summaryDriverAllowance = document.getElementById('summaryDriverAllowance');
@@ -486,6 +549,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const summaryTaxes = document.getElementById('summaryTaxes');
   const summaryTotal = document.getElementById('summaryTotal');
 
+  // Navigation Buttons
+  const goToStep2Btn = document.getElementById('goToStep2Btn');
+  const backToStep1Btn = document.getElementById('backToStep1Btn');
+  const goToStep3Btn = document.getElementById('goToStep3Btn');
+  const backToStep2Btn = document.getElementById('backToStep2Btn');
+  const goToStep4Btn = document.getElementById('goToStep4Btn');
+  const backToStep3Btn = document.getElementById('backToStep3Btn');
+  const goToStep5Btn = document.getElementById('goToStep5Btn');
+  const backToStep4Btn = document.getElementById('backToStep4Btn');
+  const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+  const sidebarSecureBtn = document.getElementById('sidebarSecureBtn');
+
+  // Confirmation Success Elements
   const successResId = document.getElementById('successResId');
   const successEmail = document.getElementById('successEmail');
 
@@ -525,16 +601,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (packageParam && packagesData[packageParam.toLowerCase().trim()]) {
     isPackageMode = true;
     selectedPackageId = packageParam.toLowerCase().trim();
-
-    // Fetch real package ObjectId from DB
-    fetch(`${API_BASE}/public/packages/${selectedPackageId}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.data) {
-          realPackageObjectId = data.data._id;
-        }
-      })
-      .catch(err => console.warn('Could not fetch package ObjectId:', err.message));
 
     // Enable package booking UI overrides
     document.body.classList.add('package-booking-active');
@@ -711,53 +777,51 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isValid) {
           showStep('loading');
 
-          const travelers = parseInt(pkgTravelersCount.value, 10);
-          const sub = pkg.price * travelers;
-          const tax = Math.round((sub * 0.05) / 10) * 10;
-          const total = sub + tax;
-
+          const matchedPkg = dbPackages.find(p => p.slug === selectedPackageId || p._id === selectedPackageId) || dbPackages[0];
+          
+          const totalText = pkgTotalPrice.textContent || "0";
+          const totalPrice = parseInt(totalText.replace(/[^0-9]/g, ''), 10) || 0;
+          
           const payload = {
-            bookingType: 'package',
-            packageId: realPackageObjectId,
             name: pkgName.value.trim(),
             email: pkgEmail.value.trim(),
-            phone: '+91' + pkgPhone.value.trim(),
-            pickupDate: pkgDateInput.value,
-            numberOfPeople: travelers,
-            totalPrice: total,
+            phone: pkgPhone.value.trim(),
+            bookingType: 'package',
+            packageId: matchedPkg ? matchedPkg._id : null,
+            pickupDate: new Date(pkgDateInput.value).toISOString(),
+            numberOfPeople: parseInt(pkgTravelersCount.value, 10) || 1,
+            totalPrice: totalPrice,
             advancePaid: 0,
             paymentStatus: 'pending',
-            notes: `Package: ${pkg.name} | Category: ${pkg.category} | Duration: ${pkg.duration}`
+            status: 'pending'
           };
 
-          fetch(`${API_BASE}/bookings`, {
+          fetch('/api/bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           })
-          .then(res => res.json())
-          .then(data => {
-            if (!data.success) {
-              throw new Error(data.message || 'Package booking failed.');
-            }
-            
-            const booking = data.data;
-            successResId.textContent = booking.bookingId;
-            successEmail.textContent = booking.email;
+            .then(r => r.json())
+            .then(res => {
+              if (res.success) {
+                showStep('success');
+                if (packageDetailsPanel) packageDetailsPanel.style.display = 'none';
+                const checkoutCard = document.getElementById('packageCheckoutCard');
+                if (checkoutCard) checkoutCard.style.display = 'none';
+                document.querySelector('.booking-grid').style.gridTemplateColumns = '1fr';
 
-            showStep('success');
-
-            if (packageDetailsPanel) packageDetailsPanel.style.display = 'none';
-            const checkoutCard = document.getElementById('packageCheckoutCard');
-            if (checkoutCard) checkoutCard.style.display = 'none';
-
-            document.querySelector('.booking-grid').style.gridTemplateColumns = '1fr';
-          })
-          .catch(err => {
-            console.error('Package booking error:', err);
-            alert('Something went wrong while booking the package:\n' + err.message + '\n\nPlease try again.');
-            showStep(1);
-          });
+                successResId.textContent = res.data.bookingId;
+                successEmail.textContent = res.data.email;
+              } else {
+                showStep(1);
+                alert('Booking failed: ' + res.message);
+              }
+            })
+            .catch(err => {
+              showStep(1);
+              console.error(err);
+              alert('A network error occurred. Please try again.');
+            });
         }
       });
     }
@@ -839,186 +903,223 @@ document.addEventListener('DOMContentLoaded', () => {
   calculateDistanceAndFares();
 
 
+  // ─── NAVIGATION & WIZARD CONTROLLER ───
+  function showStep(stepNum) {
+    if (stepNum < 1 || stepNum > 5) return;
+    
+    currentStep = stepNum;
+
+    // Toggle forms display
+    Object.keys(stepViews).forEach(key => {
+      stepViews[key].classList.remove('active');
+    });
+    
+    stepViews[currentStep].classList.add('active');
+
+    // Update Progress Indicators
+    stepIndicators.forEach((ind, index) => {
+      const indStep = index + 1;
+      ind.classList.remove('active', 'completed');
+      if (indStep < currentStep) {
+        ind.classList.add('completed');
+      } else if (indStep === currentStep) {
+        ind.classList.add('active');
+      }
+    });
+
+    // Update progress bar line fill percent
+    const fillPercent = ((currentStep - 1) / 4) * 100;
+    progressFill.style.width = fillPercent + '%';
+
+    // Scroll to top of form panel smoothly
+    document.querySelector('.booking-page-container').scrollIntoView({ behavior: 'smooth' });
+
+    // Sync sidebar button label and state
+    updateSidebarButtonState();
+  }
+
+  function updateSidebarButtonState() {
+    if (currentStep === 5) {
+      sidebarSecureBtn.innerHTML = `
+        <span class="btn-lock-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </span>
+        <span>Confirm &amp; Pay Now</span>
+      `;
+    } else {
+      sidebarSecureBtn.innerHTML = `
+        <span class="btn-lock-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </span>
+        <span>Secure &amp; Safe Booking</span>
+      `;
+    }
+  }
+
+
+  // ─── STEP ACTIONS NAVIGATION TRIGGERS ───
+  goToStep2Btn.addEventListener('click', () => {
+    if (validateStep1()) {
+      showStep(2);
+    }
+  });
+
+  backToStep1Btn.addEventListener('click', () => {
+    showStep(1);
+  });
+
+  goToStep3Btn.addEventListener('click', () => {
+    if (validateStep2()) {
+      showStep(3);
+    }
+  });
+
+  backToStep2Btn.addEventListener('click', () => {
+    showStep(2);
+  });
+
+  goToStep4Btn.addEventListener('click', () => {
+    showStep(4);
+  });
+
+  backToStep3Btn.addEventListener('click', () => {
+    showStep(3);
+  });
+
+  goToStep5Btn.addEventListener('click', () => {
+    if (validateStep4()) {
+      showStep(5);
+    }
+  });
+
+  if (backToStep4Btn) {
+    backToStep4Btn.addEventListener('click', () => {
+      showStep(4);
+    });
+  }
+
+  confirmPaymentBtn.addEventListener('click', () => {
+    if (validateStep5()) {
+      processRealPayment();
+    }
+  });
+
+  sidebarSecureBtn.addEventListener('click', () => {
+    // Triggers navigation based on current step
+    if (currentStep === 1) {
+      goToStep2Btn.click();
+    } else if (currentStep === 2) {
+      goToStep3Btn.click();
+    } else if (currentStep === 3) {
+      goToStep4Btn.click();
+    } else if (currentStep === 4) {
+      goToStep5Btn.click();
+    } else if (currentStep === 5) {
+      confirmPaymentBtn.click();
+    }
+  });
+
 
   // ─── AUTOCOMPLETE & TYPING LOGIC ───
-  /* ══════════════ INIT ══════════════ */
-  const todayStr = new Date().toISOString().split('T')[0];
-  journeyDateInput.min = todayStr;
-  journeyDateInput.value = todayStr;
-
-  loadVehicles();
-  updateSidebarSummary();
-
-  /* ══════════════ HELPERS ══════════════ */
-  function isValidObjectId(id) {
-    if (!id) return false;
-    return /^[0-9a-fA-F]{24}$/.test(String(id));
-  }
-
-  function fmt(n) { return '₹ ' + n.toLocaleString('en-IN'); }
-
-  function fmtDate(d) {
-    if (!d) return '—';
-    return new Date(d + 'T00:00:00').toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-  }
-
-  /* ══════════════ LOAD VEHICLES FROM API ══════════════ */
-  async function loadVehicles() {
-    vehiclesContainer.innerHTML = '';
-    for (let i = 0; i < 4; i++) {
-      vehiclesContainer.innerHTML += `
-        <div class="vehicle-skeleton">
-          <div class="skel-img"></div>
-          <div style="flex:1"><div class="skel-line w60"></div><div class="skel-line w40"></div><div class="skel-line w80"></div></div>
-        </div>`;
-    }
-
-    try {
-      const res = await fetch(`${API_BASE}/vehicles`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-
-      let list = null;
-      if (data.success && Array.isArray(data.vehicles) && data.vehicles.length > 0) {
-        list = data.vehicles;
-      } else if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-        list = data.data;
-      } else if (Array.isArray(data) && data.length > 0) {
-        list = data;
-      }
-
-      if (list) {
-        const validOnes = list.filter(v => isValidObjectId(v._id));
-        if (validOnes.length > 0) {
-          vehiclesList = validOnes;
-        } else {
-          console.warn('API returned vehicles but none have valid ObjectId _id fields, using fallback');
-          vehiclesList = fallbackVehicles;
-        }
-      } else {
-        vehiclesList = fallbackVehicles;
-      }
-    } catch (err) {
-      console.warn('Vehicle API unavailable, using fallback:', err.message);
-      vehiclesList = fallbackVehicles;
-    }
-
-    renderVehicles();
-    updateSidebarSummary();
-  }
-
-  /* ══════════════ DISTANCE / DURATION / FARE ══════════════ */
-  function getDistanceKm() {
-    const from = (pickupInput.value || '').trim().toLowerCase().split(',')[0].replace(/\s+/g, '');
-    const to = (dropoffInput.value || '').trim().toLowerCase().split(',')[0].replace(/\s+/g, '');
-    return distanceMap[`${from}-${to}`] || 100;
-  }
-
-  function getDurationStr(km) {
-    const totalMin = Math.round((km / 55) * 60);
-    const h = Math.floor(totalMin / 60);
-    const m = totalMin % 60;
-    if (h === 0) return `~ ${m}m`;
-    if (m === 0) return `~ ${h}h`;
-    return `~ ${h}h ${m}m`;
-  }
-
-  function calculateFare() {
-    if (!selectedVehicle) return { base: 0, distance: 0, driver: 0, toll: 0, tax: 0, total: 0 };
-    const dist = getDistanceKm();
-    const multiplier = tripType === 'Round Trip' ? 2 : 1;
-    const effectiveDist = dist * multiplier;
-    const ppkm = selectedVehicle.pricePerKm || 12;
-    const baseFare = Math.round(ppkm * effectiveDist * 0.55);
-    const distCharge = Math.round(ppkm * effectiveDist * 0.45);
-    const driverAllowance = multiplier === 2 ? 500 : 300;
-    const tollParking = Math.round(effectiveDist * 2.2);
-    const subtotal = baseFare + distCharge + driverAllowance + tollParking;
-    const tax = Math.round(subtotal * 0.05);
-    const total = subtotal + tax;
-    return { base: baseFare, distance: distCharge, driver: driverAllowance, toll: tollParking, tax, total };
-  }
-
-  /* ══════════════ NAVIGATION ══════════════ */
-  function showStep(step) {
-    currentStep = step;
-    Object.keys(stepViews).forEach(k => stepViews[k].classList.remove('active'));
-    stepViews[step].classList.add('active');
-    if (typeof step === 'number') {
-      stepIndicators.forEach((ind, i) => {
-        const n = i + 1;
-        ind.classList.remove('active', 'completed');
-        if (n < step) ind.classList.add('completed');
-        else if (n === step) ind.classList.add('active');
-      });
-      progressFill.style.width = (((step - 1) / 4) * 100) + '%';
-    }
-    const c = document.querySelector('.booking-page-container');
-    if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    updateSidebarSummary();
-  }
-
-  /* ══════════════ BUTTON BINDINGS ══════════════ */
-  document.getElementById('goToStep2Btn').onclick = () => { if (validateStep1()) showStep(2); };
-  document.getElementById('backToStep1Btn').onclick = () => showStep(1);
-  document.getElementById('goToStep3Btn').onclick = () => { if (validateStep2()) showStep(3); };
-  document.getElementById('backToStep2Btn').onclick = () => showStep(2);
-  document.getElementById('goToStep4Btn').onclick = () => showStep(4);
-  document.getElementById('backToStep3Btn').onclick = () => showStep(3);
-  document.getElementById('goToStep5Btn').onclick = () => { if (validateStep4()) { renderReview(); showStep(5); } };
-  document.getElementById('backToStep4Btn').onclick = () => showStep(4);
-  document.getElementById('confirmPaymentBtn').onclick = () => { if (validateStep5()) submitBooking(); };
-
-  document.getElementById('sidebarSecureBtn').onclick = () => {
-    const map = { 1: 'goToStep2Btn', 2: 'goToStep3Btn', 3: 'goToStep4Btn', 4: 'goToStep5Btn', 5: 'confirmPaymentBtn' };
-    const btn = document.getElementById(map[currentStep]);
-    if (btn) btn.click();
-  };
-
-  /* ══════════════ AUTOCOMPLETE ══════════════ */
   function setupAutocomplete(inputEl, dropdownEl) {
     inputEl.addEventListener('input', () => {
       const val = inputEl.value.trim().toLowerCase();
       dropdownEl.innerHTML = '';
-      if (!val) { dropdownEl.style.display = 'none'; return; }
-      const filtered = popularLocations.filter(l => l.toLowerCase().includes(val));
-      if (!filtered.length) { dropdownEl.style.display = 'none'; return; }
+      if (!val) {
+        dropdownEl.style.display = 'none';
+        return;
+      }
+
+      const filtered = popularLocations.filter(loc => 
+        loc.toLowerCase().includes(val)
+      );
+
+      if (filtered.length === 0) {
+        dropdownEl.style.display = 'none';
+        return;
+      }
+
       filtered.forEach(loc => {
         const item = document.createElement('div');
         item.className = 'suggestion-item';
-        item.textContent = loc;
-        item.onclick = () => { inputEl.value = loc; dropdownEl.style.display = 'none'; updateSidebarSummary(); };
+        // Bold the matched prefix parts
+        const idx = loc.toLowerCase().indexOf(val);
+        const displayHtml = loc.substring(0, idx) + 
+                            '<strong>' + loc.substring(idx, idx + val.length) + '</strong>' + 
+                            loc.substring(idx + val.length);
+        item.innerHTML = displayHtml;
+        
+        item.addEventListener('click', () => {
+          inputEl.value = loc;
+          dropdownEl.style.display = 'none';
+          calculateDistanceAndFares();
+        });
         dropdownEl.appendChild(item);
       });
+
       dropdownEl.style.display = 'block';
     });
-    document.addEventListener('click', e => {
-      if (!inputEl.contains(e.target) && !dropdownEl.contains(e.target)) dropdownEl.style.display = 'none';
+
+    // Close suggestion boxes on click outside
+    document.addEventListener('click', (e) => {
+      if (!inputEl.contains(e.target) && !dropdownEl.contains(e.target)) {
+        dropdownEl.style.display = 'none';
+      }
+    });
+
+    inputEl.addEventListener('change', () => {
+      // Small timeout to allow autocomplete click triggers
+      setTimeout(calculateDistanceAndFares, 150);
     });
   }
+
   setupAutocomplete(pickupInput, pickupSuggestions);
   setupAutocomplete(dropoffInput, dropoffSuggestions);
 
-  /* ══════════════ SWAP / TRIP TYPE ══════════════ */
-  swapLocationsBtn.onclick = () => {
-    const t = pickupInput.value; pickupInput.value = dropoffInput.value; dropoffInput.value = t;
-    updateSidebarSummary();
-  };
 
-  typeOneWayBtn.onclick = () => {
+  // ─── SWAP LOCATIONS LOGIC ───
+  swapLocationsBtn.addEventListener('click', () => {
+    const temp = pickupInput.value;
+    pickupInput.value = dropoffInput.value;
+    dropoffInput.value = temp;
+
+    // Small scale click animation
+    swapLocationsBtn.style.transform = 'scale(0.9) rotate(180deg)';
+    setTimeout(() => {
+      swapLocationsBtn.style.transform = '';
+    }, 300);
+
+    calculateDistanceAndFares();
+  });
+
+
+  // ─── TRIP TYPE ACTIONS ───
+  typeOneWayBtn.addEventListener('click', () => {
     tripType = 'One Way';
-    typeOneWayBtn.classList.add('active'); typeRoundTripBtn.classList.remove('active');
-    returnDateInput.disabled = true; returnDateInput.value = '';
-    returnDateWrapper.style.opacity = '0.6'; returnDateWrapper.style.pointerEvents = 'none';
+    typeOneWayBtn.classList.add('active');
+    typeRoundTripBtn.classList.remove('active');
+    
+    // Disable return date field
+    returnDateInput.disabled = true;
+    returnDateInput.value = '';
+    returnDateWrapper.classList.add('disabled');
+    returnDateWrapper.style.opacity = '0.6';
+    returnDateWrapper.style.pointerEvents = 'none';
     returnDateLabel.style.opacity = '0.6';
-    updateSidebarSummary();
-  };
 
-  typeRoundTripBtn.onclick = () => {
+    calculateDistanceAndFares();
+  });
+
+  typeRoundTripBtn.addEventListener('click', () => {
     tripType = 'Round Trip';
-    typeRoundTripBtn.classList.add('active'); typeOneWayBtn.classList.remove('active');
+    typeRoundTripBtn.classList.add('active');
+    typeOneWayBtn.classList.remove('active');
+
+    // Enable return date field
     returnDateInput.disabled = false;
-    returnDateWrapper.style.opacity = '1'; returnDateWrapper.style.pointerEvents = 'auto';
+    returnDateWrapper.classList.remove('disabled');
+    returnDateWrapper.style.opacity = '1';
+    returnDateWrapper.style.pointerEvents = 'auto';
     returnDateLabel.style.opacity = '1';
 
     // Set default return date to tomorrow or +1 day of journey date
@@ -1031,7 +1132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     calculateDistanceAndFares();
-  };
+  });
 
   journeyDateInput.addEventListener('change', () => {
     if (tripType === 'Round Trip') {
@@ -1249,48 +1350,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ─── RENDER VEHICLES LIST (STEP 2) ───
   function renderVehiclesList() {
-    returnDateInput.min = journeyDateInput.value;
-    updateSidebarSummary();
-  };
-
-  [pickupInput, dropoffInput, journeyDateInput, journeyTimeInput, passengerCount, luggageCount].forEach(el => {
-    el.addEventListener('change', updateSidebarSummary);
-  });
-
-  /* ══════════════ RENDER VEHICLES ══════════════ */
-  function renderVehicles() {
     vehiclesContainer.innerHTML = '';
-    vehiclesList.forEach((v, idx) => {
-      const isAvailable = v.availability !== false;
+    
+    Object.keys(vehiclesData).forEach(key => {
+      const v = vehiclesData[key];
+      const isSelected = v.id === selectedVehicleId;
+      
       const card = document.createElement('div');
-      card.className = 'vehicle-card' + (!isAvailable ? ' vehicle-unavailable' : '');
-      if (idx === 0 && isAvailable) card.classList.add('selected');
-
-      const imgSrc = v.image || `https://picsum.photos/seed/${v._id || v.name}/200/140.jpg`;
-      const ppkm = v.pricePerKm || 12;
-
+      card.className = `vehicle-card ${isSelected ? 'selected' : ''}`;
+      card.dataset.id = v.id;
+      
       card.innerHTML = `
-        <span class="v-radio-indicator"></span>
-        ${isAvailable ? `<img src="${imgSrc}" alt="${v.name}" class="vehicle-card-image" onerror="this.style.display='none'" />` : ''}
-        <div class="vehicle-details-column">
-          <div><span class="vehicle-title">${v.name}</span><span class="vehicle-class">${v.model || v.type || ''}</span></div>
-          <div class="vehicle-specs">${v.seats || 4} Seats &bull; ${v.luggage || 2} Bags</div>
-          <div class="vehicle-rate-note">${v.note || (v.type || '')}</div>
+        <div class="vehicle-image-wrapper">
+          <img src="${v.img}" alt="${v.name}" class="vehicle-image-img" />
         </div>
-        <div class="vehicle-price-tag">
-          <span class="price-value">${fmt(ppkm)}</span>
-          <span class="price-label">per km</span>
+        <div class="vehicle-card-content">
+          <div class="vehicle-selection-indicator">
+            <span class="v-radio-indicator"></span>
+          </div>
+          <div class="vehicle-details-column">
+            <div class="vehicle-name-row">
+              <span class="vehicle-title">${v.name}</span>
+              <span class="vehicle-class">${v.model.split(' ')[0]} Class</span>
+            </div>
+            <div class="vehicle-specs">
+              <span>${v.capacity} Seats</span>
+              <span class="spec-dot">•</span>
+              <span>${v.luggage} Bags</span>
+              <span class="spec-dot">•</span>
+              <span>AC Available</span>
+            </div>
+            <div class="vehicle-rate-note">
+              Rate: ₹ ${v.rate}/km (after 100 km) • Inclusive of basic insurance
+            </div>
+            <div class="vehicle-price-row">
+              <span class="v-price" id="vPriceVal-${v.id}">₹ 0</span>
+              <span class="v-price-sub">incl. toll &amp; taxes</span>
+            </div>
+          </div>
         </div>
-        ${!isAvailable ? '<span class="vehicle-unavailable-badge">Unavailable</span>' : ''}`;
-
-      if (isAvailable) {
-        card.onclick = () => {
-          document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('selected'));
-          card.classList.add('selected');
-          selectedVehicle = v;
-          updateSidebarSummary();
-        };
-      }
+      `;
+      
+      card.addEventListener('click', () => {
+        // Remove selection from others
+        document.querySelectorAll('.vehicle-card').forEach(c => {
+          c.classList.remove('selected');
+        });
+        
+        // Add select state
+        card.classList.add('selected');
+        selectedVehicleId = v.id;
+        
+        // Re-run fare breakdown based on selected vehicle
+        calculateDistanceAndFares();
+      });
+      
       vehiclesContainer.appendChild(card);
     });
   }
@@ -1350,32 +1464,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  /* ══════════════ SIDEBAR SUMMARY ══════════════ */
-  function updateSidebarSummary() {
-    const from = (pickupInput.value || '').trim().split(',')[0] || '—';
-    const to = (dropoffInput.value || '').trim().split(',')[0] || '—';
-    summaryRoute.textContent = (pickupInput.value.trim() && dropoffInput.value.trim()) ? `${from} → ${to}` : '—';
-    summaryDateTime.textContent = journeyDateInput.value ? `${fmtDate(journeyDateInput.value)} at ${journeyTimeInput.value || '—'}` : '—';
-
-    const dist = getDistanceKm();
-    const multiplier = tripType === 'Round Trip' ? 2 : 1;
-    summaryDistance.textContent = `~ ${dist * multiplier} km`;
-    summaryDuration.textContent = tripType === 'Round Trip' ? `${getDurationStr(dist)} × 2` : getDurationStr(dist);
-    summaryTripType.textContent = tripType;
-    summaryVehicle.textContent = selectedVehicle ? selectedVehicle.name : '—';
-    summaryPassengers.textContent = passengerCount ? passengerCount.value : '4';
-    summaryLuggage.textContent = (luggageCount ? luggageCount.value : '2') + ' Bags';
-
-    const fare = calculateFare();
-    summaryBaseFare.textContent = fmt(fare.base);
-    summaryDistanceCharge.textContent = fmt(fare.distance);
-    summaryDriverAllowance.textContent = fmt(fare.driver);
-    summaryTollParking.textContent = fmt(fare.toll);
-    summaryTaxes.textContent = fmt(fare.tax);
-    summaryTotal.textContent = fmt(fare.total);
-  }
-
-  /* ══════════════ VALIDATION ══════════════ */
+  // ─── VALIDATION SCHEMES ───
   function validateStep1() {
     if (isPackageMode) {
       const dateVal = pkgDateInput ? pkgDateInput.value : '';
@@ -1407,198 +1496,130 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return isValid;
-    let ok = true;
-    if (!pickupInput.value.trim()) { pickupInput.style.borderColor = '#D32F2F'; ok = false; } else pickupInput.style.borderColor = '';
-    if (!dropoffInput.value.trim()) { dropoffInput.style.borderColor = '#D32F2F'; ok = false; } else dropoffInput.style.borderColor = '';
-    if (!journeyDateInput.value) ok = false;
-    return ok;
   }
 
   function validateStep2() {
-    if (!selectedVehicle) { alert('Please select a vehicle to continue.'); return false; }
+    if (!selectedVehicleId) {
+      alert('Please choose a vehicle to continue.');
+      return false;
+    }
     return true;
   }
 
   function validateStep4() {
-    let ok = true;
-    if (!custName.value.trim()) { custName.classList.add('error'); nameError.style.display = 'block'; ok = false; }
-    else { custName.classList.remove('error'); nameError.style.display = 'none'; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(custEmail.value.trim())) { custEmail.classList.add('error'); emailError.style.display = 'block'; ok = false; }
-    else { custEmail.classList.remove('error'); emailError.style.display = 'none'; }
-    if (!/^[6-9][0-9]{9}$/.test(custPhone.value.trim())) { custPhone.classList.add('error'); phoneError.style.display = 'block'; ok = false; }
-    else { custPhone.classList.remove('error'); phoneError.style.display = 'none'; }
-    return ok;
+    let isValid = true;
+    
+    // Validate Name
+    if (!custName.value.trim()) {
+      custName.classList.add('error');
+      nameError.style.display = 'block';
+      isValid = false;
+    } else {
+      custName.classList.remove('error');
+      nameError.style.display = 'none';
+    }
+
+    // Validate Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(custEmail.value.trim())) {
+      custEmail.classList.add('error');
+      emailError.style.display = 'block';
+      isValid = false;
+    } else {
+      custEmail.classList.remove('error');
+      emailError.style.display = 'none';
+    }
+
+    // Validate Phone (+91 and 10 digit number)
+    const phoneVal = custPhone.value.trim();
+    const phoneRegex = /^[6-9][0-9]{9}$/;
+    if (!phoneRegex.test(phoneVal)) {
+      custPhone.classList.add('error');
+      phoneError.style.display = 'block';
+      isValid = false;
+    } else {
+      custPhone.classList.remove('error');
+      phoneError.style.display = 'none';
+    }
+
+    return isValid;
   }
 
   function validateStep5() {
-    if (!termsCheck.checked) {
-      termsError.style.display = 'block';
-      return false;
-    }
-    termsError.style.display = 'none';
-    return true;
+    return true; // No payment validation needed
   }
+
 
   // ─── PROCESS TRANSACTION & CONFIRM BOOKING ───
-  function processMockPayment() {
-    // Show mock loading step
+  function processRealPayment() {
     showStep('loading');
     
-    // Hide progress bar wrapper during final verification or completed state
     document.querySelector('.steps-progress-wrapper').style.opacity = '0.3';
-    const sidebarSec = document.getElementById('sidebarSecureBtn');
-    if (sidebarSec) sidebarSec.disabled = true;
+    sidebarSecureBtn.disabled = true;
 
-    // Simulate bank loading animation for 2.5 seconds
-    setTimeout(() => {
-      showStep('success');
-    }, 2500);
-  }
+    const matchedVehicle = dbVehicles.find(v => v.type === selectedVehicleId) || dbVehicles[0];
+    
+    const totalText = summaryTotal.textContent || "0";
+    const totalPrice = parseInt(totalText.replace(/[^0-9]/g, ''), 10) || 0;
 
-  /* Clear errors on typing */
-  custName.addEventListener('input', () => { nameError.style.display = 'none'; custName.classList.remove('error'); });
-  custEmail.addEventListener('input', () => { emailError.style.display = 'none'; custEmail.classList.remove('error'); });
-  custPhone.addEventListener('input', () => { phoneError.style.display = 'none'; custPhone.classList.remove('error'); });
-
-  /* ══════════════ RENDER REVIEW (Step 5) ══════════════ */
-  function renderReview() {
-    const fare = calculateFare();
-    const dist = getDistanceKm();
-    const bags = luggageCount ? luggageCount.value : '2';
-    reviewSummary.innerHTML = `
-      <div class="review-section">
-        <h4>Trip Details</h4>
-        <div class="review-row"><span>Pickup</span><span>${pickupInput.value.trim()}</span></div>
-        <div class="review-row"><span>Drop-off</span><span>${dropoffInput.value.trim()}</span></div>
-        <div class="review-row"><span>Date &amp; Time</span><span>${fmtDate(journeyDateInput.value)} at ${journeyTimeInput.value}</span></div>
-        <div class="review-row"><span>Trip Type</span><span>${tripType}</span></div>
-        ${tripType === 'Round Trip' && returnDateInput.value ? `<div class="review-row"><span>Return Date</span><span>${fmtDate(returnDateInput.value)}</span></div>` : ''}
-        <div class="review-row"><span>Estimated Distance</span><span>~ ${dist} km${tripType === 'Round Trip' ? ' (× 2)' : ''}</span></div>
-      </div>
-      <div class="review-section">
-        <h4>Vehicle</h4>
-        <div class="review-row"><span>Selected</span><span>${selectedVehicle.name} — ${selectedVehicle.model || selectedVehicle.type || ''}</span></div>
-        <div class="review-row"><span>Capacity</span><span>${selectedVehicle.seats} Seats &bull; ${selectedVehicle.luggage} Bags</span></div>
-        <div class="review-row"><span>Rate</span><span>${fmt(selectedVehicle.pricePerKm || 0)} per km</span></div>
-      </div>
-      <div class="review-section">
-        <h4>Passengers &amp; Luggage</h4>
-        <div class="review-row"><span>Passengers</span><span>${passengerCount.value}</span></div>
-        <div class="review-row"><span>Luggage Bags</span><span>${bags}</span></div>
-        ${specialInstructions.value.trim() ? `<div class="review-row"><span>Special Instructions</span><span>${specialInstructions.value.trim()}</span></div>` : ''}
-      </div>
-      <div class="review-section">
-        <h4>Customer Details</h4>
-        <div class="review-row"><span>Full Name</span><span>${custName.value.trim()}</span></div>
-        <div class="review-row"><span>Email</span><span>${custEmail.value.trim()}</span></div>
-        <div class="review-row"><span>Mobile</span><span>+91 ${custPhone.value.trim()}</span></div>
-        ${custGst.value.trim() ? `<div class="review-row"><span>GST Number</span><span>${custGst.value.trim().toUpperCase()}</span></div>` : ''}
-      </div>
-      <div class="review-section" style="border-color: var(--maroon-dark, #6E1F2B); background: rgba(110,31,43,0.02);">
-        <h4>Fare Breakdown</h4>
-        <div class="review-row"><span>Base Fare</span><span>${fmt(fare.base)}</span></div>
-        <div class="review-row"><span>Distance Charge</span><span>${fmt(fare.distance)}</span></div>
-        <div class="review-row"><span>Driver Allowance</span><span>${fmt(fare.driver)}</span></div>
-        <div class="review-row"><span>Toll &amp; Parking (est.)</span><span>${fmt(fare.toll)}</span></div>
-        <div class="review-row"><span>Taxes &amp; Fees</span><span>${fmt(fare.tax)}</span></div>
-        <div class="review-row" style="border-top: 2px solid var(--maroon-dark, #6E1F2B); margin-top: 6px; padding-top: 12px; border-bottom: none;">
-          <span style="font-size: 16px; font-weight: 700; color: #1a1a1a;">Estimated Total</span>
-          <span style="font-size: 20px; font-weight: 700; color: var(--maroon-dark, #6E1F2B);">${fmt(fare.total)}</span>
-        </div>
-      </div>`;
-  }
-
-  /* ═══════════════════════════════════════════════════
-     SUBMIT BOOKING
-     ═══════════════════════════════════════════════════ */
-  async function submitBooking() {
-    showStep('loading');
-    document.querySelector('.steps-progress-wrapper').style.opacity = '0.3';
-
-    const fare = calculateFare();
-    lastBookingFare = fare;
-    const dist = getDistanceKm();
-
-    const notesParts = [
-      `Trip Type: ${tripType}`,
-      `Time: ${journeyTimeInput.value}`,
-      `Distance: ~${dist} km`,
-      `Duration: ${getDurationStr(dist)}`,
-      `Luggage: ${luggageCount.value} Bags`,
-      `Base Fare: ${fmt(fare.base)}`,
-      `Distance Charge: ${fmt(fare.distance)}`,
-      `Driver Allowance: ${fmt(fare.driver)}`,
-      `Toll & Parking: ${fmt(fare.toll)}`,
-      `Taxes & Fees: ${fmt(fare.tax)}`
-    ];
-    if (specialInstructions.value.trim()) {
-      notesParts.push(`Special Instructions: ${specialInstructions.value.trim()}`);
-    }
-
-    let vehicleIdToSend = null;
-    if (selectedVehicle && isValidObjectId(selectedVehicle._id)) {
-      vehicleIdToSend = selectedVehicle._id;
-    } else {
-      notesParts.push(`Vehicle: ${selectedVehicle.name} — ${selectedVehicle.model || selectedVehicle.type || ''}`);
-      notesParts.push(`Vehicle Seats: ${selectedVehicle.seats}`);
-      notesParts.push(`Vehicle Rate: ${selectedVehicle.pricePerKm}/km`);
-    }
-
-    const notesString = notesParts.join(' | ');
-
-    let numberOfDays = 1;
-    if (tripType === 'Round Trip' && returnDateInput.value && journeyDateInput.value) {
-      const pickup = new Date(journeyDateInput.value);
-      const returnD = new Date(returnDateInput.value);
-      const diff = Math.ceil((returnD - pickup) / (1000 * 60 * 60 * 24));
-      if (diff > 0) numberOfDays = diff;
+    let pickupDate = new Date();
+    if (journeyDateInput.value && journeyTimeInput.value) {
+      pickupDate = new Date(`${journeyDateInput.value}T${journeyTimeInput.value}`);
     }
 
     const payload = {
-      bookingType: 'vehicle',
-      vehicleId: vehicleIdToSend,
       name: custName.value.trim(),
       email: custEmail.value.trim(),
-      phone: '+91' + custPhone.value.trim(),
+      phone: custPhone.value.trim(),
+      bookingType: 'vehicle',
+      vehicleId: matchedVehicle ? matchedVehicle._id : null,
       pickupLocation: pickupInput.value.trim(),
       dropoffLocation: dropoffInput.value.trim(),
-      pickupDate: journeyDateInput.value,
-      returnDate: (tripType === 'Round Trip' && returnDateInput.value) ? returnDateInput.value : null,
-      numberOfPeople: Number(passengerCount.value),
-      numberOfDays: numberOfDays,
-      totalPrice: fare.total,
+      pickupDate: pickupDate.toISOString(),
+      totalPrice: totalPrice,
       advancePaid: 0,
       paymentStatus: 'pending',
-      gstNumber: custGst.value.trim().toUpperCase() || null,
-      notes: notesString
+      status: 'pending'
     };
 
-    try {
-      const res = await fetch(`${API_BASE}/bookings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || 'Booking failed. Please try again.');
-      }
-
-      const booking = data.data;
-      successResId.textContent = booking.bookingId;
-      successEmail.textContent = booking.email;
-
-      showStep('success');
-      document.querySelector('.steps-progress-wrapper').style.display = 'none';
-      document.querySelector('.booking-summary-sidebar').style.display = 'none';
-      document.querySelector('.booking-grid').style.gridTemplateColumns = '1fr';
-    } catch (err) {
-      console.error('Booking error:', err);
-      alert('Something went wrong while confirming your booking:\n' + err.message + '\n\nPlease try again.');
-      document.querySelector('.steps-progress-wrapper').style.opacity = '1';
-      showStep(5);
+    if (tripType === 'Round Trip' && returnDateInput.value) {
+      payload.returnDate = new Date(`${returnDateInput.value}T00:00:00`).toISOString();
     }
+
+    const gstVal = document.getElementById('custGst') ? document.getElementById('custGst').value.trim() : '';
+    if (gstVal) {
+      payload.gstNumber = gstVal;
+    }
+
+    fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          showStep('success');
+          document.querySelector('.steps-progress-wrapper').style.display = 'none';
+          document.querySelector('.booking-summary-sidebar').style.display = 'none';
+          document.querySelector('.booking-grid').style.gridTemplateColumns = '1fr';
+
+          successResId.textContent = res.data.bookingId;
+          successEmail.textContent = res.data.email;
+        } else {
+          showStep(5);
+          document.querySelector('.steps-progress-wrapper').style.opacity = '1';
+          sidebarSecureBtn.disabled = false;
+          alert('Booking failed: ' + res.message);
+        }
+      })
+      .catch(err => {
+        showStep(5);
+        document.querySelector('.steps-progress-wrapper').style.opacity = '1';
+        sidebarSecureBtn.disabled = false;
+        console.error(err);
+        alert('A network error occurred. Please try again.');
+      });
   }
 
   // Recalculate package/ride fares when passenger count changes in Step 3
@@ -1608,104 +1629,5 @@ document.addEventListener('DOMContentLoaded', () => {
       calculateDistanceAndFares();
     });
   }
-
-  /* ═══════════════════════════════════════════════════
-     PDF ITINERARY DOWNLOAD
-     ═══════════════════════════════════════════════════ */
-  document.getElementById('downloadItineraryBtn').onclick = () => {
-    const bookingId = successResId.textContent;
-    const email = successEmail.textContent;
-    const fare = lastBookingFare || calculateFare();
-    const dist = getDistanceKm();
-
-    const pdfHTML = `
-      <div style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;max-width:600px;margin:0 auto;color:#1a1a1a;">
-        <div style="background:#6E1F2B;padding:30px 40px;text-align:center;border-radius:8px 8px 0 0;">
-          <h1 style="margin:0 0 4px 0;font-size:28px;font-weight:700;color:#fff;letter-spacing:4px;">VOYAGO</h1>
-          <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.7);letter-spacing:1.5px;">TOURS & TRAVELS</p>
-        </div>
-        <div style="background:#fdf6f7;padding:20px 40px;text-align:center;border-bottom:2px dashed #6E1F2B;">
-          <p style="margin:0 0 4px 0;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#999;font-weight:600;">Booking Reference ID</p>
-          <p style="margin:0;font-size:24px;font-weight:700;color:#6E1F2B;letter-spacing:1px;">${bookingId}</p>
-        </div>
-        <div style="background:#e8f5e9;padding:14px 40px;text-align:center;">
-          <p style="margin:0;font-size:15px;font-weight:600;color:#2E7D32;">✓ BOOKING CONFIRMED</p>
-        </div>
-        <div style="padding:24px 40px;">
-          <h3 style="margin:0 0 14px 0;font-size:13px;font-weight:700;color:#6E1F2B;text-transform:uppercase;letter-spacing:1px;">Trip Details</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:13px;">
-            <tr><td style="padding:8px 0;color:#777;width:40%;">Pickup</td><td style="padding:8px 0;font-weight:600;">${pickupInput.value.trim()}</td></tr>
-            <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:8px 0;color:#777;">Drop-off</td><td style="padding:8px 0;font-weight:600;">${dropoffInput.value.trim()}</td></tr>
-            <tr><td style="padding:8px 0;color:#777;">Date & Time</td><td style="padding:8px 0;font-weight:600;">${fmtDate(journeyDateInput.value)} at ${journeyTimeInput.value}</td></tr>
-            <tr style="border-bottom:1px solid #f0f0f0;"><td style="padding:8px 0;color:#777;">Trip Type</td><td style="padding:8px 0;font-weight:600;">${tripType}</td></tr>
-            ${tripType === 'Round Trip' && returnDateInput.value ? `<tr><td style="padding:8px 0;color:#777;">Return Date</td><td style="padding:8px 0;font-weight:600;">${fmtDate(returnDateInput.value)}</td></tr>` : ''}
-            <tr><td style="padding:8px 0;color:#777;">Distance</td><td style="padding:8px 0;font-weight:600;">~ ${dist} km${tripType === 'Round Trip' ? ' (× 2)' : ''}</td></tr>
-            <tr><td style="padding:8px 0;color:#777;">Duration</td><td style="padding:8px 0;font-weight:600;">${getDurationStr(dist)}</td></tr>
-          </table>
-        </div>
-        <div style="padding:0 40px 24px;">
-          <h3 style="margin:0 0 14px 0;font-size:13px;font-weight:700;color:#6E1F2B;text-transform:uppercase;letter-spacing:1px;">Vehicle</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:13px;">
-            <tr><td style="padding:8px 0;color:#777;width:40%;">Selected</td><td style="padding:8px 0;font-weight:600;">${selectedVehicle ? selectedVehicle.name : 'N/A'}${selectedVehicle && selectedVehicle.model ? ' — ' + selectedVehicle.model : ''}</td></tr>
-            <tr><td style="padding:8px 0;color:#777;">Capacity</td><td style="padding:8px 0;font-weight:600;">${selectedVehicle ? selectedVehicle.seats : 'N/A'} Seats &bull; ${selectedVehicle ? selectedVehicle.luggage : 'N/A'} Bags</td></tr>
-            <tr><td style="padding:8px 0;color:#777;">Rate</td><td style="padding:8px 0;font-weight:600;">${selectedVehicle ? fmt(selectedVehicle.pricePerKm) : 'N/A'} per km</td></tr>
-          </table>
-        </div>
-        <div style="padding:0 40px 24px;">
-          <h3 style="margin:0 0 14px 0;font-size:13px;font-weight:700;color:#6E1F2B;text-transform:uppercase;letter-spacing:1px;">Customer Details</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:13px;">
-            <tr><td style="padding:8px 0;color:#777;width:40%;">Name</td><td style="padding:8px 0;font-weight:600;">${custName.value.trim()}</td></tr>
-            <tr><td style="padding:8px 0;color:#777;">Email</td><td style="padding:8px 0;font-weight:600;">${email}</td></tr>
-            <tr><td style="padding:8px 0;color:#777;">Phone</td><td style="padding:8px 0;font-weight:600;">+91 ${custPhone.value.trim()}</td></tr>
-            ${custGst.value.trim() ? `<tr><td style="padding:8px 0;color:#777;">GST</td><td style="padding:8px 0;font-weight:600;">${custGst.value.trim().toUpperCase()}</td></tr>` : ''}
-          </table>
-        </div>
-        <div style="padding:0 40px 24px;">
-          <h3 style="margin:0 0 14px 0;font-size:13px;font-weight:700;color:#6E1F2B;text-transform:uppercase;letter-spacing:1px;">Fare Breakdown</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:13px;border:2px solid #6E1F2B;border-radius:8px;overflow:hidden;">
-            <tr style="background:rgba(110,31,43,0.04);"><td style="padding:10px 14px;color:#777;">Base Fare</td><td style="padding:10px 14px;text-align:right;">${fmt(fare.base)}</td></tr>
-            <tr style="background:rgba(110,31,43,0.02);"><td style="padding:10px 14px;color:#777;">Distance Charge</td><td style="padding:10px 14px;text-align:right;">${fmt(fare.distance)}</td></tr>
-            <tr style="background:rgba(110,31,43,0.04);"><td style="padding:10px 14px;color:#777;">Driver Allowance</td><td style="padding:10px 14px;text-align:right;">${fmt(fare.driver)}</td></tr>
-            <tr style="background:rgba(110,31,43,0.02);"><td style="padding:10px 14px;color:#777;">Toll & Parking</td><td style="padding:10px 14px;text-align:right;">${fmt(fare.toll)}</td></tr>
-            <tr style="background:rgba(110,31,43,0.04);"><td style="padding:10px 14px;color:#777;">Taxes & Fees</td><td style="padding:10px 14px;text-align:right;">${fmt(fare.tax)}</td></tr>
-            <tr style="background:#6E1F2B;"><td style="padding:14px;font-weight:700;color:#fff;font-size:15px;">Estimated Total</td><td style="padding:14px;text-align:right;font-weight:700;color:#fff;font-size:18px;">${fmt(fare.total)}</td></tr>
-          </table>
-        </div>
-        <div style="background:#f9f9f9;padding:20px 40px;border-radius:0 0 8px 8px;">
-          <p style="margin:0 0 8px 0;font-size:12px;color:#555;">📞 For queries, contact our agent: <strong>+91 9359873623</strong></p>
-          <p style="margin:0 0 8px 0;font-size:12px;color:#555;">✉ Email: hello@voyago.in</p>
-          <p style="margin:0 0 12px 0;font-size:11px;color:#999;">Keep your Booking ID (<strong>${bookingId}</strong>) handy for all communications.</p>
-          <p style="margin:0;font-size:10px;color:#bbb;text-align:center;">&copy; ${new Date().getFullYear()} Voyago Tours & Travels. All rights reserved.</p>
-        </div>
-      </div>`;
-
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = pdfHTML;
-    tempDiv.style.position = 'absolute';
-    tempDiv.style.left = '-9999px';
-    tempDiv.style.top = '0';
-    document.body.appendChild(tempDiv);
-
-    const opt = {
-      margin: [10, 10, 10, 10],
-      filename: `Voyago-Itinerary-${bookingId}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    if (typeof html2pdf !== 'undefined') {
-      html2pdf().set(opt).from(tempDiv).save().then(() => {
-        document.body.removeChild(tempDiv);
-      }).catch(err => {
-        console.error('PDF generation failed:', err);
-        document.body.removeChild(tempDiv);
-        alert('PDF download failed. Please try again.');
-      });
-    } else {
-      alert('PDF library not loaded. Please refresh the page and try again.');
-      document.body.removeChild(tempDiv);
-    }
-  };
 
 });

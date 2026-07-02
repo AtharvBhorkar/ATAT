@@ -11,8 +11,9 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="css/home.css" />
-  <link rel="stylesheet" href="css/booking.css?v=5" />
+  <link rel="stylesheet" href="css/booking.css?v=6" />
 </head>
+
 <body>
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
@@ -33,14 +34,13 @@
         <li><a href="home.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="vehicles.html">Vehicles</a></li>
-        <li><a href="packages.html">Packages</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
 
       <div class="nav-actions">
         <a href="login.html" class="btn-ghost">Sign In</a>
-        <a href="booking.html" class="btn-primary" style="background: var(--maroon-dark); border-color: var(--maroon-dark);">Book a Ride</a>
+        <a href="booking.html" class="btn-primary">Book a Ride</a>
       </div>
 
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -48,11 +48,12 @@
       </button>
     </div>
   </nav>
+
   <!-- MAIN BOOKING CONTENT  -->
   <main class="booking-page-container">
     <div class="container">
-      
-      <!-- ─── BREADCRUMBS / STEP INDICATOR ─── -->
+
+      <!-- BREADCRUMBS / STEP INDICATOR -->
       <div class="steps-progress-wrapper">
         <div class="steps-progress-line">
           <div class="steps-progress-fill" id="progressFill" style="width: 0%;"></div>
@@ -74,10 +75,9 @@
             <div class="step-circle">4</div>
             <span class="step-label">Customer Details</span>
           </div>
-          <!-- ═══ CHANGED: "Payment" → "Review & Confirm" ═══ -->
           <div class="step-item" data-step="5" id="stepIndicator5">
             <div class="step-circle">5</div>
-            <span class="step-label">Payment</span>
+            <span class="step-label">Confirm Booking</span>
           </div>
         </div>
       </div>
@@ -89,12 +89,13 @@
         <div class="booking-form-panel">
           <form id="bookingForm" onsubmit="event.preventDefault();">
 
-            <!-- ═══ STEP 1: TRIP DETAILS (unchanged) ═══ -->
+            <!-- STEP 1: TRIP DETAILS -->
             <div class="form-step-view active" id="stepView1">
               <h2 class="step-title">Step 1: Trip Details</h2>
               <p class="step-subtitle">Please provide your trip information</p>
-              
-              <div class="form-grid">
+
+              <!-- STANDARD RIDE BOOKING INPUTS -->
+              <div class="standard-locations-grid form-grid" id="standardLocationsGrid">
                 <!-- Location Row -->
                 <div class="locations-row span-full">
                   <div class="form-group location-group">
@@ -140,6 +141,7 @@
                   </div>
                 </div>
 
+                <!-- Date & Time Row -->
                 <div class="form-group">
                   <label for="journeyDateInput" class="form-label">Journey Date</label>
                   <div class="input-wrapper">
@@ -152,7 +154,7 @@
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                       </svg>
                     </span>
-                    <input type="date" id="journeyDateInput" />
+                    <input type="date" id="journeyDateInput" value="2025-05-25" />
                   </div>
                 </div>
 
@@ -170,6 +172,7 @@
                   </div>
                 </div>
 
+                <!-- Trip Type & Return Date -->
                 <div class="form-group">
                   <label class="form-label">Trip Type</label>
                   <div class="trip-type-segmented">
@@ -179,9 +182,8 @@
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round"
                         style="margin-right: 4px; vertical-align: middle;">
-                        <polyline points="23 4 23 10 17 10"></polyline>
-                        <polyline points="1 20 1 14 7 14"></polyline>
-                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
                       </svg>
                       Round Trip
                     </button>
@@ -207,6 +209,7 @@
                 </div>
               </div>
 
+              <!-- Action button -->
               <div class="step-actions right-align">
                 <button type="button" class="btn-step-next" id="goToStep2Btn">
                   <span>Continue to Vehicle</span>
@@ -219,13 +222,13 @@
               </div>
             </div>
 
-            <!-- ═══ STEP 2: VEHICLE SELECTION (unchanged) ═══ -->
+            <!-- STEP 2: VEHICLE SELECTION -->
             <div class="form-step-view" id="stepView2">
               <h2 class="step-title">Step 2: Select Vehicle</h2>
               <p class="step-subtitle">Choose from our wide range of premium vehicles</p>
 
               <div class="vehicles-list-container" id="vehiclesContainer">
-                <!-- Populated dynamically via JS -->
+                <!-- Vehicle Options will be populated dynamically via JavaScript -->
               </div>
 
               <div class="step-actions">
@@ -248,7 +251,7 @@
               </div>
             </div>
 
-            <!-- ═══ STEP 3: PASSENGERS (unchanged) ═══ -->
+            <!-- STEP 3: PASSENGERS -->
             <div class="form-step-view" id="stepView3">
               <h2 class="step-title">Step 3: Passengers &amp; Luggage</h2>
               <p class="step-subtitle">Help us prepare the vehicle for your maximum comfort</p>
@@ -263,13 +266,7 @@
                     <option value="4" selected>4 Passengers</option>
                     <option value="5">5 Passengers</option>
                     <option value="6">6 Passengers</option>
-                    <option value="7">7 Passengers</option>
-                    <option value="8">8 Passengers</option>
-                    <option value="9">9 Passengers</option>
-                    <option value="10">10 Passengers</option>
-                    <option value="12">12 Passengers</option>
-                    <option value="15">15 Passengers</option>
-                    <option value="17">17 Passengers</option>
+                    <option value="7">7+ Passengers</option>
                   </select>
                 </div>
 
@@ -281,10 +278,7 @@
                     <option value="2" selected>2 Bags</option>
                     <option value="3">3 Bags</option>
                     <option value="4">4 Bags</option>
-                    <option value="5">5 Bags</option>
-                    <option value="6">6 Bags</option>
-                    <option value="8">8 Bags</option>
-                    <option value="10">10+ Bags</option>
+                    <option value="5">5+ Bags</option>
                   </select>
                 </div>
 
@@ -316,7 +310,7 @@
               </div>
             </div>
 
-            <!-- ═══ STEP 4: CUSTOMER DETAILS (unchanged) ═══ -->
+            <!-- STEP 4: CUSTOMER DETAILS -->
             <div class="form-step-view" id="stepView4">
               <h2 class="step-title">Step 4: Customer Details</h2>
               <p class="step-subtitle">Please provide contact information for the ride updates</p>
@@ -336,11 +330,11 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="custPhone" class="form-label">Mobile Number (WhatsApp) *</label>
+                  <label for="custPhone" class="form-label">Mobile Number *</label>
                   <div class="phone-input-group">
                     <span class="phone-prefix">+91</span>
                     <input type="tel" id="custPhone" class="form-input-text" placeholder="9876543210"
-                      pattern="[6-9][0-9]{9}" maxlength="10" required />
+                      pattern="[6-9][0-9]{9}" required />
                   </div>
                   <div class="error-msg" id="phoneError">Please enter a valid 10-digit mobile number.</div>
                 </div>
@@ -361,143 +355,62 @@
                   </svg>
                   <span>Go Back</span>
                 </button>
-                <!-- ═══ CHANGED: Button text updated ═══ -->
                 <button type="button" class="btn-step-next" id="goToStep5Btn">
-                  <span>Continue to Payment</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  <span>Continue to Confirm Booking</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
                 </button>
               </div>
             </div>
 
-            <!-- STEP 5: PAYMENT -->
+            <!-- STEP 5: CONFIRMATION -->
             <div class="form-step-view" id="stepView5">
-              <h2 class="step-title">Step 5: Secure Payment</h2>
-              <p class="step-subtitle">Complete your transaction using our safe checkout</p>
-              
-              <div class="payment-method-selector">
-                <label class="payment-method-card active">
-                  <input type="radio" name="paymentMethod" value="card" checked />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="2" y="5" width="20" height="14" rx="2" />
-                      <line x1="2" y1="10" x2="22" y2="10" />
-                      <rect x="6" y="14" width="3" height="2" rx="0.5" />
-                    </svg>
-                    <strong>Credit / Debit Card</strong>
-                  </span>
-                </label>
+              <h2 class="step-title">Step 5: Confirm Booking</h2>
+              <p class="step-subtitle">Please review your details and confirm your reservation</p>
 
-                <label class="payment-method-card">
-                  <input type="radio" name="paymentMethod" value="upi" />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="5" y="2" width="14" height="20" rx="2" />
-                      <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3" />
-                      <path d="M9 10l2 2 4-4" />
-                    </svg>
-                    <strong>UPI (Instant Pay)</strong>
-                  </span>
-                </label>
-
-                <label class="payment-method-card">
-                  <input type="radio" name="paymentMethod" value="cash" />
-                  <span class="payment-method-details">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="method-icon">
-                      <rect x="2" y="6" width="20" height="12" rx="2" />
-                      <circle cx="12" cy="12" r="3" />
-                      <path d="M6 12h.01M18 12h.01" stroke-width="2.5" />
-                    </svg>
-                    <strong>Pay to Driver</strong>
-                  </span>
-                </label>
-              </div>
-
-              <!-- Card form inputs container -->
-              <div class="card-details-form" id="cardDetailsForm">
-                <div class="form-grid">
-                  <div class="form-group span-full">
-                    <label for="cardNumber" class="form-label">Card Number</label>
-                    <div class="input-wrapper">
-                      <span class="input-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                      </span>
-                      <input type="text" id="cardNumber" class="form-input-text" placeholder="4111 2222 3333 4444" maxlength="19" />
-                    </div>
-                    <div class="error-msg" id="cardNumError">Please enter a valid card number.</div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="cardExpiry" class="form-label">Expiry Date</label>
-                    <input type="text" id="cardExpiry" class="form-input-text" placeholder="MM/YY" maxlength="5" />
-                    <div class="error-msg" id="cardExpiryError">Enter date in MM/YY format.</div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="cardCvv" class="form-label">CVV / CVV2</label>
-                    <input type="password" id="cardCvv" class="form-input-text" placeholder="***" maxlength="4" />
-                    <div class="error-msg" id="cardCvvError">Enter 3 or 4 digit CVV.</div>
-                  </div>
+              <div class="booking-confirmation-notice">
+                <div class="confirm-icon-wrap">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--maroon)" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                  </svg>
                 </div>
+                <h3>Ready to Confirm Your Ride?</h3>
+                <p>By confirming, you agree to our booking policies. Your driver details and trip verification code will
+                  be sent to your contact email and phone number shortly.</p>
               </div>
 
-              <!-- UPI Info -->
-              <div class="upi-info-container" id="upiInfoContainer" style="display: none;">
-                <div class="form-group">
-                  <label for="upiId" class="form-label">UPI ID *</label>
-                  <input type="text" id="upiId" class="form-input-text" placeholder="username@upi" />
-                  <div class="error-msg" id="upiError">Please enter a valid UPI ID (e.g. name@okaxis).</div>
-                </div>
-                <div style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">
-                  We will send a payment request to your UPI app. Open Google Pay, PhonePe, or BHIM to approve it.
-                </div>
-              </div>
-
-              <!-- Cash Info -->
-              <div class="cash-info-container" id="cashInfoContainer" style="display: none;">
-                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 8px;">
-                  You can pay the full amount of <strong id="cashPayableAmt">₹ 4,800</strong> directly to the driver at the end of the trip via Cash, UPI, or Card.
-                </p>
-                <div style="background: rgba(110,31,43,.04); border-left: 3px solid var(--maroon); padding: 12px; border-radius: 4px; font-size: 13px;">
-                  <strong>Note:</strong> A verification OTP will be sent to your mobile number prior to dispatch.
-                </div>
-              </div>
-
-              <!-- Terms checkbox -->
-              <div class="terms-acceptance-checkbox">
-                <label class="custom-checkbox-container">
-                  <input type="checkbox" id="termsCheck" required />
-                  <span class="checkmark"></span>
-                  <span class="checkbox-text">I agree to the <a href="terms-condition.html" target="_blank">Terms &amp; Conditions</a>, <a href="privacy.html" target="_blank">Privacy Policy</a>, and <a href="cancellation-policy.html" target="_blank">Cancellation Policy</a>.</span>
-                </label>
-                <div class="error-msg" id="termsError">You must agree to the terms to proceed.</div>
-              </div>
-
-              <div class="step-actions">
-                <button type="button" class="btn-step-prev-nav" id="backToStep4Btn">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                  <span>Go Back</span>
-                </button>
-                <button type="button" class="btn-step-next" id="confirmPaymentBtn">
-                  <span>Pay &amp; Confirm Booking</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <div class="step-actions" style="justify-content: center; margin-top: 32px;">
+                <button type="button" class="btn-step-next" id="confirmPaymentBtn"
+                  style="width: 100%; max-width: 320px; justify-content: center;">
+                  <span>Confirm Booking</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
                 </button>
               </div>
             </div>
 
-            <!-- ═══ CHANGED: Loading screen text — no payment ═══ -->
+            <!-- MOCK LOADING SCREEN -->
             <div class="form-step-view" id="stepViewLoading">
               <div class="payment-processing-loader">
                 <div class="spinner-ring"></div>
-                <h3>Processing Payment...</h3>
+                <h3>Processing Booking....</h3>
                 <p>Securing connection with bank server. Please do not refresh this page or close your browser.</p>
               </div>
             </div>
 
-            <!-- ═══ SUCCESS CONFIRMATION PAGE (unchanged) ═══ -->
+            <!-- SUCCESS CONFIRMATION PAGE -->
             <div class="form-step-view" id="stepViewSuccess">
               <div class="booking-success-container">
 
                 <div class="success-three-columns">
+                  <!-- Column 1: Left Details -->
                   <div class="success-col success-col-left">
                     <div class="checkmark-animation-circle">
                       <svg class="checkmark-svg" viewBox="0 0 52 52">
@@ -510,6 +423,7 @@
                       confirmed.</p>
                   </div>
 
+                  <!-- Column 2: Center Reference ID Card -->
                   <div class="success-col success-col-center">
                     <div class="reference-card-inner">
                       <span class="ref-title">Your Booking Reference ID</span>
@@ -521,13 +435,14 @@
                     </div>
                   </div>
 
+                  <!-- Column 3: Right What's Next List -->
                   <div class="success-col success-col-right">
                     <h3 class="whats-next-title">What's Next?</h3>
                     <ul class="whats-next-list">
                       <li>
                         <span class="list-icon">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
                             </path>
                             <polyline points="22,6 12,13 2,6"></polyline>
@@ -537,25 +452,25 @@
                       </li>
                       <li>
                         <span class="list-icon">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                               d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
                             </path>
                           </svg>
                         </span>
-                        <span>Call our agent: <a href="tel:+919359873623" style="color:#6E1F2B;font-weight:700;">+91 9359873623</a></span>
+                        <span>Our team will contact you shortly</span>
                       </li>
                       <li>
                         <span class="list-icon">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" y1="15" x2="12" y2="3"></line>
                           </svg>
                         </span>
-                        <span>Download your itinerary below</span>
+                        <span>Download your itinerary</span>
                       </li>
                       <li>
                         <span class="list-icon icon-heart">
@@ -571,6 +486,7 @@
                   </div>
                 </div>
 
+                <!-- Centered buttons below columns -->
                 <div class="success-centered-actions">
                   <button type="button" class="btn-itinerary" id="downloadItineraryBtn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -596,10 +512,7 @@
           </form>
         </div>
 
-        <!-- ══════════════════════════════════════════════════
-             CHANGED: Sidebar — added missing dynamic fields
-             that the JS needs to update
-             ══════════════════════════════════════════════════ -->
+        <!-- RIGHT COLUMN: STICKY TRIP FARE SUMMARY -->
         <div class="booking-summary-sidebar">
           <div class="summary-card">
             <div class="summary-card-header">
@@ -610,11 +523,6 @@
                 <div class="summary-row">
                   <span class="summary-label">Route</span>
                   <span class="summary-value" id="summaryRoute">Mumbai → Pune</span>
-                </div>
-                <!-- ADDED: Date & Time -->
-                <div class="summary-row">
-                  <span class="summary-label">Date &amp; Time</span>
-                  <span class="summary-value" id="summaryDateTime">—</span>
                 </div>
                 <div class="summary-row">
                   <span class="summary-label">Distance</span>
@@ -630,51 +538,36 @@
                 </div>
               </div>
 
-              <!-- ADDED: Vehicle & Passengers section -->
-              <div class="summary-details" style="border-top: 1px solid #f0ebe6; padding-top: 14px; margin-top: 6px;">
-                <div class="summary-row">
-                  <span class="summary-label">Vehicle</span>
-                  <span class="summary-value" id="summaryVehicle">Sedan</span>
-                </div>
-                <div class="summary-row">
-                  <span class="summary-label">Passengers</span>
-                  <span class="summary-value" id="summaryPassengers">4</span>
-                </div>
-                <div class="summary-row">
-                  <span class="summary-label">Luggage</span>
-                  <span class="summary-value" id="summaryLuggage">2 Bags</span>
-                </div>
-              </div>
-
               <div class="fare-breakdown-wrapper">
                 <h4 class="breakdown-title">Fare Breakdown</h4>
                 <div class="summary-row font-sm">
                   <span class="summary-label">Base Fare</span>
-                  <span class="summary-value" id="summaryBaseFare">₹ 500</span>
+                  <span class="summary-value" id="summaryBaseFare">₹ 2,850</span>
                 </div>
                 <div class="summary-row font-sm">
                   <span class="summary-label">Distance Charge</span>
-                  <span class="summary-value" id="summaryDistanceCharge">₹ 1,650</span>
+                  <span class="summary-value" id="summaryDistanceCharge">₹ 900</span>
                 </div>
                 <div class="summary-row font-sm">
                   <span class="summary-label">Driver Allowance</span>
-                  <span class="summary-value" id="summaryDriverAllowance">₹ 350</span>
+                  <span class="summary-value" id="summaryDriverAllowance">₹ 400</span>
                 </div>
                 <div class="summary-row font-sm">
                   <span class="summary-label">Toll &amp; Parking</span>
-                  <span class="summary-value" id="summaryTollParking">₹ 250</span>
+                  <span class="summary-value" id="summaryTollParking">₹ 350</span>
                 </div>
                 <div class="summary-row font-sm">
                   <span class="summary-label">Taxes &amp; Fees</span>
-                  <span class="summary-value" id="summaryTaxes">₹ 138</span>
+                  <span class="summary-value" id="summaryTaxes">₹ 300</span>
                 </div>
               </div>
 
               <div class="summary-total-row">
                 <span class="total-label">Estimated Total</span>
-                <span class="total-value" id="summaryTotal">₹ 2,888</span>
+                <span class="total-value" id="summaryTotal">₹ 4,800</span>
               </div>
 
+              <!-- Information Alert box -->
               <div class="fare-info-alert">
                 <span class="info-alert-icon">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -684,11 +577,10 @@
                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
                   </svg>
                 </span>
-                <p class="info-alert-text">Fare is estimated. Final fare may vary based on actual route and conditions.
-                </p>
+                <p class="info-alert-text">Fare is estimated. Final fare may vary slightly.</p>
               </div>
 
-              <!-- CHANGED: Button text -->
+              <!-- Secure booking trigger (binds to current step action) -->
               <button type="button" class="btn-secure-booking" id="sidebarSecureBtn">
                 <span class="btn-lock-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -697,109 +589,20 @@
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                   </svg>
                 </span>
-                <span>Continue Booking</span>
+                <span>Secure &amp; Safe Booking</span>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- RIGHT COLUMN: PACKAGE TOUR CHECKOUT CARD -->
-        <div class="package-checkout-card" id="packageCheckoutCard">
-          <div class="checkout-card-header">
-            <h3>Package Checkout</h3>
-          </div>
-          <div class="checkout-card-body">
-            
-            <h4 class="checkout-card-section-title">1. Travel Information</h4>
-            <div class="form-group">
-              <label for="pkgDateInput" class="form-label">Travel Start Date *</label>
-              <div class="input-wrapper">
-                <span class="input-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                </span>
-                <input type="date" id="pkgDateInput" />
-              </div>
-              <div class="error-msg" id="pkgDateError">Please select a travel start date.</div>
-            </div>
-
-            <div class="form-group">
-              <label for="pkgTravelersCount" class="form-label">Number of People *</label>
-              <select id="pkgTravelersCount" class="form-select">
-                <option value="1">1 Person</option>
-                <option value="2">2 People</option>
-                <option value="3">3 People</option>
-                <option value="4" selected>4 People</option>
-                <option value="5">5 People</option>
-                <option value="6">6 People</option>
-                <option value="7">7 People</option>
-                <option value="8">8 People</option>
-                <option value="9">9 People</option>
-                <option value="10">10+ People</option>
-              </select>
-            </div>
-
-            <h4 class="checkout-card-section-title" style="margin-top: 24px;">2. Contact Details</h4>
-            <div class="form-group">
-              <label for="pkgName" class="form-label">Full Name *</label>
-              <input type="text" id="pkgName" class="form-input-text" placeholder="John Doe" style="padding-left: 14px;" />
-              <div class="error-msg" id="pkgNameError">Please enter your full name.</div>
-            </div>
-
-            <div class="form-group">
-              <label for="pkgEmail" class="form-label">Email Address *</label>
-              <input type="email" id="pkgEmail" class="form-input-text" placeholder="johndoe@example.com" style="padding-left: 14px;" />
-              <div class="error-msg" id="pkgEmailError">Please enter a valid email address.</div>
-            </div>
-
-            <div class="form-group">
-              <label for="pkgPhone" class="form-label">Mobile Number *</label>
-              <div class="phone-input-group">
-                <span class="phone-prefix">+91</span>
-                <input type="tel" id="pkgPhone" class="form-input-text" placeholder="9876543210" pattern="[6-9][0-9]{9}" />
-              </div>
-              <div class="error-msg" id="pkgPhoneError">Please enter a valid 10-digit mobile number.</div>
-            </div>
-
-            <div class="checkout-price-display">
-              <div class="checkout-price-row">
-                <span class="price-lbl">Price per person</span>
-                <span class="price-val" id="pkgPricePerPerson">₹ 0</span>
-              </div>
-              <div class="checkout-price-row">
-                <span class="price-lbl">Travelers count</span>
-                <span class="price-val" id="pkgTravelersMultiplier">x 4</span>
-              </div>
-              <div class="checkout-price-row">
-                <span class="price-lbl">Subtotal</span>
-                <span class="price-val" id="pkgSubtotal">₹ 0</span>
-              </div>
-              <div class="checkout-price-row">
-                <span class="price-lbl">Taxes &amp; Fees (5% GST)</span>
-                <span class="price-val" id="pkgTaxes">₹ 0</span>
-              </div>
-              <div class="checkout-price-row checkout-price-total">
-                <span class="total-lbl">Total Price</span>
-                <span class="price-val" id="pkgTotalPrice">₹ 0</span>
-              </div>
-            </div>
-
-            <button type="button" class="btn-secure-booking" id="bookPackageBtn">
-              <span class="btn-lock-icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              </span>
-              <span>Book the Package</span>
-            </button>
-          </div>
-
       </div>
-
-    </div>
   </main>
 
-  <!-- ══════════════ FOOTER (unchanged) ══════════════ -->
+  <!-- ══════════════ FOOTER ══════════════ -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
+        <!-- Brand -->
         <div class="footer-brand">
           <a href="home.html" class="logo footer-logo">
             <span class="logo-icon">
@@ -816,17 +619,18 @@
             more.</p>
         </div>
 
+        <!-- Links -->
         <div class="footer-col">
           <h5>Quick Links</h5>
           <ul>
             <li><a href="about.html">About Us</a></li>
             <li><a href="vehicles.html">Our Fleet</a></li>
-            <li><a href="packages.html">Tour Packages</a></li>
             <li><a href="pricing.html">Pricing</a></li>
             <li><a href="gallery.html">Gallery</a></li>
           </ul>
         </div>
 
+        <!-- Services -->
         <div class="footer-col">
           <h5>Services</h5>
           <ul>
@@ -837,6 +641,7 @@
           </ul>
         </div>
 
+        <!-- Contact -->
         <div class="footer-col">
           <h5>Get In Touch</h5>
           <ul class="contact-list">

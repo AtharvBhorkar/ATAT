@@ -1,5 +1,42 @@
 const Vehicle = require('../models/Vehicle');
 
+function normalizeVehicleData(body) {
+  const data = { ...body };
+
+  if (data.fuel && !data.fuelType) {
+    data.fuelType = data.fuel;
+  }
+
+  if (data.type) {
+    data.type = data.type.toLowerCase().trim();
+    if (data.type === 'motorcycle') data.type = 'bike';
+  }
+
+  if (data.fuelType) {
+    data.fuelType = data.fuelType.toLowerCase().trim();
+  }
+
+  if (data.transmission) {
+    data.transmission = data.transmission.toLowerCase().trim();
+  }
+
+  if (!data.slug && data.name) {
+    const baseSlug = data.name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    const randomSuffix = Math.random().toString(36).substring(2, 7);
+    data.slug = `${baseSlug}-${randomSuffix}`;
+  }
+
+  if (data.status) {
+    data.available = data.status === 'active';
+  }
+
+  return data;
+}
+
 // @desc    Get all vehicles with filters and pagination
 // @route   GET /api/vehicles
 exports.getAllVehicles = async (req, res) => {
@@ -70,7 +107,8 @@ exports.getVehicleById = async (req, res) => {
 // @route   POST /api/vehicles
 exports.createVehicle = async (req, res) => {
   try {
-    const vehicle = await Vehicle.create(req.body);
+    const normalizedData = normalizeVehicleData(req.body);
+    const vehicle = await Vehicle.create(normalizedData);
     res.status(201).json({
       success: true,
       message: 'Vehicle created successfully.',
@@ -89,9 +127,10 @@ exports.createVehicle = async (req, res) => {
 // @route   PUT /api/vehicles/:id
 exports.updateVehicle = async (req, res) => {
   try {
+    const normalizedData = normalizeVehicleData(req.body);
     const vehicle = await Vehicle.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      normalizedData,
       { new: true, runValidators: true }
     );
 

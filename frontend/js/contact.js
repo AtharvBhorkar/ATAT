@@ -67,25 +67,42 @@
 
             // If valid, show success and clear form
             if (isValid) {
-                // Change button state
                 const originalBtnHtml = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<span>Sending...</span>';
                 submitBtn.disabled = true;
 
-                // Simulate network request
-                setTimeout(() => {
-                    formSuccess.classList.add('show');
-                    contactForm.reset();
-                    
-                    // Reset button
-                    submitBtn.innerHTML = originalBtnHtml;
-                    submitBtn.disabled = false;
-                    
-                    // Hide success message after 5 seconds
-                    setTimeout(() => {
-                        formSuccess.classList.remove('show');
-                    }, 5000);
-                }, 1000);
+                const payload = {
+                    name: nameInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    message: msgInput.value.trim()
+                };
+
+                fetch('/api/contacts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            formSuccess.classList.add('show');
+                            contactForm.reset();
+                            
+                            setTimeout(() => {
+                                formSuccess.classList.remove('show');
+                            }, 5000);
+                        } else {
+                            alert('Failed to send message: ' + data.message);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Contact submission error:', err);
+                        alert('A network error occurred. Please try again.');
+                    })
+                    .finally(() => {
+                        submitBtn.innerHTML = originalBtnHtml;
+                        submitBtn.disabled = false;
+                    });
             }
         });
         
