@@ -1,23 +1,23 @@
 const express = require('express');
 const router = express.Router();
 
-const {
-  register,
-  login,
-  logout,
-  dashboard,
-  getMe
-} = require('../controllers/adminAuthController');
+const adminAuthController = require('../controllers/adminAuthController');
+const { protect } = require('../middleware/authMiddleware');
 
-const { protect } = require('../middleware/authMiddleware'); // adjust path if needed
+console.log('register:', typeof adminAuthController.register);
+console.log('login:', typeof adminAuthController.login);
+console.log('logout:', typeof adminAuthController.logout);
+console.log('dashboard:', typeof adminAuthController.dashboard);
+console.log('getMe:', typeof adminAuthController.getMe);
+console.log('protect:', typeof protect);
 
 // Public routes
-router.post('/register', register);
-router.post('/login', login);
-router.post('/logout', logout);
+router.post('/register', adminAuthController.register);
+router.post('/login', adminAuthController.login);
+router.post('/logout', adminAuthController.logout);
 
 // Protected routes
-router.get('/dashboard', protect, dashboard);
-router.get('/me', protect, getMe);
+router.get('/dashboard', protect, adminAuthController.dashboard);
+router.get('/me', protect, adminAuthController.getMe);
 
 module.exports = router;
