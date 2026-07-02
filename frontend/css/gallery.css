@@ -23,7 +23,7 @@
   --tr: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --tr-fast: 0.25s ease;
 
-  /* ===== NAVBAR + FOOTER REQUIRED VARIABLES (home.css se same) ===== */
+  /* nav and footer var. */
   --nav-h: 76px;
   --transition: 0.35s ease;
   --font-display: 'Playfair Display', serif;
@@ -45,13 +45,13 @@ body {
   overflow-x: hidden;
 }
 
-/* ===== GLOBAL LINK RESET ===== */
+/* GLOBAL LINK RESET  */
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* ===== NAV ACTION BUTTONS (Sign In / Book a Ride) ===== */
+/*  NAV ACTION BUTTONS */
 .btn-ghost {
   font-size: 14px;
   font-weight: 500;
@@ -82,7 +82,7 @@ a {
   box-shadow: 0 8px 24px rgba(110, 31, 43, 0.35);
 }
 
-/* ===== CONTAINER (FOOTER KE LIYE ZAROORI) ===== */
+/* cONTAINER  */
 .container {
   max-width: 1280px;
   width: 100%;
@@ -90,7 +90,7 @@ a {
   padding: 0 24px;
 }
 
-/* ===== SECTION EYEBROW ===== */
+/* SECTION EYEBROW  */
 .section-eyebrow {
   font-size: 11px;
   font-weight: 600;
@@ -107,7 +107,7 @@ a {
 
 
 
-/* ===== HERO ===== */
+/*  HERO  */
 .hero {
   position: relative;
   height: 100vh;
@@ -245,7 +245,7 @@ a {
   }
 }
 
-/* ===== GALLERY INTRO ===== */
+/*  GALLERY  */
 .gallery-intro {
   background: var(--bg);
   padding: 40px 40px 0;
@@ -279,7 +279,7 @@ a {
   font-weight: 300;
 }
 
-/* ===== FILTER ===== */
+/*  FILTER  */
 .filter-wrap {
   background: var(--bg);
   position: sticky;
@@ -349,7 +349,7 @@ a {
   stroke: #fff;
 }
 
-/* ===== GALLERY GRID ===== */
+/*  GALLERY GRID  */
 .gallery-section {
   background: var(--bg);
   padding: 24px 28px 40px;
@@ -452,7 +452,7 @@ a {
   transform: translateY(0);
 }
 
-/* ===== LOAD MORE ===== */
+/*  LOAD MORE  */
 .gallery-actions {
   display: flex;
   gap: 14px;
@@ -514,7 +514,7 @@ a {
   color: var(--maroon);
 }
 
-/* ===== BEHIND THE JOURNEY ===== */
+/* BEHIND THE JOURNEY  */
 .behind-section {
   background: #6E1F2B;
   padding: 30px 0 30px;
@@ -565,7 +565,7 @@ a {
   transform: translateY(0);
 }
 
-/* ---- Carousel ---- */
+/*  Carousel  */
 .behind-carousel-wrapper {
   overflow: hidden;
   width: 100%;
@@ -593,7 +593,7 @@ a {
   }
 }
 
-/* ---- Card ---- */
+/* Card  */
 .behind-card {
   width: 270px;
   flex-shrink: 0;
@@ -613,12 +613,12 @@ a {
 
 }
 
-/* Image zoom on hover */
+
 .behind-card:hover .behind-card-img {
   transform: scale(1.08);
 }
 
-/* Image — inside card with padding + rounded */
+
 .behind-card-img-wrap {
   margin: 12px 12px 0 12px;
   border-radius: 14px;
@@ -634,7 +634,7 @@ a {
   transition: transform 0.45s ease;
 }
 
-/* Bottom body — title left, icon right */
+
 .behind-card-body {
   padding: 14px 16px 18px;
   display: flex;
@@ -671,7 +671,7 @@ a {
   overflow: hidden;
 }
 
-/* Icon box — right side */
+
 .behind-card-icon {
   width: 44px;
   height: 44px;
@@ -689,12 +689,12 @@ a {
   height: 28px;
 }
 
-/* Dots — hidden ab kyunki pure CSS loop hai */
+
 .behind-dots {
   display: none;
 }
 
-/* ---- Responsive ---- */
+/*  Responsive  */
 @media (max-width: 600px) {
   .behind-section {
     padding: 60px 0 70px;
@@ -709,7 +709,7 @@ a {
   }
 }
 
-/* ===== CTA ===== */
+
 .cta-outer {
   background: #ffeded;
   padding: 60px 28px;
@@ -837,7 +837,7 @@ a {
 
 
 
-/* ===== GALLERY RESPONSIVE (gallery items, filter, lightbox) ===== */
+/* GALLERY RESPONSIVE */
 @media (max-width: 1024px) {
   .filter-tabs {
     justify-content: flex-start;
@@ -908,9 +908,28 @@ a {
 }
 
 
-/* ════════════════════════════════════════════════════
-   NAVBAR  (home.css se exactly copy kiya gaya hai)
-════════════════════════════════════════════════════ */
+/* NAVBAR   */
+
+.logo-brand {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+.logo-img {
+  height: 54px;
+  width: 54px;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: transform var(--transition);
+}
+.logo-img:hover {
+  transform: scale(1.03);
+}
+
+
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -920,52 +939,26 @@ a {
   transition: background var(--transition), box-shadow var(--transition);
 }
 .navbar.scrolled {
-  background: rgba(245,239,230,0.97);
+  background: rgba(245,239,230,.97);
   backdrop-filter: blur(14px);
   box-shadow: 0 2px 24px rgba(26,16,16,.1);
 }
-
 .nav-inner {
-  display: flex;
-  align-items: center;
+  display: flex; align-items: center;
   gap: 32px;
-  max-width: 1280px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 24px;
+  max-width: 1280px; width: 100%;
+  margin: 0 auto; padding: 0 24px;
 }
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--white);
-  text-transform: uppercase;
-  transition: color var(--transition);
-  flex-shrink: 0;
-}
-.navbar.scrolled .logo { color: var(--maroon-dark); }
-.logo-icon { color: var(--gold); transition: color var(--transition); }
-.navbar.scrolled .logo-icon { color: var(--maroon); }
-
 .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
+  display: flex; align-items: center;
+  gap: 4px; flex: 1;
   justify-content: center;
   list-style: none;
 }
 .nav-links a {
   color: rgba(255,255,255,.88);
-  font-size: 14px;
-  font-weight: 500;
-  padding: 8px 14px;
-  border-radius: 50px;
+  font-size: 14px; font-weight: 500;
+  padding: 8px 14px; border-radius: 50px;
   transition: all var(--transition);
   display: block;
 }
@@ -979,33 +972,53 @@ a {
   color: var(--maroon);
   background: rgba(110,31,43,.08);
 }
-
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-.nav-actions .btn-ghost { color: rgba(255,255,255,.88); }
-.navbar.scrolled .nav-actions .btn-ghost { color: var(--text); }
+.nav-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .nav-actions .btn-primary { font-size: 13px; padding: 10px 22px; }
 
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
+
+.btn-ghost {
+  color: rgba(255,255,255,.88);
+  padding: 11px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color var(--transition);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
-  margin-left: auto;
+}
+.navbar.scrolled .btn-ghost { color: var(--text); }
+.btn-ghost:hover { color: var(--gold); }
+
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--maroon);
+  color: var(--white);
+  padding: 13px 28px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: 2px solid var(--maroon);
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--maroon-dark);
+  border-color: var(--maroon-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(110,31,43,.38);
+}
+
+
+.hamburger {
+  display: none; flex-direction: column;
+  gap: 5px; background: none; border: none;
+  cursor: pointer; padding: 6px; margin-left: auto;
 }
 .hamburger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--white);
-  border-radius: 2px;
+  display: block; width: 24px; height: 2px;
+  background: var(--white); border-radius: 2px;
   transition: all var(--transition);
 }
 .navbar.scrolled .hamburger span { background: var(--dark); }
@@ -1013,14 +1026,32 @@ a {
 .hamburger.open span:nth-child(2) { opacity: 0; }
 .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
+.mobile-only { display: none; }
 
-/* ════════════════════════════════════════════════════
-   NAVBAR — RESPONSIVE (home.css ke @media (max-width:900px) se same)
-════════════════════════════════════════════════════ */
+/* nav responisve */
+
 @media (max-width: 900px) {
-  .nav-links, .nav-actions .btn-ghost { display: none; }
+  .nav-links { display: none; }
+  .nav-actions .btn-ghost { display: none; }
   .hamburger { display: flex; }
+  .mobile-only { display: block; width: 100%; margin-top: 8px; }
 
+  .nav-btn-signin {
+    display: block;
+    text-align: center;
+    border: 1px solid var(--maroon);
+    color: var(--maroon) !important;
+    border-radius: 50px;
+    padding: 10px 0;
+  }
+  .nav-btn-book {
+    display: block;
+    text-align: center;
+    background: var(--maroon) !important;
+    color: var(--white) !important;
+    border-radius: 50px;
+    padding: 10px 0;
+  }
   .nav-links.open {
     display: flex;
     flex-direction: column;
@@ -1030,7 +1061,7 @@ a {
     background: rgba(245,239,230,.98);
     backdrop-filter: blur(20px);
     padding: 24px;
-    border-bottom: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--ivory-deep);
     box-shadow: var(--shadow-md);
     gap: 4px;
     align-items: flex-start;
@@ -1041,36 +1072,52 @@ a {
     font-size: 15px;
     padding: 12px 16px;
     width: 100%;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
   }
-  .nav-links.open a:hover { background: rgba(110,31,43,.08); color: var(--maroon); }
+  .nav-links.open a:hover, .nav-links.open a.active {
+    background: rgba(110,31,43,.08);
+    color: var(--maroon);
+  }
 }
 
-/* ════════════════════════════════════════════════════
-   NAVBAR — RESPONSIVE (home.css ke @media (max-width:500px) se same)
-   Bahut chhoti screens pe "Book a Ride" button bhi hide
-════════════════════════════════════════════════════ */
 @media (max-width: 500px) {
   .nav-actions { display: none; }
 }
 
+@media (max-width: 480px) {
+  :root { --nav-h: 64px; }
+  .logo-img { height: 46px; } 
+}
 
-/* ════════════════════════════════════════════════════
-   FOOTER  (home.css se exactly copy kiya gaya hai)
-════════════════════════════════════════════════════ */
+/* FOOTER  */
+
 .footer { background: var(--dark); padding-top: 80px; }
 
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
   gap: 60px;
+  align-items: start;
   padding-bottom: 60px;
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
-.footer-brand .footer-logo { color: var(--white); margin-bottom: 20px; }
-.footer-brand .footer-logo .logo-icon { color: var(--gold); }
-.footer-brand p { font-size: 13.5px; color: rgba(255,255,255,.5); line-height: 1.75; max-width: 300px; margin-bottom: 28px; }
+.logo-img-footer { 
+  height: 72px;  
+  width: 72px; 
+  display: block;  
+  object-fit: cover;   
+  border-radius: 50%;
+  margin-bottom: 24px;
+}
+
+.footer-brand p {
+  font-size: 13.5px;
+  color: rgba(255,255,255,.5);
+  line-height: 1.75;
+  max-width: 300px;
+  margin-bottom: 28px;
+}
 
 .social-links { display: flex; gap: 12px; }
 .social-links a {
@@ -1091,16 +1138,16 @@ a {
   color: var(--gold);
   margin-bottom: 20px;
 }
-.footer-col ul li { margin-bottom: 20px; }
+.footer-col ul li { margin-bottom: 16px; }
 .footer-col ul a { font-size: 13.5px; color: rgba(255,255,255,.5); transition: color var(--transition); }
 .footer-col ul a:hover { color: var(--white); }
 
-.contact-list li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 22px; }
+.contact-list li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
 .contact-list li svg { flex-shrink: 0; color: var(--rust); margin-top: 2px; }
 .contact-list li a, .contact-list li span { font-size: 13.5px; color: rgba(255,255,255,.55); transition: color var(--transition); }
 .contact-list li a:hover { color: var(--white); }
 
-.footer-hours { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+.footer-hours { margin-top: 24px; display: flex; flex-direction: column; gap: 4px; }
 .footer-hours strong { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
 .footer-hours span { font-size: 13px; color: rgba(255,255,255,.45); }
 
@@ -1118,24 +1165,28 @@ a {
 .footer-legal a:hover { color: rgba(255,255,255,.7); }
 
 
-/* ════════════════════════════════════════════════════
-   FOOTER — RESPONSIVE (home.css ke @media (max-width:1100px) se same)
-════════════════════════════════════════════════════ */
+/* FOOTEr responisve */
+
 @media (max-width: 1100px) {
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
 }
 
-/* ════════════════════════════════════════════════════
-   FOOTER — RESPONSIVE (home.css ke @media (max-width:700px) se same)
-════════════════════════════════════════════════════ */
 @media (max-width: 700px) {
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom-inner { flex-direction: column; text-align: center; }
   .footer-legal { justify-content: center; }
 }
 
-.footer-col ul {
+ul {
   list-style: none;
-  padding: 0;
-  margin: 0;
+}
+
+
+/* HERO — Tablet & Mobile responsive */
+@media (max-width: 1024px) {
+  .hero {
+    height: auto;
+    min-height: 500px;
+    padding: 100px 20px 50px;   
+  }
 }
