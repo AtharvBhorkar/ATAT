@@ -17,6 +17,7 @@
       display: block;
       object-fit: contain;
       transition: transform var(--transition);
+      border-radius: 50px; /* Optional: adds a subtle rounding to the logo edges */
     }
     .logo-img:hover {
       transform: scale(1.03);
@@ -27,6 +28,7 @@
       display: block;
       object-fit: contain;
       margin-bottom: 24px;
+      border-radius: 50px; /* Optional: adds a subtle rounding to the logo edges */
     }
     @media (max-width: 480px) {
       .logo-img { height: 46px; }
