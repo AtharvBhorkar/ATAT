@@ -63,6 +63,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
+app.get('/dashboard.html', (req, res) => {
+  res.redirect('/');
+});
+
 /* ───────────────────────────────
 HEALTH CHECK
 ─────────────────────────────── */
