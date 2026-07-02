@@ -16,6 +16,7 @@ const contactRoutes = require('./routes/contacts');
 const publicApiRoutes = require('./routes/publicApi');
 const paymentRoutes = require('./routes/payments');
 const settingsRoutes = require('./routes/settings');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -109,6 +110,7 @@ app.use('/api/contacts', contactRoutes);
 app.use('/api/public', publicApiRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/human', userRoutes);
 
 /* ───────────────────────────────
 404 HANDLER
