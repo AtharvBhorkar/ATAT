@@ -327,27 +327,26 @@ exports.dashboard = async (req, res) => {
     res.json({
       success: true,
       data: {
-        stats: {
-          totalVehicles,
-          availableVehicles,
-          totalPackages,
-          activePackages,
-          totalBookings,
-          pendingBookings,
-          confirmedBookings,
-          completedBookings,
-          cancelledBookings,
-          activeRentals,
-          totalContacts,
-          unreadContacts,
-          totalRevenue: revenueAggregation[0]?.total || 0,
-          pendingPayments: pendingPaymentsAggregation[0]?.total || 0,
-          totalUsers: totalUsersCount,
-          vehicleBookings,
-          packageBookings,
-          vehicleRevenue: vehicleRevenue[0]?.total || 0,
-          packageRevenue: packageRevenue[0]?.total || 0
-        },
+        totalVehicles,
+        availableVehicles,
+        activeVehicles: availableVehicles,
+        totalPackages,
+        activePackages,
+        totalBookings,
+        pendingBookings,
+        confirmedBookings,
+        completedBookings,
+        cancelledBookings,
+        activeRentals,
+        totalContacts,
+        unreadContacts,
+        totalRevenue: revenueAggregation[0]?.total || 0,
+        pendingPayments: pendingPaymentsAggregation[0]?.total || 0,
+        totalUsers: totalUsersCount,
+        vehicleBookings,
+        packageBookings,
+        vehicleRevenue: vehicleRevenue[0]?.total || 0,
+        packageRevenue: packageRevenue[0]?.total || 0,
         recentBookings,
         recentContacts,
         monthlyBookings,
@@ -366,15 +365,12 @@ exports.dashboard = async (req, res) => {
   }
 };
 
-// @desc    Get current admin profile
-// @route   GET /api/admin/me
-// @access  Private
 exports.getMe = async (req, res) => {
   try {
     const admin = await Admin.findById(req.admin._id);
     res.json({
       success: true,
-      data: {
+      admin: {
         id: admin._id,
         name: admin.name,
         email: admin.email,
