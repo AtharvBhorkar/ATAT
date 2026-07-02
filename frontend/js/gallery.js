@@ -1,36 +1,65 @@
-/* ─── NAVBAR SCROLL ─── */
-const navbar = document.getElementById('navbar');
-const onScroll = () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 40);
-};
-window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
+/* nav js*/
 
-/* ─── HAMBURGER MENU ─── */
-const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
+document.addEventListener('DOMContentLoaded', () => {
 
-hamburger.addEventListener('click', () => {
-  const open = hamburger.classList.toggle('open');
-  navLinks.classList.toggle('open', open);
-  hamburger.setAttribute('aria-expanded', open);
-});
+ 
+  const navbar = document.getElementById('navbar');
+  const onScroll = () => {
+    if (navbar) {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
-navLinks.querySelectorAll('a').forEach(a =>
-  a.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    navLinks.classList.remove('open');
-  })
-);
+  
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
 
-document.addEventListener('click', e => {
-  if (!navbar.contains(e.target)) {
-    hamburger.classList.remove('open');
-    navLinks.classList.remove('open');
+  if (hamburger && navLinks) {
+    
+    const mobileOnlyItems = navLinks.querySelectorAll('.mobile-only');
+    if (mobileOnlyItems.length === 0) {
+      const signInLi = document.createElement('li');
+      signInLi.className = 'mobile-only';
+      signInLi.innerHTML = '<a href="login.html" class="nav-btn-signin">Sign In</a>';
+
+      const bookLi = document.createElement('li');
+      bookLi.className = 'mobile-only';
+      bookLi.innerHTML = '<a href="booking.html" class="nav-btn-book">Book a Ride</a>';
+
+      navLinks.appendChild(signInLi);
+      navLinks.appendChild(bookLi);
+    }
+
+    hamburger.addEventListener('click', () => {
+      const open = hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+
+  
+    navLinks.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      })
+    );
+
+  
+    document.addEventListener('click', e => {
+      if (navbar && !navbar.contains(e.target)) {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      }
+    });
   }
-});
 
-/* ─── SCROLL REVEAL ─── */
+}); 
+
+/* SCROLL REVEAL */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -44,7 +73,7 @@ document.querySelectorAll(
   '.behind-title, .behind-desc, .cta-box-content'
 ).forEach(el => revealObserver.observe(el));
 
-/* ─── FILTER ─── */
+/* FILTER */
 const filterBtns = document.querySelectorAll('.filter-btn');
 const allItems   = document.querySelectorAll('.gallery-item');
 
@@ -64,7 +93,7 @@ filterBtns.forEach(btn => {
   });
 });
 
-/* ─── LOAD MORE / SHOW LESS ─── */
+/*  LOAD MORE / SHOW LESS  */
 const INITIAL_COUNT = 14;
 const LOAD_STEP     = 10;
 let shownCount      = INITIAL_COUNT;
@@ -99,7 +128,7 @@ showLessBtn.addEventListener('click', () => {
 
 applyLoadMore();
 
-/* ─── BEHIND CARDS STAGGERED REVEAL ─── */
+/*  BEHIND CARDS STAGGERED REVEAL  */
 const behindCards   = document.querySelectorAll('.behind-card');
 const behindObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry, idx) => {
@@ -114,7 +143,7 @@ const behindObserver = new IntersectionObserver((entries) => {
 
 behindCards.forEach(card => behindObserver.observe(card));
 
-/* ─── BEHIND TITLE + DESC REVEAL ─── */
+/* BEHIND TITLE + DESC REVEAL  */
 const revealEls = document.querySelectorAll('.behind-title, .behind-desc');
 const revObs    = new IntersectionObserver(entries => {
   entries.forEach(e => {

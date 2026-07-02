@@ -1,44 +1,77 @@
-document.addEventListener('DOMContentLoaded', function () {
+/* Nav js*/
 
-  /* ─── NAVBAR SCROLL ─── */
+document.addEventListener('DOMContentLoaded', () => {
+
+  
   const navbar = document.getElementById('navbar');
   const onScroll = () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    if (navbar) {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ─── HAMBURGER MENU ─── */
+  
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('navLinks');
 
-  hamburger.addEventListener('click', () => {
-    const open = hamburger.classList.toggle('open');
-    navLinks.classList.toggle('open', open);
-    hamburger.setAttribute('aria-expanded', open);
-  });
+  if (hamburger && navLinks) {
+    
+    const mobileOnlyItems = navLinks.querySelectorAll('.mobile-only');
+    if (mobileOnlyItems.length === 0) {
+      const signInLi = document.createElement('li');
+      signInLi.className = 'mobile-only';
+      signInLi.innerHTML = '<a href="login.html" class="nav-btn-signin">Sign In</a>';
 
-  navLinks.querySelectorAll('a').forEach(a =>
-    a.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-    })
-  );
+      const bookLi = document.createElement('li');
+      bookLi.className = 'mobile-only';
+      bookLi.innerHTML = '<a href="booking.html" class="nav-btn-book">Book a Ride</a>';
 
-  document.addEventListener('click', e => {
-    if (!navbar.contains(e.target)) {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
+      navLinks.appendChild(signInLi);
+      navLinks.appendChild(bookLi);
     }
-  });
 
-  /* ─── TOC SCROLLSPY ─── */
+  
+    hamburger.addEventListener('click', () => {
+      const open = hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+
+   
+    navLinks.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      })
+    );
+
+   
+    document.addEventListener('click', e => {
+      if (navbar && !navbar.contains(e.target)) {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      }
+    });
+  }
+
+});
+
+
+/* TOC scrollspy + Contact form js */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* TOC SCROLLSPY */
   const sections = document.querySelectorAll('.policy-section');
   const tocLinks = document.querySelectorAll('.toc-link');
   const tocPills = document.querySelectorAll('.toc-pill');
   const pillsNav = document.querySelector('.toc-pills');
 
-  // Flag to prevent scrollIntoView from fighting user scroll
+ 
   let isUserScrolling = false;
   let pillScrollTimer = null;
 
@@ -49,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
     tocPills.forEach(pill => {
       const isActive = pill.getAttribute('href') === '#' + id;
       pill.classList.toggle('active', isActive);
-      // Only scroll pill into view if user is NOT currently scrolling the page
+    
       if (isActive && pillsNav && !isUserScrolling) {
         clearTimeout(pillScrollTimer);
         pillScrollTimer = setTimeout(() => {
@@ -59,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Track if user is scrolling to prevent pill scrollIntoView conflict
+ 
   window.addEventListener('scroll', () => {
     isUserScrolling = true;
     clearTimeout(pillScrollTimer);
@@ -78,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   sections.forEach(section => observer.observe(section));
 
-  /* ─── SMOOTH SCROLL for TOC links ─── */
+  /*  SMOOTH SCROLL  */
   document.querySelectorAll('.toc-link, .toc-pill').forEach(link => {
     link.addEventListener('click', function (e) {
       e.preventDefault();
@@ -96,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  /* ─── CONTACT FORM ─── */
+  /* CONTACT FORM */
   const termsForm = document.getElementById('termsContactForm');
   if (termsForm) {
     termsForm.addEventListener('submit', function (e) {

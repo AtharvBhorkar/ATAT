@@ -75,7 +75,9 @@ const packageSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ['adventure', 'pilgrimage', 'beach', 'hill-station', 'wildlife', 'heritage', 'honeymoon', 'family']
+      lowercase: true,
+      trim: true,
+      enum: ['adventure', 'pilgrimage', 'beach', 'hill-station', 'wildlife', 'heritage', 'honeymoon', 'family', 'cultural', 'mountain', 'city', '']
     },
     vehicles: {
       type: Number,

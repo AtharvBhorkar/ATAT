@@ -2127,3 +2127,21 @@ select.form-control {
         transition-duration: .01ms !important
     }
 }
+/* Booking Modal Styles */
+.modal-overlay {
+    font-family: 'Inter', sans-serif;
+}
+.modal-box {
+    animation: modalSlideIn 0.25s ease-out;
+}
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-box::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-box::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 3px;
+}

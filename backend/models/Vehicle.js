@@ -206,6 +206,12 @@ const vehicleSchema = new mongoose.Schema(
       default: true,
     },
 
+    status: {
+      type: String,
+      enum: ["active", "maintenance", "disabled"],
+      default: "active",
+    },
+
     featured: {
       type: Boolean,
       default: false,

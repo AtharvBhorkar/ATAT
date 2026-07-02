@@ -23,6 +23,8 @@ function mapPackage(p) {
     image: p.image || '',
     images: p.images || [],
     active: p.active !== false,
+    isActive: p.active !== false,
+    status: p.active !== false ? 'active' : 'disabled',
     featured: p.featured || false,
     rating: p.rating || 0,
     totalBookings: p.totalBookings || 0,
@@ -42,7 +44,6 @@ router.get('/', async (req, res) => {
     const query = {};
 
     if (active !== undefined) query.active = active === 'true';
-    else query.active = true;
 
     if (category && category !== 'all') query.category = category;
     if (featured !== undefined) query.featured = featured === 'true';
