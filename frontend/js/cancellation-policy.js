@@ -1,42 +1,66 @@
+/* nav js*/
 
+document.addEventListener('DOMContentLoaded', () => {
 
- /* ─── NAVBAR SCROLL ─── */
+ 
   const navbar = document.getElementById('navbar');
   const onScroll = () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    if (navbar) {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-
-  /* ─── HAMBURGER MENU ─── */
+  
   const hamburger = document.getElementById('hamburger');
   const navLinks  = document.getElementById('navLinks');
 
-  hamburger.addEventListener('click', () => {
-    const open = hamburger.classList.toggle('open');
-    navLinks.classList.toggle('open', open);
-    hamburger.setAttribute('aria-expanded', open);
-  });
+  if (hamburger && navLinks) {
+    
+    const mobileOnlyItems = navLinks.querySelectorAll('.mobile-only');
+    if (mobileOnlyItems.length === 0) {
+      const signInLi = document.createElement('li');
+      signInLi.className = 'mobile-only';
+      signInLi.innerHTML = '<a href="login.html" class="nav-btn-signin">Sign In</a>';
 
-  // Close on link click
-  navLinks.querySelectorAll('a').forEach(a =>
-    a.addEventListener('click', () => {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
-    })
-  );
+      const bookLi = document.createElement('li');
+      bookLi.className = 'mobile-only';
+      bookLi.innerHTML = '<a href="booking.html" class="nav-btn-book">Book a Ride</a>';
 
-  // Close on outside click
-  document.addEventListener('click', e => {
-    if (!navbar.contains(e.target)) {
-      hamburger.classList.remove('open');
-      navLinks.classList.remove('open');
+      navLinks.appendChild(signInLi);
+      navLinks.appendChild(bookLi);
     }
-  });
+
+    hamburger.addEventListener('click', () => {
+      const open = hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+
+  
+    navLinks.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      })
+    );
+
+  
+    document.addEventListener('click', e => {
+      if (navbar && !navbar.contains(e.target)) {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      }
+    });
+  }
+
+}); 
 
 
-// ===== FAQ ACCORDION =====
+//  FAQ 
 const faqItems = document.querySelectorAll('.faq-item');
 
 function closeAllFaqs() {
@@ -61,12 +85,12 @@ faqItems.forEach(item => {
   });
 });
 
-// Kahi bhi click karo toh FAQ band ho jaye
+
 document.addEventListener('click', () => {
   closeAllFaqs();
 });
 
-// ===== TOC ACTIVE LINK ON SCROLL =====
+// TOC ACTIVE 
 const tocLinks = document.querySelectorAll('.toc-link');
 const sections = document.querySelectorAll('.policy-section');
 
@@ -86,7 +110,7 @@ const sectionObserver = new IntersectionObserver((entries) => {
 
 sections.forEach(sec => sectionObserver.observe(sec));
 
-// ===== TOC SMOOTH SCROLL =====
+//  TOC SMOOTH SCROLL 
 tocLinks.forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
@@ -97,7 +121,7 @@ tocLinks.forEach(link => {
   });
 });
 
-// ===== CANCEL FORM SUBMIT =====
+//  CANCEL FORM SUBMIT 
 const cancelForm = document.getElementById('cancelForm');
 const cfSuccess = document.getElementById('cfSuccess');
 
@@ -110,7 +134,7 @@ if (cancelForm) {
   });
 }
 
-// ===== SCROLL REVEAL =====
+//  SCROLL REVEAL
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -131,10 +155,10 @@ document.querySelectorAll(
 });
 
 
-// ===== PILL NAV ACTIVE ON SCROLL =====
+// PILL NAV ACTIVE ON SCROLL
 const pills = document.querySelectorAll('.toc-pill');
 
-// Click par active
+
 pills.forEach(pill => {
   pill.addEventListener('click', () => {
     pills.forEach(p => p.classList.remove('active'));
@@ -142,7 +166,7 @@ pills.forEach(pill => {
   });
 });
 
-// Scroll par active — lekin sirf tab jab koi section visible ho
+
 const sectionObserver2 = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
