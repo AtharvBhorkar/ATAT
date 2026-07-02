@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
 
-const generateToken = (id) => {
+function generateToken(id) {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '7d'
+    expiresIn: process.env.JWT_EXPIRE || '7d'
   });
-};
+}
 
 // @desc    Register a new admin
 // @route   POST /api/admin/register
@@ -117,7 +117,7 @@ exports.login = async (req, res) => {
 
     const token = generateToken(admin._id);
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       message: 'Login successful.',
       token,
@@ -131,12 +131,14 @@ exports.login = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Admin login error:', error);
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: 'Server error during login.'
     });
   }
 };
+
 
 // @desc    Logout admin
 // @route   POST /api/admin/logout
