@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 
 // 🚨 CHECK JWT_SECRET IMMEDIATELY
 if (!process.env.JWT_SECRET) {
@@ -32,6 +33,21 @@ const paymentRoutes = require('./routes/payments');
 const settingsRoutes = require('./routes/settings');
 const userRoutes = require('./routes/userRoutes');
 
+// Ensure upload directories exist
+const dirs = [
+  path.join(__dirname, 'uploads'),
+  path.join(__dirname, 'uploads', 'vehicles'),
+  path.join(__dirname, 'uploads', 'packages'),
+  path.join(__dirname, 'uploads', 'temp'),
+];
+
+dirs.forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
+
+// ✅ CREATE EXPRESS APP FIRST
 const app = express();
 
 // CORS
@@ -43,15 +59,25 @@ app.use(
       'http://localhost:5500',
       'http://127.0.0.1:5500',
       'http://localhost:5000',
-      'http://127.0.0.1:5000'
+      'http://127.0.0.1:5000',
     ],
-    credentials: true
+    credentials: true,
   })
 );
 
 // Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// ✅ SERVE UPLOADED IMAGES AS STATIC FILES
+const uploadPath = path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadPath));
+
+// Optional fallback if you also keep uploads outside backend
+const altUploadPath = path.join(__dirname, '../uploads');
+if (fs.existsSync(altUploadPath)) {
+  app.use('/uploads', express.static(altUploadPath));
+}
 
 // Dev logging
 if (process.env.NODE_ENV !== 'production') {
@@ -87,7 +113,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     success: true,
     message: 'Voyago API is running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -111,7 +137,7 @@ app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: `Route ${req.method} ${req.path} not found`
+    message: `Route ${req.method} ${req.path} not found`,
   });
 });
 
@@ -120,7 +146,7 @@ app.use((err, req, res, next) => {
   console.error('Global error:', err);
   res.status(err.statusCode || 500).json({
     success: false,
-    message: err.message || 'Internal Server Error'
+    message: err.message || 'Internal Server Error',
   });
 });
 
@@ -130,7 +156,7 @@ async function start() {
   try {
     await connectDB();
     console.log('✓ Database connected');
-    
+
     await seedDefaultAdmin();
     console.log('✓ Default admin checked/seeded');
 

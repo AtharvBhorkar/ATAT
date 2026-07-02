@@ -2145,3 +2145,219 @@ select.form-control {
     background: #ddd;
     border-radius: 3px;
 }
+
+/* ═══════════════════════════════════════
+   DASHBOARD CHARTS & ACTIVITY STYLES
+════════════════════════════════════════ */
+
+/* Chart Containers */
+.dashboard-charts-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+    .dashboard-charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chart-card {
+    background: var(--white, #fff);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--light-gray, #f0f0f0);
+}
+
+.chart-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.chart-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary, #1a1a1a);
+    margin: 0;
+}
+
+.chart-card-subtitle {
+    font-size: 12px;
+    color: var(--text-muted, #888);
+    margin-top: 2px;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 280px;
+}
+
+/* Recent Activity Card */
+.activity-card {
+    background: var(--white, #fff);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--light-gray, #f0f0f0);
+    margin-bottom: 24px;
+}
+
+.activity-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.activity-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary, #1a1a1a);
+    margin: 0;
+}
+
+.activity-view-all {
+    font-size: 13px;
+    color: var(--maroon, #800000);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.activity-view-all:hover {
+    opacity: 0.7;
+}
+
+/* Activity Items */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.activity-item:hover {
+    background: var(--bg-secondary, #f8f8f8);
+}
+
+.activity-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.activity-icon.activity-vehicle {
+    background: rgba(128, 0, 0, 0.1);
+}
+
+.activity-icon.activity-package {
+    background: rgba(41, 128, 185, 0.1);
+}
+
+.activity-icon.activity-booking {
+    background: rgba(230, 126, 34, 0.1);
+}
+
+.activity-icon.activity-pending {
+    background: rgba(230, 126, 34, 0.1);
+}
+
+.activity-icon.activity-confirmed {
+    background: rgba(41, 128, 185, 0.1);
+}
+
+.activity-icon.activity-progress {
+    background: rgba(128, 0, 0, 0.1);
+}
+
+.activity-icon.activity-completed {
+    background: rgba(39, 174, 96, 0.1);
+}
+
+.activity-icon.activity-cancelled {
+    background: rgba(192, 57, 43, 0.1);
+}
+
+.activity-icon.activity-payment {
+    background: rgba(142, 68, 173, 0.1);
+}
+
+.activity-icon.activity-default {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-text {
+    font-size: 13px;
+    color: var(--text-primary, #1a1a1a);
+    line-height: 1.5;
+}
+
+.activity-text strong {
+    font-weight: 600;
+}
+
+.activity-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+}
+
+.activity-amount {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--maroon, #800000);
+}
+
+.activity-meta .badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.activity-time {
+    font-size: 11px;
+    color: var(--text-muted, #999);
+}
+
+.activity-empty {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+/* Empty state for charts */
+.chart-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 280px;
+    color: var(--text-muted, #999);
+    font-size: 14px;
+}

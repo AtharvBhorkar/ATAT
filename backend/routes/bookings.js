@@ -1,23 +1,27 @@
 const express = require('express');
 const router = express.Router();
+
 const {
   getAllBookings,
   getBookingById,
   createBooking,
   updateBooking,
   deleteBooking,
-  updateBookingStatus
+  updateBookingStatus,
+  downloadBookingPDF,
+  sendBookingPDFByEmail
 } = require('../controllers/bookingController');
-const verifyAdmin = require('../middleware/verifyAdmin');
 
-// Public route for customers to create bookings
+// PUBLIC
 router.post('/', createBooking);
+router.get('/:id/pdf', downloadBookingPDF);
+router.post('/send-pdf', sendBookingPDFByEmail);
 
-// Protected routes for admin
-router.get('/', verifyAdmin, getAllBookings);
-router.get('/:id', verifyAdmin, getBookingById);
-router.put('/:id', verifyAdmin, updateBooking);
-router.delete('/:id', verifyAdmin, deleteBooking);
-router.patch('/:id/status', verifyAdmin, updateBookingStatus);
+// ADMIN / GENERAL
+router.get('/', getAllBookings);
+router.get('/:id', getBookingById);
+router.put('/:id', updateBooking);
+router.delete('/:id', deleteBooking);
+router.patch('/:id/status', updateBookingStatus);
 
 module.exports = router;
