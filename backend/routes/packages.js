@@ -86,9 +86,12 @@ router.get('/', async (req, res) => {
 // ✅ PUBLIC - Get single package
 router.get('/:slug', async (req, res) => {
     try {
-        const pkg = await Package.findOne({
-            $or: [{ _id: req.params.slug }, { slug: req.params.slug }]
-        });
+        const isObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.slug);
+        const pkg = await Package.findOne(
+            isObjectId
+                ? { $or: [{ _id: req.params.slug }, { slug: req.params.slug }] }
+                : { slug: req.params.slug }
+        );
         if (!pkg) return res.status(404).json({ success: false, message: 'Package not found.' });
         res.json({ success: true, data: mapPackage(pkg) });
     } catch (error) {

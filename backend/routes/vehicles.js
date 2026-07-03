@@ -117,9 +117,12 @@ router.get('/', async (req, res) => {
 // ✅ PUBLIC - Get single vehicle
 router.get('/:id', async (req, res) => {
     try {
-        const vehicle = await Vehicle.findOne({
-            $or: [{ _id: req.params.id }, { slug: req.params.id }]
-        });
+        const isObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.id);
+        const vehicle = await Vehicle.findOne(
+            isObjectId
+                ? { $or: [{ _id: req.params.id }, { slug: req.params.id }] }
+                : { slug: req.params.id }
+        );
         if (!vehicle) return res.status(404).json({ success: false, message: 'Vehicle not found.' });
         
         const similar = await Vehicle.find({

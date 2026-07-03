@@ -512,20 +512,81 @@ function populateModal(V) {
   if (modal && !modal._listenersAttached) {
     modal._listenersAttached = true;
     document.getElementById('vmClose').addEventListener('click', closeVehicleModal);
-
-    modal.addEventListener('click', e => {
-      if (e.target === modal) closeVehicleModal();
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeVehicleModal();
-    });
+    modal.addEventListener('click', e => { if (e.target === modal) closeVehicleModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVehicleModal(); });
   }
 }
 
 /* ─────────────────────────────────────────────────────────────
+   OPEN MODAL
+   ───────────────────────────────────────────────────────────── */
+async function openVehicleModal(key) {
+  injectModalHTML();
+
+  // Show loading indicator in modal
+  const inner = document.getElementById('vmInner');
+  if (inner) {
+    inner.innerHTML = '<div style="text-align:center;padding:60px;color:#666;">Loading vehicle details...</div>';
+  }
+  const modal = document.getElementById('vehicleModal');
+  if (modal) {
+    modal.classList.add('vm-active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  let V;
+  // Try to use window.API if loaded
+  if (window.API && window.API.public && typeof window.API.public.getVehicle === 'function') {
+    try {
+      const res = await window.API.public.getVehicle(key);
+      if (res && res.success && res.data) {
+        V = transformVehicleForModal(res.data);
+      }
+    } catch (e) {
+      console.warn('API fetch failed, falling back to local data:', e);
+    }
+  }
+
+  // Fallback to direct fetch
+  if (!V) {
+    const API_BASE = window.location.port === '5500' || window.location.port === '3000'
+        ? 'http://localhost:5000/api/public'
+        : '/api/public';
+    try {
+      const res = await fetch(`${API_BASE}/vehicles/${key}`);
+      const result = await res.json();
+      if (result && result.success && result.data) {
+        V = transformVehicleForModal(result.data);
+      }
+    } catch (e) {
+      console.warn('Direct fetch failed, falling back to local data:', e);
+    }
+  }
+
+  // Fallback to local hardcoded data
+  if (!V) {
+    V = VEHICLE_DATA[key];
+  }
+
+  if (!V) {
+    console.error('Vehicle not found:', key);
+    if (inner) {
+      inner.innerHTML = `<div style="text-align:center;padding:60px;color:#b8552e;"><h3>Failed to load details</h3><p style="margin:10px 0;">Vehicle not found: ${key}</p><button onclick="closeVehicleModal()" style="margin-top:10px;padding:8px 16px;cursor:pointer;border:1px solid #b8552e;background:none;border-radius:4px;color:#b8552e;">Close</button></div>`;
+    }
+    return;
+  }
+
+  // Re-inject layout so populateModal can bind elements correctly
+  const oldModal = document.getElementById('vehicleModal');
+  if (oldModal) oldModal.remove();
+  injectModalHTML();
+
+  populateModal(V);
+}
+
+/* ─────────────────────────────────────────────────────────────
    CLOSE MODAL
-───────────────────────────────────────────────────────────── */
+   ───────────────────────────────────────────────────────────── */
 function closeVehicleModal() {
   const modal = document.getElementById('vehicleModal');
   if (!modal) return;
@@ -534,13 +595,12 @@ function closeVehicleModal() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   AUTO-WIRE  all  [data-vehicle]  triggers on DOMContentLoaded
-───────────────────────────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-vehicle]').forEach(el => {
-    el.addEventListener('click', e => {
-      e.preventDefault();
-      openVehicleModal(el.dataset.vehicle);
-    });
-  });
+   AUTO-WIRE  all  [data-vehicle]  triggers using event delegation
+   ───────────────────────────────────────────────────────────── */
+document.addEventListener('click', e => {
+  const trigger = e.target.closest('[data-vehicle]');
+  if (trigger) {
+    e.preventDefault();
+    openVehicleModal(trigger.dataset.vehicle);
+  }
 });

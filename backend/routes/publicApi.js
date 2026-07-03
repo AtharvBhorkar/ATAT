@@ -261,9 +261,12 @@ router.get('/packages', async (req, res) => {
 /* ═══ SINGLE VEHICLE ═══ */
 router.get('/vehicles/:id', async (req, res) => {
   try {
-    const vehicle = await Vehicle.findOne({
-      $or: [{ _id: req.params.id }, { slug: req.params.id }]
-    });
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.id);
+    const vehicle = await Vehicle.findOne(
+      isObjectId
+        ? { $or: [{ _id: req.params.id }, { slug: req.params.id }] }
+        : { slug: req.params.id }
+    );
 
     if (!vehicle) {
       return res.status(404).json({ success: false, message: 'Vehicle not found.' });
@@ -278,9 +281,12 @@ router.get('/vehicles/:id', async (req, res) => {
 /* ═══ SINGLE PACKAGE ═══ */
 router.get('/packages/:id', async (req, res) => {
   try {
-    const pkg = await Package.findOne({
-      $or: [{ _id: req.params.id }, { slug: req.params.id }]
-    });
+    const isObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.id);
+    const pkg = await Package.findOne(
+      isObjectId
+        ? { $or: [{ _id: req.params.id }, { slug: req.params.id }] }
+        : { slug: req.params.id }
+    );
 
     if (!pkg) {
       return res.status(404).json({ success: false, message: 'Package not found.' });
