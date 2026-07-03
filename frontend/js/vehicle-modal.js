@@ -387,6 +387,41 @@ function injectModalHTML() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   TRANSFORM DB DATA → MODAL FORMAT
+   ───────────────────────────────────────────────────────────── */
+function transformVehicleForModal(v) {
+  const capitalize = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : 'N/A';
+  let type = (v.type || 'standard').toLowerCase();
+  let bookType = type;
+  if (type === 'tempo traveller' || type === 'tempo') bookType = 'tempo';
+  if (type === 'luxury bus' || type === 'bus') bookType = 'bus';
+
+  return {
+    name: v.name || 'Unnamed Vehicle',
+    type: capitalize(type),
+    badge: v.badge || '',
+    badgeClass: v.badgeClass || 'vm-badge--maroon',
+    rating: v.rating || 0,
+    trips: v.totalTrips || 0,
+    desc: v.description || v.note || 'Comfortable vehicle for your journey.',
+    images: v.images && v.images.length > 0 ? v.images : (v.image ? [v.image] : ['/images/no-image.jpg']),
+    specs: [
+      { icon: 'seat', label: 'Seating', val: `${v.seats || 4} Passengers` },
+      { icon: 'fuel', label: 'Fuel', val: capitalize(v.fuelType || v.fuel || 'N/A') },
+      { icon: 'ac', label: 'AC', val: v.ac !== false ? 'Fully AC' : 'Non-AC' },
+      { icon: 'bag', label: 'Luggage', val: `${v.luggage || v.bags || 2} Large Bags` },
+      { icon: 'gear', label: 'Transmission', val: capitalize(v.transmission || 'N/A') },
+      { icon: 'km', label: 'Mileage', val: v.mileage || 'N/A' }
+    ],
+    features: v.amenities && v.amenities.length > 0 ? v.amenities : (v.features || ['Air Conditioning', 'Verified Driver']),
+    priceKm: v.pricePerKm || 0,
+    priceDay: v.pricePerDay || 0,
+    minFare: v.minimumFare || v.minFare || 0,
+    bookType: bookType
+  };
+}
+
+/* ─────────────────────────────────────────────────────────────
    POPULATE MODAL
    ───────────────────────────────────────────────────────────── */
 function populateModal(V) {
