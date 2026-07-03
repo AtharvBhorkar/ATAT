@@ -6,6 +6,11 @@ const { uploadSingle, uploadMultiple, handleUploadError } = require('../middlewa
 const { processImage, deleteImage, getImageUrl } = require('../utils/imageUtils');
 
 function mapVehicle(v) {
+    let primaryImage = v.image;
+    if (!primaryImage || primaryImage === 'undefined') {
+        primaryImage = (v.images && v.images.length > 0) ? v.images[0] : '';
+    }
+
     return {
         _id: v._id,
         name: v.name || '',
@@ -24,9 +29,9 @@ function mapVehicle(v) {
         minFare: v.minFare || 0,
         rating: v.rating || 0,
         totalTrips: v.totalTrips || 0,
-        // ✅ FIXED: Return full image URL
-        image: v.image ? `/${v.image}` : '',
-        images: (v.images || []).map(img => img ? `/${img}` : ''),
+        // ✅ FIXED: Return full image URL using utility
+        image: getImageUrl(primaryImage),
+        images: (v.images || []).map(img => getImageUrl(img)),
         features: v.features || [],
         amenities: v.amenities || [],
         highlights: v.highlights || [],
@@ -310,6 +315,7 @@ router.patch('/:id/toggle', verifyAdmin, async (req, res) => {
         const vehicle = await Vehicle.findById(req.params.id);
         if (!vehicle) return res.status(404).json({ success: false, message: 'Vehicle not found.' });
         vehicle.available = !vehicle.available;
+        vehicle.status = vehicle.available ? 'active' : 'disabled';
         await vehicle.save();
         res.json({ success: true, data: mapVehicle(vehicle) });
     } catch (error) {

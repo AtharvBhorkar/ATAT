@@ -3,9 +3,14 @@ const router = express.Router();
 const Package = require('../models/Package');
 const verifyAdmin = require('../middleware/verifyAdmin');
 const { uploadSingle, uploadMultiple, handleUploadError } = require('../middleware/upload');
-const { processImage, deleteImage } = require('../utils/imageUtils');
+const { processImage, deleteImage, getImageUrl } = require('../utils/imageUtils');
 
 function mapPackage(p) {
+    let primaryImage = p.image;
+    if (!primaryImage || primaryImage === 'undefined') {
+        primaryImage = (p.images && p.images.length > 0) ? p.images[0] : '';
+    }
+
     return {
         _id: p._id,
         title: p.title || p.name || '',
@@ -23,9 +28,9 @@ function mapPackage(p) {
         description: p.description || '',
         includes: p.includes || [],
         excludes: p.excludes || [],
-        // ✅ FIXED: Return full image URLs
-        image: p.image ? `/${p.image}` : '',
-        images: (p.images || []).map(img => img ? `/${img}` : ''),
+        // ✅ FIXED: Return full image URLs using utility
+        image: getImageUrl(primaryImage),
+        images: (p.images || []).map(img => getImageUrl(img)),
         active: p.active !== false,
         isActive: p.active !== false,
         status: p.active !== false ? 'active' : 'disabled',

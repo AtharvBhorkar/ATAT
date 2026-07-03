@@ -112,18 +112,18 @@ function deleteImage(imagePath) {
 /**
  * Get full URL for an image path
  */
-function getImageUrl(imagePath, req) {
-    if (!imagePath) return '/assets/placeholder.jpg';
+function getImageUrl(imagePath) {
+    if (!imagePath) return '';
     
-    // If already a full URL, return as-is
-    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    // If already a full URL or data URI, or starts with a slash, return as-is
+    if (imagePath.startsWith('http://') || 
+        imagePath.startsWith('https://') || 
+        imagePath.startsWith('data:') || 
+        imagePath.startsWith('/')) {
         return imagePath;
     }
 
-    // Remove leading slash if present
-    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-    
-    return `/${cleanPath}`;
+    return `/${imagePath}`;
 }
 
 module.exports = {

@@ -4,8 +4,14 @@ const Vehicle = require('../models/Vehicle');
 const Package = require('../models/Package');
 const Booking = require('../models/Booking');
 const Contact = require('../models/Contact');
+const { getImageUrl } = require('../utils/imageUtils');
 
 function mapVehicle(v) {
+  let primaryImage = v.image;
+  if (!primaryImage || primaryImage === 'undefined') {
+    primaryImage = (v.images && v.images.length > 0) ? v.images[0] : '';
+  }
+
   return {
     _id: v._id,
     name: v.name || '',
@@ -24,8 +30,8 @@ function mapVehicle(v) {
     minFare: v.minFare || 0,
     rating: v.rating || 0,
     totalTrips: v.totalTrips || 0,
-    image: v.image || '',
-    images: v.images || [],
+    image: getImageUrl(primaryImage),
+    images: (v.images || []).map(img => getImageUrl(img)),
     features: v.features || [],
     description: v.description || '',
     note: v.note || v.description || '',
@@ -42,6 +48,11 @@ function mapVehicle(v) {
 }
 
 function mapPackage(p) {
+  let primaryImage = p.image;
+  if (!primaryImage || primaryImage === 'undefined') {
+    primaryImage = (p.images && p.images.length > 0) ? p.images[0] : '';
+  }
+
   return {
     _id: p._id,
     title: p.title || p.name || '',
@@ -58,8 +69,8 @@ function mapPackage(p) {
     description: p.description || '',
     includes: p.includes || [],
     excludes: p.excludes || [],
-    image: p.image || '',
-    images: p.images || [],
+    image: getImageUrl(primaryImage),
+    images: (p.images || []).map(img => getImageUrl(img)),
     active: p.active !== false,
     isActive: p.active !== false,
     status: p.active !== false ? 'active' : 'disabled',
