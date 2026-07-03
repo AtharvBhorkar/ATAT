@@ -799,31 +799,31 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.vehicleType = v.type;
 
       card.innerHTML = `
-        <div class="vehicle-card-image">
-          <img src="${vehicleImg}" alt="${displayName}" loading="lazy"
+        <div class="vehicle-image-wrapper">
+          <img src="${vehicleImg}" alt="${displayName}" class="vehicle-image-img" loading="lazy"
                onerror="this.onerror=null; this.src='${fallbackImg}';" />
-          <div class="vehicle-card-badge">${pricing.icon} ${typeLabel}</div>
         </div>
-        <div class="vehicle-card-body">
-          <h4 class="vehicle-card-name">${displayName}</h4>
-          <p class="vehicle-card-model">${displayModel}</p>
-          <div class="vehicle-card-specs">
-            <span class="spec-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              ${seats} Seats
-            </span>
-            <span class="spec-item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-              ${bags} Bags
-            </span>
+        <div class="vehicle-card-content">
+          <div class="vehicle-selection-indicator">
+            <span class="v-radio-indicator"></span>
           </div>
-          <div class="vehicle-card-footer">
-            <div class="vehicle-card-rate">
-              <span class="rate-amount">₹${pricing.rate}</span>
-              <span class="rate-unit">/km</span>
-              <span class="rate-base">+ ₹${pricing.baseFare.toLocaleString('en-IN')} base</span>
+          <div class="vehicle-details-column">
+            <div class="vehicle-name-row">
+              <span class="vehicle-title">${displayName}</span>
+              <span class="vehicle-class">${typeLabel}</span>
             </div>
-            <div class="vehicle-card-select-indicator">${isSelected ? '✓ Selected' : 'Select'}</div>
+            <div class="vehicle-specs">
+              <span>${seats} Seats</span>
+              <span class="spec-dot">•</span>
+              <span>${bags} Bags</span>
+              <span class="spec-dot">•</span>
+              <span>${pricing.icon}</span>
+            </div>
+            <div class="vehicle-price-row">
+              <span class="v-price">₹${pricing.baseFare.toLocaleString('en-IN')}</span>
+              <span class="v-price-sub">base</span>
+            </div>
+            <div class="vehicle-rate-note">₹${pricing.rate}/km + ${pricing.driverAllowance} driver allowance</div>
           </div>
         </div>`;
 
