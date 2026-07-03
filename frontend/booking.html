@@ -365,7 +365,6 @@
             <div class="form-step-view" id="stepView5">
               <h2 class="step-title">Step 5: Confirm Booking</h2>
               <p class="step-subtitle">Please review your details and confirm your reservation</p>
-
               <div class="booking-confirmation-notice">
                 <div class="confirm-icon-wrap">
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--maroon)" stroke-width="1.5"
@@ -379,9 +378,24 @@
                   be sent to your contact email and phone number shortly.</p>
               </div>
 
-              <div class="step-actions" style="justify-content: center; margin-top: 32px;">
+              <!-- REVIEW SUMMARY INSIDE STEP 5 -->
+              <div class="step5-review-summary" id="step5ReviewSummary" style="margin-top:24px;">
+                <h4 style="margin-bottom:12px; color:var(--maroon);">Booking Review</h4>
+                <div id="step5ReviewContent"
+                  style="display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; font-size:14px; color:#444;"></div>
+              </div>
+
+              <div class="step-actions" style="justify-content:center;margin-top:32px; gap:12px;">
+                <button type="button" class="btn-step-prev-nav" id="backToStep4Btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                  </svg>
+                  <span>Go Back</span>
+                </button>
                 <button type="button" class="btn-step-next" id="confirmPaymentBtn"
-                  style="width: 100%; max-width: 320px; justify-content: center;">
+                  style="flex:1; max-width:320px; justify-content:center;">
                   <span>Confirm Booking</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                     stroke-linecap="round" stroke-linejoin="round">
