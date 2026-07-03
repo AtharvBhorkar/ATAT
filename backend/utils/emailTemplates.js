@@ -86,14 +86,12 @@ function buildBookingEmailHTML(booking) {
   const packageDuration = booking.packageId?.duration || '';
   const isPackage = booking.bookingType === 'package';
 
-  // Safe values
   const safePickup = booking.pickupLocation || 'N/A';
   const safeDropoff = booking.dropoffLocation || 'N/A';
   const safeName = booking.name || 'Customer';
   const safeEmail = booking.email || 'N/A';
   const safePhone = booking.phone || 'N/A';
 
-  // Build trip details section based on booking type
   let tripDetailsHTML = '';
   if (isPackage && packageName) {
     tripDetailsHTML = `
@@ -148,7 +146,6 @@ function buildBookingEmailHTML(booking) {
       </tr>`;
   }
 
-  // Vehicle section (hide for packages without vehicle)
   let vehicleHTML = '';
   if (!isPackage || vehicleName !== 'N/A') {
     vehicleHTML = `
@@ -173,7 +170,6 @@ function buildBookingEmailHTML(booking) {
       </tr>`;
   }
 
-  // Passengers section
   let passengersHTML = '';
   if (!isPackage) {
     passengersHTML = `
@@ -235,11 +231,11 @@ function buildBookingEmailHTML(booking) {
       <td align="center">
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 620px; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
 
-          <!-- HEADER -->
+          <!-- HEADER WITH LOGO IMAGE -->
           <tr>
-            <td style="background: #6E1F2B; padding: 32px 40px; text-align: center;">
-              <h1 style="margin: 0 0 6px 0; font-size: 26px; font-weight: 700; color: #ffffff; letter-spacing: 3px;">VOYAGO</h1>
-              <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.75); letter-spacing: 1px;">TOURS & TRAVELS</p>
+            <td style="background: #6E1F2B; padding: 28px 40px; text-align: center;">
+              <img src="/assets/logo.png" alt="AMAN TOUR AND TRAVELS" width="280" style="display: block; margin: 0 auto 10px auto; border-radius: 6px;" />
+              <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.8); letter-spacing: 1.5px; font-weight: 500;">SAFE JOURNEY, HAPPY JOURNEY</p>
             </td>
           </tr>
 
@@ -247,7 +243,7 @@ function buildBookingEmailHTML(booking) {
           <tr>
             <td style="background: #f9f0f1; padding: 24px 40px; text-align: center; border-bottom: 1px solid #f0e0e2;">
               <p style="margin: 0 0 4px 0; font-size: 22px; font-weight: 700; color: #2E7D32;">✓ Booking Confirmed!</p>
-              <p style="margin: 0; font-size: 14px; color: #666;">Thank you for choosing Voyago Tours & Travels</p>
+              <p style="margin: 0; font-size: 14px; color: #666;">Thank you for choosing Aman Tour and Travels</p>
             </td>
           </tr>
 
@@ -351,14 +347,14 @@ function buildBookingEmailHTML(booking) {
           <!-- BRAND FOOTER -->
           <tr>
             <td style="background: #1a1a1a; padding: 24px 40px; text-align: center;">
-              <p style="margin: 0 0 4px 0; font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 2px;">VOYAGO</p>
-              <p style="margin: 0 0 12px 0; font-size: 11px; color: #888;">TOURS & TRAVELS</p>
+              <img src="/assets/logo.png" alt="AMAN TOUR AND TRAVELS" width="160" style="display: block; margin: 0 auto 10px auto; border-radius: 4px; opacity: 0.9;" />
+              <p style="margin: 0 0 12px 0; font-size: 10px; color: #aaa; letter-spacing: 1px;">SAFE JOURNEY, HAPPY JOURNEY</p>
               <p style="margin: 0; font-size: 11px; color: #666;">
                 42, Travel Hub, MG Road, Pune, Maharashtra — 411001<br/>
-                📞 +91 1800-000-0000 &nbsp;|&nbsp; ✉ hello@voyago.in
+                📞 +91 1800-000-0000 &nbsp;|&nbsp; ✉ hello@amantourandtravels.in
               </p>
               <p style="margin: 12px 0 0; font-size: 10px; color: #555;">
-                &copy; ${new Date().getFullYear()} Voyago Tours & Travels. All rights reserved.
+                &copy; ${new Date().getFullYear()} Aman Tour and Travels. All rights reserved.
               </p>
             </td>
           </tr>
@@ -395,7 +391,7 @@ function buildStatusUpdateEmailHTML(booking) {
     'completed': {
       icon: '🎉',
       title: 'Trip Completed!',
-      subtitle: 'Thank you for choosing Voyago. We hope you had a great journey!',
+      subtitle: 'Thank you for choosing Aman Tour and Travels. We hope you had a great journey!',
       color: '#2E7D32',
       bgColor: '#e8f5e9'
     },
@@ -437,11 +433,11 @@ function buildStatusUpdateEmailHTML(booking) {
       <td align="center">
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 520px; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
 
-          <!-- HEADER -->
+          <!-- HEADER WITH LOGO IMAGE -->
           <tr>
-            <td style="background: #6E1F2B; padding: 28px 40px; text-align: center;">
-              <h1 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 700; color: #ffffff; letter-spacing: 3px;">VOYAGO</h1>
-              <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.75); letter-spacing: 1px;">TOURS & TRAVELS</p>
+            <td style="background: #6E1F2B; padding: 24px 40px; text-align: center;">
+              <img src="/assets/logo.png" alt="AMAN TOUR AND TRAVELS" width="240" style="display: block; margin: 0 auto 8px auto; border-radius: 4px;" />
+              <p style="margin: 0; font-size: 10px; color: rgba(255,255,255,0.75); letter-spacing: 1.5px;">SAFE JOURNEY, HAPPY JOURNEY</p>
             </td>
           </tr>
 
@@ -517,7 +513,7 @@ function buildStatusUpdateEmailHTML(booking) {
           <tr>
             <td style="padding: 0 40px 24px;">
               <p style="margin: 0; font-size: 13px; color: #555; line-height: 1.6;">
-                For any queries, call us at <strong>+91 1800-000-0000</strong> or email <strong>hello@voyago.in</strong>
+                For any queries, call us at <strong>+91 1800-000-0000</strong> or email <strong>hello@amantourandtravels.in</strong>
               </p>
             </td>
           </tr>
@@ -525,10 +521,10 @@ function buildStatusUpdateEmailHTML(booking) {
           <!-- BRAND FOOTER -->
           <tr>
             <td style="background: #1a1a1a; padding: 24px 40px; text-align: center;">
-              <p style="margin: 0 0 4px 0; font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 2px;">VOYAGO</p>
-              <p style="margin: 0 0 8px 0; font-size: 11px; color: #888;">TOURS & TRAVELS</p>
+              <img src="/assets/logo.png" alt="AMAN TOUR AND TRAVELS" width="140" style="display: block; margin: 0 auto 8px auto; border-radius: 4px; opacity: 0.9;" />
+              <p style="margin: 0 0 8px 0; font-size: 9px; color: #aaa; letter-spacing: 1px;">SAFE JOURNEY, HAPPY JOURNEY</p>
               <p style="margin: 0; font-size: 10px; color: #555;">
-                &copy; ${new Date().getFullYear()} Voyago Tours & Travels. All rights reserved.
+                &copy; ${new Date().getFullYear()} Aman Tour and Travels. All rights reserved.
               </p>
             </td>
           </tr>

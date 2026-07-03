@@ -73,6 +73,10 @@ app.use(express.urlencoded({ extended: true }));
 const uploadPath = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadPath));
 
+
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+
 // Optional fallback if you also keep uploads outside backend
 const altUploadPath = path.join(__dirname, '../uploads');
 if (fs.existsSync(altUploadPath)) {
