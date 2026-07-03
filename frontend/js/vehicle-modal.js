@@ -387,14 +387,9 @@ function injectModalHTML() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   OPEN MODAL
-───────────────────────────────────────────────────────────── */
-function openVehicleModal(key) {
-  injectModalHTML();
-
-  const V = VEHICLE_DATA[key];
-  if (!V) { console.warn('Vehicle not found:', key); return; }
-
+   POPULATE MODAL
+   ───────────────────────────────────────────────────────────── */
+function populateModal(V) {
   /* ── Populate header ── */
   document.getElementById('vmType').textContent      = V.type;
   document.getElementById('vmStars').innerHTML       = buildStars(V.rating);
@@ -405,66 +400,81 @@ function openVehicleModal(key) {
 
   /* ── Badge ── */
   const badge = document.getElementById('vmBadge');
-  badge.textContent = V.badge;
-  badge.className   = `vm-img-badge ${V.badgeClass}`;
+  if (badge) {
+    badge.textContent = V.badge;
+    badge.className   = `vm-img-badge ${V.badgeClass}`;
+  }
 
   /* ── Gallery ── */
   const mainImg = document.getElementById('vmMainImg');
-  mainImg.src = V.images[0];
-  mainImg.alt = V.name;
+  if (mainImg) {
+    mainImg.src = V.images[0];
+    mainImg.alt = V.name;
+  }
 
   const thumbs = document.getElementById('vmThumbs');
-  thumbs.innerHTML = '';
-  V.images.forEach((src, i) => {
-    const t = document.createElement('button');
-    t.className   = `vm-thumb${i === 0 ? ' active' : ''}`;
-    t.innerHTML   = `<img src="${src}" alt="${V.name} view ${i+1}" loading="lazy"/>`;
-    t.addEventListener('click', () => {
-      mainImg.classList.add('vm-img-fade');
-      setTimeout(() => {
-        mainImg.src = src;
-        mainImg.classList.remove('vm-img-fade');
-      }, 200);
-      thumbs.querySelectorAll('.vm-thumb').forEach(el => el.classList.remove('active'));
-      t.classList.add('active');
+  if (thumbs) {
+    thumbs.innerHTML = '';
+    V.images.forEach((src, i) => {
+      const t = document.createElement('button');
+      t.className   = `vm-thumb${i === 0 ? ' active' : ''}`;
+      t.innerHTML   = `<img src="${src}" alt="${V.name} view ${i+1}" loading="lazy"/>`;
+      t.addEventListener('click', () => {
+        if (mainImg) {
+          mainImg.classList.add('vm-img-fade');
+          setTimeout(() => {
+            mainImg.src = src;
+            mainImg.classList.remove('vm-img-fade');
+          }, 200);
+        }
+        thumbs.querySelectorAll('.vm-thumb').forEach(el => el.classList.remove('active'));
+        t.classList.add('active');
+      });
+      thumbs.appendChild(t);
     });
-    thumbs.appendChild(t);
-  });
+  }
 
   /* ── Specs ── */
   const specsEl = document.getElementById('vmSpecs');
-  specsEl.innerHTML = '';
-  V.specs.forEach(s => {
-    specsEl.insertAdjacentHTML('beforeend', `
-      <div class="vm-spec-card">
-        <div class="vm-spec-icon">${SPEC_ICONS[s.icon] || SPEC_ICONS.fuel}</div>
-        <span class="vm-spec-label">${s.label}</span>
-        <span class="vm-spec-val">${s.val}</span>
-      </div>`);
-  });
+  if (specsEl) {
+    specsEl.innerHTML = '';
+    V.specs.forEach(s => {
+      specsEl.insertAdjacentHTML('beforeend', `
+        <div class="vm-spec-card">
+          <div class="vm-spec-icon">${SPEC_ICONS[s.icon] || SPEC_ICONS.fuel}</div>
+          <span class="vm-spec-label">${s.label}</span>
+          <span class="vm-spec-val">${s.val}</span>
+        </div>`);
+    });
+  }
 
   /* ── Features ── */
   const featEl = document.getElementById('vmFeatures');
-  featEl.innerHTML = '';
-  V.features.forEach(f => {
-    featEl.insertAdjacentHTML('beforeend', `
-      <div class="vm-feat-item">
-        <span class="vm-feat-icon">${FEAT_ICON}</span>
-        <span>${f}</span>
-      </div>`);
-  });
+  if (featEl) {
+    featEl.innerHTML = '';
+    V.features.forEach(f => {
+      featEl.insertAdjacentHTML('beforeend', `
+        <div class="vm-feat-item"><span class="vm-feat-icon">${FEAT_ICON}</span><span>${f}</span></div>`);
+    });
+  }
 
   /* ── Pricing ── */
-  document.getElementById('vmPriceKm').textContent  = V.priceKm;
-  document.getElementById('vmPriceDay').innerHTML   = `or <strong>₹${V.priceDay.toLocaleString()}</strong> / day`;
+  if (document.getElementById('vmPriceKm')) {
+    document.getElementById('vmPriceKm').textContent  = V.priceKm;
+  }
+  if (document.getElementById('vmPriceDay')) {
+    document.getElementById('vmPriceDay').innerHTML   = `or <strong>₹${V.priceDay.toLocaleString()}</strong> / day`;
+  }
 
   const pbody = document.getElementById('vmPricingBody');
-  pbody.innerHTML = `
-    <div class="vm-price-row"><span>Per Kilometre</span><strong class="hl">₹${V.priceKm}</strong></div>
-    <div class="vm-price-row"><span>Per Day</span><strong>₹${V.priceDay.toLocaleString()}</strong></div>
-    <div class="vm-price-row"><span>Minimum Fare</span><strong>₹${V.minFare}</strong></div>
-    <div class="vm-price-row"><span>Driver Charges</span><strong>Included</strong></div>
-    <div class="vm-price-row"><span>Toll / Parking</span><strong>Extra (stated upfront)</strong></div>`;
+  if (pbody) {
+    pbody.innerHTML = `
+      <div class="vm-price-row"><span>Per Kilometre</span><strong class="hl">₹${V.priceKm}</strong></div>
+      <div class="vm-price-row"><span>Per Day</span><strong>₹${V.priceDay.toLocaleString()}</strong></div>
+      <div class="vm-price-row"><span>Minimum Fare</span><strong>₹${V.minFare}</strong></div>
+      <div class="vm-price-row"><span>Driver Charges</span><strong>Included</strong></div>
+      <div class="vm-price-row"><span>Toll / Parking</span><strong>Extra (stated upfront)</strong></div>`;
+  }
 
   /* ── Advance Payment (Tier-Based) ── */
   const ADVANCE_RATES = { sedan: 0.10, suv: 0.15, muv: 0.15, tempo: 0.20, bus: 0.20 };
@@ -477,27 +487,30 @@ function openVehicleModal(key) {
 
   /* ── Book buttons ── */
   const bookingURL = `booking.html?type=${V.bookType}&vehicle=${encodeURIComponent(V.name)}`;
-  document.getElementById('vmBookBtn').href = bookingURL;
-  document.getElementById('vmMobileStickyBookBtn').href = bookingURL;
+  if (document.getElementById('vmBookBtn')) {
+    document.getElementById('vmBookBtn').href = bookingURL;
+  }
+  if (document.getElementById('vmMobileStickyBookBtn')) {
+    document.getElementById('vmMobileStickyBookBtn').href = bookingURL;
+  }
 
   /* ── Show modal ── */
   const modal  = document.getElementById('vehicleModal');
-  const drawer = document.getElementById('vmDrawer');
-
-  modal.classList.add('vm-active');
-  document.body.style.overflow = 'hidden';
+  if (modal) {
+    modal.classList.add('vm-active');
+    document.body.style.overflow = 'hidden';
+  }
 
   /* scroll modal inner to top */
   const inner = document.getElementById('vmInner');
   if (inner) inner.scrollTop = 0;
 
   /* reset gallery to first image */
-  mainImg.src = V.images[0];
+  if (mainImg) mainImg.src = V.images[0];
 
   /* attach close handlers (idempotent) */
-  if (!modal._listenersAttached) {
+  if (modal && !modal._listenersAttached) {
     modal._listenersAttached = true;
-
     document.getElementById('vmClose').addEventListener('click', closeVehicleModal);
 
     modal.addEventListener('click', e => {
