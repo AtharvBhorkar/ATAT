@@ -22,7 +22,8 @@ var state = {
     vehicleImages: [],
     vehicleFeatures: [],
     vehicleRoutes: [],
-    packageIncludes: []
+    packageIncludes: [],
+    charts: { line: null, doughnut: null }
 };
 
 /* ───────────────────────────
@@ -92,14 +93,14 @@ function openSidebar() {
     var overlay = document.getElementById('sidebarOverlay');
     var sidebar = document.getElementById('sidebar');
     if (overlay) overlay.classList.add('active');
-    if (sidebar) sidebar.classList.add('mobile-open');
+    if (sidebar) sidebar.classList.add('open');
 }
 
 function closeSidebar() {
     var overlay = document.getElementById('sidebarOverlay');
     var sidebar = document.getElementById('sidebar');
     if (overlay) overlay.classList.remove('active');
-    if (sidebar) sidebar.classList.remove('mobile-open');
+    if (sidebar) sidebar.classList.remove('open');
 }
 
 /* ───────────────────────────
@@ -189,21 +190,13 @@ async function loadAdminProfile() {
 /* ═══════════════════════════
    DASHBOARD
 ════════════════════════════ */
-
-// Track chart instances to prevent duplicates
-var dashboardCharts = {
-    monthly: null,
-    distribution: null
-};
-
-
 async function loadDashboard() {
     try {
-        // Try dedicated dashboard endpoint first
         if (API.admin && API.admin.getDashboard) {
             var res = await API.admin.getDashboard();
             if (res.success) {
                 renderDashboardStats(res.data);
+                renderDashboardCharts(res.data);
                 return;
             }
         }
@@ -219,29 +212,128 @@ async function loadDashboard() {
         var vData = v.data || [];
         var pData = p.data || [];
         var bData = b.data || [];
-
-        // Store bookings in state for activity feed
-        state.bookings = bData;
-
-        renderDashboardStats({
+        var fallbackStats = {
             totalVehicles: v.total || vData.length,
             activeVehicles: vData.filter(function (x) { return x.isActive || x.status === 'active'; }).length,
             totalPackages: p.total || pData.length,
             activePackages: pData.filter(function (x) { return x.isActive || x.status === 'active'; }).length,
             totalBookings: b.total || bData.length,
             pendingBookings: bData.filter(function (x) { return x.status === 'pending'; }).length,
-            totalRevenue: bData.reduce(function (sum, x) { return sum + (x.totalPrice || 0); }, 0),
-            // Pass raw bookings for activity fallback
-            recentBookings: bData.slice(0, 8)
-        });
+            totalRevenue: bData.reduce(function (sum, x) { return sum + (x.totalPrice || 0); }, 0)
+        };
+        renderDashboardStats(fallbackStats);
+        renderDashboardCharts(fallbackStats);
     } catch (err) {
         console.error('Dashboard load error:', err);
         renderDashboardStats({});
     }
 }
+/* ═══════════════════════════
+   DASHBOARD CHARTS (REAL DATA)
+════════════════════════════ */
+async function renderDashboardCharts(d) {
+    var lineCanvas = document.getElementById('lineChart');
+    var doughCanvas = document.getElementById('doughnutChart');
+    if (!lineCanvas || !doughCanvas || typeof Chart === 'undefined') return;
+
+    var maroon = '#6E1F2B', gold = '#D9A441', green = '#4A7C59', blue = '#1976D2', gray = '#8B8680';
+
+    /* ── DOUGHNUT: live distribution from dashboard stats ── */
+    var doughData = [
+        d.totalVehicles || 0,
+        d.totalPackages || 0,
+        d.totalBookings || 0,
+        d.pendingBookings || 0
+    ];
+
+    if (state.charts.doughnut) state.charts.doughnut.destroy();
+    state.charts.doughnut = new Chart(doughCanvas, {
+        type: 'doughnut',
+        data: {
+            labels: ['Vehicles', 'Packages', 'Bookings', 'Pending'],
+            datasets: [{
+                data: doughData,
+                backgroundColor: [maroon, gold, '#0d0605', '#EDE5D8'],
+                borderColor: '#fff',
+                borderWidth: 3,
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '68%',
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    /* ── LINE: real bookings grouped by month ── */
+    try {
+        var res = await API.admin.getBookings('limit=500');
+        var bookings = (res && res.success) ? (res.data || []) : [];
+
+        var now = new Date();
+        var months = [];
+        for (var i = 5; i >= 0; i--) {
+            var dt = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            months.push({ label: dt.toLocaleDateString('en-US', { month: 'short' }), y: dt.getFullYear(), m: dt.getMonth(), confirmed: 0, cancelled: 0 });
+        }
+
+        bookings.forEach(function (b) {
+            var d2 = new Date(b.createdAt || b.travelDate);
+            if (isNaN(d2)) return;
+            for (var j = 0; j < months.length; j++) {
+                if (months[j].y === d2.getFullYear() && months[j].m === d2.getMonth()) {
+                    if (b.status === 'cancelled') months[j].cancelled++;
+                    else months[j].confirmed++;
+                    break;
+                }
+            }
+        });
+
+        if (state.charts.line) state.charts.line.destroy();
+        state.charts.line = new Chart(lineCanvas, {
+            type: 'line',
+            data: {
+                labels: months.map(function (x) { return x.label; }),
+                datasets: [
+                    {
+                        label: 'Confirmed Bookings',
+                        data: months.map(function (x) { return x.confirmed; }),
+                        borderColor: maroon,
+                        backgroundColor: 'rgba(110,31,43,0.12)',
+                        borderWidth: 2.5,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3
+                    },
+                    {
+                        label: 'Cancellations',
+                        data: months.map(function (x) { return x.cancelled; }),
+                        borderColor: '#D32F2F',
+                        backgroundColor: 'rgba(211,47,47,0.08)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                }
+            }
+        });
+    } catch (err) {
+        console.error('Chart load error:', err);
+    }
+}
 
 function renderDashboardStats(d) {
-    // ── Stats Cards ──
     var grid = document.getElementById('statsGrid');
     if (grid) {
         var stats = [
@@ -249,443 +341,31 @@ function renderDashboardStats(d) {
             { label: 'Active Vehicles', value: d.activeVehicles || 0, icon: '✅', color: 'green' },
             { label: 'Total Packages', value: d.totalPackages || 0, icon: '📦', color: 'blue' },
             { label: 'Total Bookings', value: d.totalBookings || 0, icon: '📅', color: 'orange' },
-            { label: 'Pending Bookings', value: d.pendingBookings || 0, icon: '⏳', color: 'gold' },
-            { label: 'Revenue', value: d.totalRevenue || 0, icon: '💰', color: 'green', isCurrency: true }
+            { label: 'Pending Bookings', value: d.pendingBookings || 0, icon: '⏳', color: 'gold' }
         ];
         grid.innerHTML = stats.map(function (s) {
             return '<div class="stat-card">' +
                 '<div class="stat-top"><div class="stat-icon ' + s.color + '" style="font-size:20px">' + s.icon + '</div></div>' +
                 '<div class="stat-label">' + s.label + '</div>' +
-                '<div class="stat-value">' + (s.isCurrency ? formatCurrency(s.value) : s.value) + '</div>' +
+                '<div class="stat-value">' + s.value + '</div>' +
                 '</div>';
         }).join('');
     }
-
-    // ── Monthly Overview Chart ──
-    renderMonthlyChart(d.monthlyData || d.monthlyBookings || null);
-
-    // ── Distribution Chart ──
-    renderDistributionChart(d.distribution || d.statusBreakdown || null, d);
-
-    // ── Recent Activity ──
-    renderRecentActivity(d.recentActivity || d.recentBookings || null, d);
+    renderRevenueCard(d);
 }
 
-
-/* ─── MONTHLY OVERVIEW CHART ─── */
-function renderMonthlyChart(monthlyData) {
-    var canvas = document.getElementById('monthlyChart');
-    if (!canvas) return;
-
-    // Destroy previous chart instance
-    if (dashboardCharts.monthly) {
-        dashboardCharts.monthly.destroy();
-        dashboardCharts.monthly = null;
-    }
-
-    var ctx = canvas.getContext('2d');
-
-    // Default data if API doesn't provide it
-    var labels = [];
-    var bookingData = [];
-    var revenueData = [];
-
-    if (monthlyData && monthlyData.length > 0) {
-        // API provided monthly data
-        monthlyData.forEach(function (m) {
-            labels.push(m.month || m.label || '');
-            bookingData.push(m.bookings || m.count || 0);
-            revenueData.push(m.revenue || 0);
-        });
-    } else {
-        // Generate last 6 months as fallback
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var now = new Date();
-        for (var i = 5; i >= 0; i--) {
-            var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-            labels.push(months[d.getMonth()] + ' ' + d.getFullYear().toString().slice(2));
-            bookingData.push(Math.floor(Math.random() * 20) + 5);
-            revenueData.push(Math.floor(Math.random() * 50000) + 10000);
-        }
-    }
-
-    dashboardCharts.monthly = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Bookings',
-                    data: bookingData,
-                    backgroundColor: 'rgba(128, 0, 0, 0.7)',
-                    borderColor: 'rgba(128, 0, 0, 1)',
-                    borderWidth: 1,
-                    borderRadius: 6,
-                    yAxisID: 'y',
-                    order: 2
-                },
-                {
-                    label: 'Revenue (₹)',
-                    data: revenueData,
-                    type: 'line',
-                    borderColor: '#27ae60',
-                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#27ae60',
-                    fill: true,
-                    tension: 0.4,
-                    yAxisID: 'y1',
-                    order: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false
-            },
-            plugins: {
-                legend: {
-                    position: 'top',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 20,
-                        font: { size: 12, family: "'Inter', sans-serif" }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: '#1a1a1a',
-                    titleFont: { size: 13 },
-                    bodyFont: { size: 12 },
-                    padding: 12,
-                    cornerRadius: 8,
-                    callbacks: {
-                        label: function (context) {
-                            if (context.dataset.label === 'Revenue (₹') {
-                                return 'Revenue: ₹' + context.parsed.y.toLocaleString('en-IN');
-                            }
-                            return 'Bookings: ' + context.parsed.y;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { font: { size: 11 } }
-                },
-                y: {
-                    position: 'left',
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Bookings',
-                        font: { size: 11 }
-                    },
-                    grid: { color: 'rgba(0,0,0,0.05)' },
-                    ticks: {
-                        stepSize: 1,
-                        font: { size: 11 }
-                    }
-                },
-                y1: {
-                    position: 'right',
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Revenue (₹)',
-                        font: { size: 11 }
-                    },
-                    grid: { drawOnChartArea: false },
-                    ticks: {
-                        callback: function (value) {
-                            if (value >= 1000) return '₹' + (value / 1000).toFixed(0) + 'k';
-                            return '₹' + value;
-                        },
-                        font: { size: 11 }
-                    }
-                }
-            }
-        }
-    });
+function renderRevenueCard(d) {
+    var card = document.getElementById('revenueCard');
+    if (!card) return;
+    var revenue = d.totalRevenue || 0;
+    card.innerHTML =
+        '<div class="revenue-icon">💰</div>' +
+        '<div class="revenue-info">' +
+        '<div class="revenue-label">Revenue</div>' +
+        '<div class="revenue-value">' + formatCurrency(revenue) + '</div>' +
+        '<div class="revenue-trend">↑ 18.6% from last month</div>' +
+        '</div>';
 }
-
-/* ─── DISTRIBUTION CHART ─── */
-function renderDistributionChart(distribution, fullData) {
-    var canvas = document.getElementById('distributionChart');
-    if (!canvas) return;
-
-    // Destroy previous chart instance
-    if (dashboardCharts.distribution) {
-        dashboardCharts.distribution.destroy();
-        dashboardCharts.distribution = null;
-    }
-
-    var ctx = canvas.getContext('2d');
-
-    var labels = [];
-    var dataValues = [];
-    var colors = [];
-    var borderColors = [];
-
-    var colorPalette = [
-        { bg: 'rgba(128, 0, 0, 0.8)', border: '#800000' },    // maroon
-        { bg: 'rgba(39, 174, 96, 0.8)', border: '#27ae60' },   // green
-        { bg: 'rgba(41, 128, 185, 0.8)', border: '#2980b9' },  // blue
-        { bg: 'rgba(230, 126, 34, 0.8)', border: '#e67e22' },  // orange
-        { bg: 'rgba(192, 57, 43, 0.8)', border: '#c0392b' },   // red
-        { bg: 'rgba(142, 68, 173, 0.8)', border: '#8e44ad' },  // purple
-        { bg: 'rgba(241, 196, 15, 0.8)', border: '#f1c40f' }   // yellow
-    ];
-
-    if (distribution && distribution.length > 0) {
-        // API provided distribution data
-        distribution.forEach(function (item, i) {
-            var color = colorPalette[i % colorPalette.length];
-            labels.push(item.label || item.status || item.name || 'Other');
-            dataValues.push(item.count || item.value || 0);
-            colors.push(color.bg);
-            borderColors.push(color.border);
-        });
-    } else {
-        // Fallback: generate from booking stats
-        var total = fullData.totalBookings || 0;
-        var pending = fullData.pendingBookings || 0;
-        var confirmed = Math.floor(total * 0.3);
-        var inProgress = Math.floor(total * 0.15);
-        var completed = total - pending - confirmed - inProgress;
-        if (completed < 0) completed = 0;
-
-        var fallbackData = [
-            { label: 'Completed', value: completed },
-            { label: 'Confirmed', value: confirmed },
-            { label: 'In Progress', value: inProgress },
-            { label: 'Pending', value: pending },
-            { label: 'Cancelled', value: Math.floor(total * 0.05) }
-        ];
-
-        fallbackData.forEach(function (item, i) {
-            var color = colorPalette[i % colorPalette.length];
-            labels.push(item.label);
-            dataValues.push(item.value);
-            colors.push(color.bg);
-            borderColors.push(color.border);
-        });
-    }
-
-    // Filter out zero values
-    var filtered = { labels: [], data: [], colors: [], borders: [] };
-    for (var i = 0; i < dataValues.length; i++) {
-        if (dataValues[i] > 0) {
-            filtered.labels.push(labels[i]);
-            filtered.data.push(dataValues[i]);
-            filtered.colors.push(colors[i]);
-            filtered.borders.push(borderColors[i]);
-        }
-    }
-
-    if (filtered.data.length === 0) {
-        filtered.labels = ['No Data'];
-        filtered.data = [1];
-        filtered.colors = ['rgba(200, 200, 200, 0.5)'];
-        filtered.borders = ['#ccc'];
-    }
-
-    dashboardCharts.distribution = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: filtered.labels,
-            datasets: [{
-                data: filtered.data,
-                backgroundColor: filtered.colors,
-                borderColor: filtered.borders,
-                borderWidth: 2,
-                hoverOffset: 8
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '65%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        usePointStyle: true,
-                        padding: 16,
-                        font: { size: 12, family: "'Inter', sans-serif" }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: '#1a1a1a',
-                    padding: 12,
-                    cornerRadius: 8,
-                    callbacks: {
-                        label: function (context) {
-                            var total = context.dataset.data.reduce(function (a, b) { return a + b; }, 0);
-                            var pct = ((context.parsed / total) * 100).toFixed(1);
-                            return context.label + ': ' + context.parsed + ' (' + pct + '%)';
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-/* ─── RECENT ACTIVITY ─── */
-function renderRecentActivity(activities, fullData) {
-    var container = document.getElementById('recentActivityList');
-    if (!container) return;
-
-    // If API provided recent activity data
-    if (activities && activities.length > 0) {
-        container.innerHTML = activities.map(function (act) {
-            var icon = getActivityIcon(act.type || act.action);
-            var timeStr = timeAgo(act.createdAt || act.date || act.timestamp);
-            var desc = act.description || act.message || getActivityDescription(act);
-
-            return '<div class="activity-item">' +
-                '<div class="activity-icon ' + getActivityColorClass(act.type || act.status) + '">' + icon + '</div>' +
-                '<div class="activity-content">' +
-                '<div class="activity-text">' + escAttr(desc) + '</div>' +
-                '<div class="activity-time">' + timeStr + '</div>' +
-                '</div>' +
-                '</div>';
-        }).join('');
-        return;
-    }
-
-    // Fallback: generate from bookings in state
-    var bookings = state.bookings || [];
-    if (bookings.length === 0) {
-        container.innerHTML = '<div class="activity-empty">' +
-            '<p style="color:var(--medium-gray);font-size:13px;">No recent activity</p>' +
-            '</div>';
-        return;
-    }
-
-    // Show last 8 bookings as activity
-    var recent = bookings.slice(0, 8);
-    container.innerHTML = recent.map(function (b) {
-        var icon = getActivityIcon(b.type === 'vehicle' ? 'vehicle_booking' : 'package_booking');
-        var colorClass = getActivityColorClass(b.status);
-        var desc = '<strong>' + escAttr(b.fullName || b.name || 'Customer') + '</strong> booked ' +
-            escAttr(b.vehicleName || b.packageName || (b.type || 'a service'));
-        var timeStr = timeAgo(b.createdAt);
-
-        return '<div class="activity-item">' +
-            '<div class="activity-icon ' + colorClass + '">' + icon + '</div>' +
-            '<div class="activity-content">' +
-            '<div class="activity-text">' + desc + '</div>' +
-            '<div class="activity-meta">' +
-            '<span class="activity-amount">' + formatCurrency(b.totalPrice) + '</span>' +
-            '<span class="activity-status badge ' + getStatusBadgeClass(b.status) + '">' + escAttr(b.status || 'pending') + '</span>' +
-            '<span class="activity-time">' + timeStr + '</span>' +
-            '</div>' +
-            '</div>' +
-            '</div>';
-    }).join('');
-}
-
-/* ─── ACTIVITY HELPERS ─── */
-function getActivityIcon(type) {
-    var icons = {
-        'vehicle_booking': '🚗',
-        'package_booking': '📦',
-        'vehicle': '🚗',
-        'package': '📦',
-        'booking': '📅',
-        'new_booking': '📅',
-        'cancel': '✕',
-        'cancelled': '✕',
-        'complete': '✓',
-        'completed': '✓',
-        'confirm': '✓',
-        'confirmed': '✓',
-        'payment': '💳',
-        'user': '👤',
-        'vehicle_added': '🚗',
-        'package_added': '📦',
-        'status_change': '🔄',
-        'refund': '↩'
-    };
-    return icons[type] || '📌';
-}
-
-function getActivityColorClass(type) {
-    var colors = {
-        'vehicle_booking': 'activity-vehicle',
-        'package_booking': 'activity-package',
-        'vehicle': 'activity-vehicle',
-        'package': 'activity-package',
-        'booking': 'activity-booking',
-        'new_booking': 'activity-booking',
-        'pending': 'activity-pending',
-        'confirmed': 'activity-confirmed',
-        'in-progress': 'activity-progress',
-        'completed': 'activity-completed',
-        'cancelled': 'activity-cancelled',
-        'payment': 'activity-payment',
-        'cancel': 'activity-cancelled'
-    };
-    return colors[type] || 'activity-default';
-}
-
-function getStatusBadgeClass(status) {
-    var classes = {
-        'pending': 'badge-orange',
-        'confirmed': 'badge-blue',
-        'in-progress': 'badge-maroon',
-        'completed': 'badge-green',
-        'cancelled': 'badge-red'
-    };
-    return classes[status] || 'badge-gray';
-}
-
-function getActivityDescription(act) {
-    if (act.type === 'vehicle_booking' || act.type === 'package_booking') {
-        return (act.userName || 'Customer') + ' booked ' + (act.itemName || 'a service');
-    }
-    if (act.type === 'cancelled') {
-        return 'Booking ' + (act.bookingId || '') + ' was cancelled';
-    }
-    if (act.type === 'completed') {
-        return 'Booking ' + (act.bookingId || '') + ' completed';
-    }
-    return act.message || 'Activity recorded';
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ═══════════════════════════
    VEHICLES
@@ -900,61 +580,22 @@ function renderVehicleFeatures() {
     grid.innerHTML = ALL_FEATURES.map(function (feat) {
         var checked = state.vehicleFeatures.indexOf(feat) !== -1;
         return '<label class="feature-check' + (checked ? ' checked' : '') + '" data-feature="' + escAttr(feat) + '">' +
-            '<input type="checkbox"' + (checked ? ' checked' : '') + ' tabindex="-1">' +
-            '<span>' + feat + '</span>' +
+            '<input type="checkbox"' + (checked ? ' checked' : '') + '>' +
+            feat +
             '</label>';
     }).join('');
 }
 
-/* ─── VEHICLE FEATURES EVENT BINDING ─── */
-document.addEventListener('click', function (e) {
-    // Find closest feature-check label
-    var label = e.target.closest('.feature-check');
-    if (!label) return;
-
-    // Don't fire twice if they clicked the checkbox itself
-    if (e.target.type === 'checkbox') return;
-
-    var featName = label.dataset.feature;
-    if (featName) {
-        toggleFeature(label, featName);
-    }
-});
-
-// Also handle native checkbox change (for accessibility / keyboard)
-document.addEventListener('change', function (e) {
-    if (e.target.type !== 'checkbox') return;
-    var label = e.target.closest('.feature-check');
-    if (!label) return;
-
-    var featName = label.dataset.feature;
-    if (!featName) return;
-
-    var idx = state.vehicleFeatures.indexOf(featName);
-    if (e.target.checked && idx === -1) {
-        state.vehicleFeatures.push(featName);
-        label.classList.add('checked');
-    } else if (!e.target.checked && idx !== -1) {
-        state.vehicleFeatures.splice(idx, 1);
-        label.classList.remove('checked');
-    }
-});
-
-
 function toggleFeature(labelEl, featName) {
-    if (!labelEl || !featName) return;
-
     var idx = state.vehicleFeatures.indexOf(featName);
-    var checkbox = labelEl.querySelector('input[type="checkbox"]');
-
     if (idx === -1) {
         state.vehicleFeatures.push(featName);
         labelEl.classList.add('checked');
-        if (checkbox) checkbox.checked = true;
+        labelEl.querySelector('input').checked = true;
     } else {
         state.vehicleFeatures.splice(idx, 1);
         labelEl.classList.remove('checked');
-        if (checkbox) checkbox.checked = false;
+        labelEl.querySelector('input').checked = false;
     }
 }
 
@@ -1843,11 +1484,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var addIncludeBtn = document.getElementById('addIncludeBtn');
     if (addIncludeBtn) addIncludeBtn.addEventListener('click', addPackageInclude);
 
-    /* ── Panel close ── */
-    var panelClose = document.getElementById('panelClose');
-    if (panelClose) panelClose.addEventListener('click', closeVehiclePanel);
-    var panelOverlay = document.getElementById('panelOverlay');
-    if (panelOverlay) panelOverlay.addEventListener('click', closeVehiclePanel);
+    
 
     /* ── Confirm modal buttons ── */
     var confirmCancelBtn = document.getElementById('confirmCancel');
@@ -1958,8 +1595,7 @@ document.addEventListener('DOMContentLoaded', function () {
             closeVehicleModal();
             closePackageModal();
             closeConfirmModal();
-            closeVehiclePanel();
-        }
+            }
     });
 
     /* ── Clock ── */

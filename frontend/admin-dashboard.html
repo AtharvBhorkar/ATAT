@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voyago Admin Dashboard</title>
+    <title>ATAT Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,8 +23,8 @@
         <aside class="sidebar" id="sidebar">
             <button class="sidebar-close" id="sidebarClose" aria-label="Close">&times;</button>
             <div class="sidebar-head">
-                <div class="sidebar-logo">V</div>
-                <span class="sidebar-brand">VOYAGO</span>
+                <div class="sidebar-logo">A</div>
+                <span class="sidebar-brand">ATAT</span>
             </div>
             <nav class="sidebar-nav">
                 <div class="nav-section-label">Main</div>
@@ -114,53 +114,33 @@
 
             <div class="content">
                 <!-- ========== DASHBOARD ========== -->
-                <!-- Section: Dashboard -->
                 <div class="section active" id="sec-dashboard">
-                
-                    <!-- Stats Grid (already exists) -->
                     <div class="stats-grid" id="statsGrid"></div>
-                
-                    <!-- Charts Row -->
-                    <div class="dashboard-charts-grid">
-                        <!-- Monthly Overview -->
+                    <div class="revenue-card" id="revenueCard"></div>
+                    <div class="charts-grid">
                         <div class="chart-card">
-                            <div class="chart-card-header">
-                                <div>
-                                    <h3 class="chart-card-title">Monthly Overview</h3>
-                                    <p class="chart-card-subtitle">Bookings & Revenue trends</p>
-                                </div>
-                            </div>
-                            <div class="chart-wrapper">
-                                <canvas id="monthlyChart"></canvas>
-                            </div>
+                            <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                                </svg>Monthly Overview</h3>
+                            <canvas id="lineChart"></canvas>
                         </div>
-                
-                        <!-- Distribution -->
                         <div class="chart-card">
-                            <div class="chart-card-header">
-                                <div>
-                                    <h3 class="chart-card-title">Distribution</h3>
-                                    <p class="chart-card-subtitle">Bookings by status</p>
-                                </div>
-                            </div>
-                            <div class="chart-wrapper">
-                                <canvas id="distributionChart"></canvas>
-                            </div>
+                            <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path
+                                        d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                                    <path d="M2 12h20" />
+                                </svg>Distribution</h3>
+                            <canvas id="doughnutChart"></canvas>
                         </div>
                     </div>
-                
-                    <!-- Recent Activity -->
                     <div class="activity-card">
-                        <div class="activity-card-header">
-                            <h3 class="activity-card-title">Recent Activity</h3>
-                            <a class="activity-view-all" onclick="navigateTo('bookings')">View All →</a>
-                        </div>
-                        <div class="activity-list" id="recentActivityList">
-                            <div class="activity-empty">
-                                <p style="color:var(--medium-gray);font-size:13px;">Loading...</p>
-                            </div>
-                        </div>
-                    </div>          </div>
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="activityList"></div>
+                    </div>
+                </div>
 
                 <!-- ========== VEHICLES ========== -->
                 <div class="section" id="sec-vehicles">
@@ -277,7 +257,7 @@
                                 <h4>Site Name</h4>
                                 <p>Display name for your business</p>
                             </div>
-                            <input type="text" class="form-control" id="siteName" placeholder="Voyago"
+                            <input type="text" class="form-control" id="siteName" placeholder="ATAT"
                                 style="width:220px;">
                         </div>
                         <div class="settings-row">
@@ -285,7 +265,7 @@
                                 <h4>Support Email</h4>
                                 <p>Main contact email for customers</p>
                             </div>
-                            <input type="email" class="form-control" id="supportEmail" placeholder="support@voyago.com"
+                            <input type="email" class="form-control" id="supportEmail" placeholder="amantourandtravelsncr@gmail.com"
                                 style="width:220px;">
                         </div>
                         <div class="settings-row">
@@ -373,15 +353,7 @@
 
 
 
-    <!-- Vehicle Detail Panel -->
-    <div class="panel-overlay" id="panelOverlay"></div>
-    <div class="slide-panel" id="vehiclePanel">
-        <div class="slide-panel-head">
-            <h3>Vehicle Details</h3>
-            <button class="modal-close" id="panelClose">&times;</button>
-        </div>
-        <div class="slide-panel-body" id="panelBody"></div>
-    </div>
+    
 
     <!-- Vehicle Form Modal -->
     <div class="modal-backdrop" id="vehicleModal">

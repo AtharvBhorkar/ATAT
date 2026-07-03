@@ -50,7 +50,12 @@ body {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.5);
+    background: linear-gradient(
+        135deg,
+        rgba(77,21,32,.88) 0%,
+        rgba(110,31,43,.65) 55%,
+        rgba(26,16,16,.50) 100%
+    );
 }
 
 .hero-container {
@@ -735,7 +740,7 @@ body {
 .navbar, .footer { font-family: 'Inter', system-ui, sans-serif !important; }
 .navbar * { font-family: inherit; }
 .footer * { font-family: inherit; }
-.nav-links a { font-size: 13px !important; }
+.nav-links a { font-size: 14px !important; }
 .footer-brand p { font-size: 13.5px !important; }
 .footer-col h5 { font-size: 11px !important; font-family: 'Inter', system-ui, sans-serif !important; }
 .footer-col ul a { font-size: 13.5px !important; }
@@ -754,8 +759,8 @@ body {
   text-decoration: none;
 }
 .logo-img {
-  height: 40px; /* Reduced height to fit nicely within navbar */
-  width: auto;
+  height: 54px;
+  width: 54px;
   display: block;
   object-fit: contain;
   border-radius: 8px;
@@ -998,7 +1003,7 @@ body {
   --text:         #2A1A1A;
   --text-muted:   #7a6a64;
   --white:        #FFFFFF;
-  --nav-h:        80px;
+  --nav-h:        72px;
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --transition:   0.3s ease;

@@ -86,8 +86,8 @@
 /* ─── HERO & PARALLAX ─── */
 .packages-hero {
   position: relative;
-  height: 85vh;
-  min-height: 620px;
+  height: 100vh;
+  min-height: 720px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -664,6 +664,9 @@
     height: 45vh;
     min-height: 380px;
   }
+  .search-container {
+    margin-bottom: 56px;
+  }
   .pkg-img-wrap {
     height: 180px;
   }
@@ -772,8 +775,8 @@
 /* ─── HERO & PARALLAX ─── */
 .packages-hero {
   position: relative;
-  height: 85vh;
-  min-height: 620px;
+  height: 100vh;
+  min-height: 720px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -812,6 +815,7 @@
 /* ─── SEARCH INPUT ─── */
 .search-container {
   margin-top: 40px;
+  margin-bottom: 40px;
   max-width: 640px;
 }
 
