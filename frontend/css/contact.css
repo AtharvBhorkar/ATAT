@@ -34,13 +34,6 @@ body {
     overflow-x: hidden;
 }
 
-
-
-/* Ensure navbar becomes pure white on scroll as requested */
-.navbar.scrolled {
-    background: rgba(255, 255, 255, 0.98) !important;
-}
-
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -79,8 +72,8 @@ h4 {
 /* Contact Hero Section */
 .contact-hero {
     position: relative;
-    height: 80vh;
-    min-height: 600px;
+    height: 100vh;
+    min-height: 700px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -114,13 +107,17 @@ h4 {
     }
 }
 
-/* Premium Gradient Overlay (Dark Blue) */
+/* Premium Gradient Overlay (Maroon Diagonal Fade) */
 .contact-hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    /* Subtle dark tint to ensure text readability against bright city lights, without being milky */
-    background: rgba(10, 15, 25, 0.4);
+    background: linear-gradient(
+        135deg,
+        rgba(77,21,32,.88) 0%,
+        rgba(110,31,43,.65) 55%,
+        rgba(26,16,16,.50) 100%
+    );
     z-index: 1;
 }
 
@@ -167,7 +164,9 @@ h4 {
 
 @media (max-width: 768px) {
     .contact-hero {
-        height: 50vh;
+        min-height: 40vh;
+        padding: 8rem 1.5rem 4rem;
+        height: auto;
     }
 
     .contact-hero h1 {
@@ -1099,11 +1098,11 @@ h4 {
   text-decoration: none;
 }
 .logo-img {
-  height: 40px; /* Reduced height to fit nicely within navbar */
-  width: auto;
+  height: 54px;
+  width: 54px;
   display: block;
-  object-fit: contain;
-  border-radius: 8px;
+  object-fit: cover;
+  border-radius: 50%;
   transition: transform var(--transition);
 }
 .logo-img:hover {
@@ -1186,11 +1185,11 @@ h4 {
 
 /* Footer logo image height */
 .logo-img-footer {
-  height: 72px; /* Footer logo is slightly larger for visual balance */
-  width: auto;
+  height: 72px;
+  width: 72px;
   display: block;
-  object-fit: contain;
-  border-radius: 8px;
+  object-fit: cover;
+  border-radius: 50%;
   margin-bottom: 24px;
 }
 .footer-brand p { font-size: 13.5px; color: rgba(255,255,255,.5); line-height: 1.75; max-width: 300px; margin-bottom: 28px; }
@@ -1293,7 +1292,7 @@ h4 {
 
 @media (max-width: 480px) {
   :root { --nav-h: 64px; }
-  .logo-img { height: 46px; } /* Slightly smaller logo on extra-small mobile screens */
+  .logo-img { height: 46px; width: 46px; } /* Slightly smaller logo on extra-small mobile screens */
 }
 
 /* Ensure Navbar and Footer use Inter font exactly like the Home page to match sizes */
@@ -1343,7 +1342,7 @@ h4 {
   --text:         #2A1A1A;
   --text-muted:   #7a6a64;
   --white:        #FFFFFF;
-  --nav-h:        80px;
+  --nav-h:        72px;
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --transition:   0.3s ease;

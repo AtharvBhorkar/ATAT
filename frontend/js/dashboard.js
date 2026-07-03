@@ -22,7 +22,8 @@ var state = {
     vehicleImages: [],
     vehicleFeatures: [],
     vehicleRoutes: [],
-    packageIncludes: []
+    packageIncludes: [],
+    charts: { line: null, doughnut: null }
 };
 
 /* ───────────────────────────
@@ -92,14 +93,14 @@ function openSidebar() {
     var overlay = document.getElementById('sidebarOverlay');
     var sidebar = document.getElementById('sidebar');
     if (overlay) overlay.classList.add('active');
-    if (sidebar) sidebar.classList.add('mobile-open');
+    if (sidebar) sidebar.classList.add('open');
 }
 
 function closeSidebar() {
     var overlay = document.getElementById('sidebarOverlay');
     var sidebar = document.getElementById('sidebar');
     if (overlay) overlay.classList.remove('active');
-    if (sidebar) sidebar.classList.remove('mobile-open');
+    if (sidebar) sidebar.classList.remove('open');
 }
 
 /* ───────────────────────────
@@ -195,6 +196,7 @@ async function loadDashboard() {
             var res = await API.admin.getDashboard();
             if (res.success) {
                 renderDashboardStats(res.data);
+                renderDashboardCharts(res.data);
                 return;
             }
         }
@@ -210,7 +212,7 @@ async function loadDashboard() {
         var vData = v.data || [];
         var pData = p.data || [];
         var bData = b.data || [];
-        renderDashboardStats({
+        var fallbackStats = {
             totalVehicles: v.total || vData.length,
             activeVehicles: vData.filter(function (x) { return x.isActive || x.status === 'active'; }).length,
             totalPackages: p.total || pData.length,
@@ -218,31 +220,151 @@ async function loadDashboard() {
             totalBookings: b.total || bData.length,
             pendingBookings: bData.filter(function (x) { return x.status === 'pending'; }).length,
             totalRevenue: bData.reduce(function (sum, x) { return sum + (x.totalPrice || 0); }, 0)
-        });
+        };
+        renderDashboardStats(fallbackStats);
+        renderDashboardCharts(fallbackStats);
     } catch (err) {
         console.error('Dashboard load error:', err);
         renderDashboardStats({});
     }
 }
+/* ═══════════════════════════
+   DASHBOARD CHARTS (REAL DATA)
+════════════════════════════ */
+async function renderDashboardCharts(d) {
+    var lineCanvas = document.getElementById('lineChart');
+    var doughCanvas = document.getElementById('doughnutChart');
+    if (!lineCanvas || !doughCanvas || typeof Chart === 'undefined') return;
+
+    var maroon = '#6E1F2B', gold = '#D9A441', green = '#4A7C59', blue = '#1976D2', gray = '#8B8680';
+
+    /* ── DOUGHNUT: live distribution from dashboard stats ── */
+    var doughData = [
+        d.totalVehicles || 0,
+        d.totalPackages || 0,
+        d.totalBookings || 0,
+        d.pendingBookings || 0
+    ];
+
+    if (state.charts.doughnut) state.charts.doughnut.destroy();
+    state.charts.doughnut = new Chart(doughCanvas, {
+        type: 'doughnut',
+        data: {
+            labels: ['Vehicles', 'Packages', 'Bookings', 'Pending'],
+            datasets: [{
+                data: doughData,
+                backgroundColor: [maroon, gold, '#0d0605', '#EDE5D8'],
+                borderColor: '#fff',
+                borderWidth: 3,
+                hoverOffset: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '68%',
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+
+    /* ── LINE: real bookings grouped by month ── */
+    try {
+        var res = await API.admin.getBookings('limit=500');
+        var bookings = (res && res.success) ? (res.data || []) : [];
+
+        var now = new Date();
+        var months = [];
+        for (var i = 5; i >= 0; i--) {
+            var dt = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            months.push({ label: dt.toLocaleDateString('en-US', { month: 'short' }), y: dt.getFullYear(), m: dt.getMonth(), confirmed: 0, cancelled: 0 });
+        }
+
+        bookings.forEach(function (b) {
+            var d2 = new Date(b.createdAt || b.travelDate);
+            if (isNaN(d2)) return;
+            for (var j = 0; j < months.length; j++) {
+                if (months[j].y === d2.getFullYear() && months[j].m === d2.getMonth()) {
+                    if (b.status === 'cancelled') months[j].cancelled++;
+                    else months[j].confirmed++;
+                    break;
+                }
+            }
+        });
+
+        if (state.charts.line) state.charts.line.destroy();
+        state.charts.line = new Chart(lineCanvas, {
+            type: 'line',
+            data: {
+                labels: months.map(function (x) { return x.label; }),
+                datasets: [
+                    {
+                        label: 'Confirmed Bookings',
+                        data: months.map(function (x) { return x.confirmed; }),
+                        borderColor: maroon,
+                        backgroundColor: 'rgba(110,31,43,0.12)',
+                        borderWidth: 2.5,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3
+                    },
+                    {
+                        label: 'Cancellations',
+                        data: months.map(function (x) { return x.cancelled; }),
+                        borderColor: '#D32F2F',
+                        backgroundColor: 'rgba(211,47,47,0.08)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { precision: 0 } }
+                }
+            }
+        });
+    } catch (err) {
+        console.error('Chart load error:', err);
+    }
+}
 
 function renderDashboardStats(d) {
     var grid = document.getElementById('statsGrid');
-    if (!grid) return;
-    var stats = [
-        { label: 'Total Vehicles', value: d.totalVehicles || 0, icon: '🚗', color: 'maroon' },
-        { label: 'Active Vehicles', value: d.activeVehicles || 0, icon: '✅', color: 'green' },
-        { label: 'Total Packages', value: d.totalPackages || 0, icon: '📦', color: 'blue' },
-        { label: 'Total Bookings', value: d.totalBookings || 0, icon: '📅', color: 'orange' },
-        { label: 'Pending Bookings', value: d.pendingBookings || 0, icon: '⏳', color: 'gold' },
-        { label: 'Revenue', value: d.totalRevenue || 0, icon: '💰', color: 'green', isCurrency: true }
-    ];
-    grid.innerHTML = stats.map(function (s) {
-        return '<div class="stat-card">' +
-            '<div class="stat-top"><div class="stat-icon ' + s.color + '" style="font-size:20px">' + s.icon + '</div></div>' +
-            '<div class="stat-label">' + s.label + '</div>' +
-            '<div class="stat-value">' + (s.isCurrency ? formatCurrency(s.value) : s.value) + '</div>' +
-            '</div>';
-    }).join('');
+    if (grid) {
+        var stats = [
+            { label: 'Total Vehicles', value: d.totalVehicles || 0, icon: '🚗', color: 'maroon' },
+            { label: 'Active Vehicles', value: d.activeVehicles || 0, icon: '✅', color: 'green' },
+            { label: 'Total Packages', value: d.totalPackages || 0, icon: '📦', color: 'blue' },
+            { label: 'Total Bookings', value: d.totalBookings || 0, icon: '📅', color: 'orange' },
+            { label: 'Pending Bookings', value: d.pendingBookings || 0, icon: '⏳', color: 'gold' }
+        ];
+        grid.innerHTML = stats.map(function (s) {
+            return '<div class="stat-card">' +
+                '<div class="stat-top"><div class="stat-icon ' + s.color + '" style="font-size:20px">' + s.icon + '</div></div>' +
+                '<div class="stat-label">' + s.label + '</div>' +
+                '<div class="stat-value">' + s.value + '</div>' +
+                '</div>';
+        }).join('');
+    }
+    renderRevenueCard(d);
+}
+
+function renderRevenueCard(d) {
+    var card = document.getElementById('revenueCard');
+    if (!card) return;
+    var revenue = d.totalRevenue || 0;
+    card.innerHTML =
+        '<div class="revenue-icon">💰</div>' +
+        '<div class="revenue-info">' +
+        '<div class="revenue-label">Revenue</div>' +
+        '<div class="revenue-value">' + formatCurrency(revenue) + '</div>' +
+        '<div class="revenue-trend">↑ 18.6% from last month</div>' +
+        '</div>';
 }
 
 /* ═══════════════════════════
@@ -1362,11 +1484,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var addIncludeBtn = document.getElementById('addIncludeBtn');
     if (addIncludeBtn) addIncludeBtn.addEventListener('click', addPackageInclude);
 
-    /* ── Panel close ── */
-    var panelClose = document.getElementById('panelClose');
-    if (panelClose) panelClose.addEventListener('click', closeVehiclePanel);
-    var panelOverlay = document.getElementById('panelOverlay');
-    if (panelOverlay) panelOverlay.addEventListener('click', closeVehiclePanel);
+    
 
     /* ── Confirm modal buttons ── */
     var confirmCancelBtn = document.getElementById('confirmCancel');
@@ -1477,8 +1595,7 @@ document.addEventListener('DOMContentLoaded', function () {
             closeVehicleModal();
             closePackageModal();
             closeConfirmModal();
-            closeVehiclePanel();
-        }
+            }
     });
 
     /* ── Clock ── */

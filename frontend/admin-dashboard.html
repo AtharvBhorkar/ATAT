@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voyago Admin Dashboard</title>
+    <title>ATAT Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,8 +23,8 @@
         <aside class="sidebar" id="sidebar">
             <button class="sidebar-close" id="sidebarClose" aria-label="Close">&times;</button>
             <div class="sidebar-head">
-                <div class="sidebar-logo">V</div>
-                <span class="sidebar-brand">VOYAGO</span>
+                <div class="sidebar-logo">A</div>
+                <span class="sidebar-brand">ATAT</span>
             </div>
             <nav class="sidebar-nav">
                 <div class="nav-section-label">Main</div>
@@ -116,6 +116,7 @@
                 <!-- ========== DASHBOARD ========== -->
                 <div class="section active" id="sec-dashboard">
                     <div class="stats-grid" id="statsGrid"></div>
+                    <div class="revenue-card" id="revenueCard"></div>
                     <div class="charts-grid">
                         <div class="chart-card">
                             <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -256,7 +257,7 @@
                                 <h4>Site Name</h4>
                                 <p>Display name for your business</p>
                             </div>
-                            <input type="text" class="form-control" id="siteName" placeholder="Voyago"
+                            <input type="text" class="form-control" id="siteName" placeholder="ATAT"
                                 style="width:220px;">
                         </div>
                         <div class="settings-row">
@@ -264,7 +265,7 @@
                                 <h4>Support Email</h4>
                                 <p>Main contact email for customers</p>
                             </div>
-                            <input type="email" class="form-control" id="supportEmail" placeholder="support@voyago.com"
+                            <input type="email" class="form-control" id="supportEmail" placeholder="amantourandtravelsncr@gmail.com"
                                 style="width:220px;">
                         </div>
                         <div class="settings-row">
@@ -352,15 +353,7 @@
 
 
 
-    <!-- Vehicle Detail Panel -->
-    <div class="panel-overlay" id="panelOverlay"></div>
-    <div class="slide-panel" id="vehiclePanel">
-        <div class="slide-panel-head">
-            <h3>Vehicle Details</h3>
-            <button class="modal-close" id="panelClose">&times;</button>
-        </div>
-        <div class="slide-panel-body" id="panelBody"></div>
-    </div>
+    
 
     <!-- Vehicle Form Modal -->
     <div class="modal-backdrop" id="vehicleModal">

@@ -1003,12 +1003,11 @@ p {
 }
 
 .logo-img {
-    height: 40px;
-    /* Reduced height to fit nicely within navbar */
-    width: auto;
+    height: 54px;
+    width: 54px;
     display: block;
-    object-fit: contain;
-    border-radius: 8px;
+    object-fit: cover;
+    border-radius: 50%;
     transition: transform var(--transition);
 }
 
@@ -1151,11 +1150,10 @@ p {
 /* Footer logo image height */
 .logo-img-footer {
     height: 72px;
-    /* Footer logo is slightly larger for visual balance */
-    width: auto;
+    width: 72px;
     display: block;
-    object-fit: contain;
-    border-radius: 8px;
+    object-fit: cover;
+    border-radius: 50%;
     margin-bottom: 24px;
 }
 
@@ -1397,6 +1395,7 @@ p {
 
     .logo-img {
         height: 46px;
+        width: 46px;
     }
 
     /* Slightly smaller logo on extra-small mobile screens */
