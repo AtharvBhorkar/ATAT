@@ -1,12 +1,5 @@
-/* ═══════════════════════════════════════════════════════════════
-   VOYAGO — vehicle-modal.js
-   Shared vehicle detail modal — works on vehicles.html & home.html
-   Usage: openVehicleModal('sedan-dzire')
-   ═══════════════════════════════════════════════════════════════ */
 
-/* ─────────────────────────────────────────────────────────────
-   VEHICLE DATA
-───────────────────────────────────────────────────────────── */
+
 const VEHICLE_DATA = {
 
   /* ── SEDANS ── */
@@ -23,14 +16,14 @@ const VEHICLE_DATA = {
       'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=900&q=80'
     ],
     specs: [
-      { icon: 'seat', label: 'Seating',      val: '4 Passengers' },
-      { icon: 'fuel', label: 'Fuel',         val: 'Petrol / CNG'  },
-      { icon: 'ac',   label: 'AC',           val: 'Fully AC'      },
-      { icon: 'bag',  label: 'Luggage',      val: '2 Large Bags'  },
+      { icon: 'seat', label: 'Seating', val: '4 Passengers' },
+      { icon: 'fuel', label: 'Fuel', val: 'Petrol / CNG' },
+      { icon: 'ac', label: 'AC', val: 'Fully AC' },
+      { icon: 'bag', label: 'Luggage', val: '2 Large Bags' },
       { icon: 'gear', label: 'Transmission', val: 'Manual / Auto' },
-      { icon: 'km',   label: 'Mileage',      val: '22–26 km/L'   }
+      { icon: 'km', label: 'Mileage', val: '22–26 km/L' }
     ],
-    features: ['Air Conditioning','USB Charging Port','GPS Navigation','Music System','Reclining Seats','Sanitised After Each Trip','Emergency Assistance','Verified Driver'],
+    features: ['Air Conditioning', 'USB Charging Port', 'GPS Navigation', 'Music System', 'Reclining Seats', 'Sanitised After Each Trip', 'Emergency Assistance', 'Verified Driver'],
     priceKm: 12, priceDay: 2800, minFare: 350,
     bookType: 'sedan'
   },
@@ -48,14 +41,14 @@ const VEHICLE_DATA = {
       'https://images.unsplash.com/photo-1493238792000-8113da705763?w=900&q=80'
     ],
     specs: [
-      { icon: 'seat', label: 'Seating',      val: '4 Passengers'  },
-      { icon: 'fuel', label: 'Fuel',         val: 'Petrol'        },
-      { icon: 'ac',   label: 'AC',           val: 'Dual Zone AC'  },
-      { icon: 'bag',  label: 'Luggage',      val: '2 Large Bags'  },
+      { icon: 'seat', label: 'Seating', val: '4 Passengers' },
+      { icon: 'fuel', label: 'Fuel', val: 'Petrol' },
+      { icon: 'ac', label: 'AC', val: 'Dual Zone AC' },
+      { icon: 'bag', label: 'Luggage', val: '2 Large Bags' },
       { icon: 'gear', label: 'Transmission', val: 'CVT Automatic' },
-      { icon: 'km',   label: 'Mileage',      val: '18–21 km/L'   }
+      { icon: 'km', label: 'Mileage', val: '18–21 km/L' }
     ],
-    features: ['Dual Zone AC','USB & Type-C Charging','GPS Navigation','Premium Sound System','Leather Seats','Sunroof','Sanitised After Each Trip','Verified Driver'],
+    features: ['Dual Zone AC', 'USB & Type-C Charging', 'GPS Navigation', 'Premium Sound System', 'Leather Seats', 'Sunroof', 'Sanitised After Each Trip', 'Verified Driver'],
     priceKm: 15, priceDay: 3500, minFare: 450,
     bookType: 'sedan'
   },
@@ -74,14 +67,14 @@ const VEHICLE_DATA = {
       'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80'
     ],
     specs: [
-      { icon: 'seat', label: 'Seating',      val: '7 Passengers'  },
-      { icon: 'fuel', label: 'Fuel',         val: 'Diesel'        },
-      { icon: 'ac',   label: 'AC',           val: 'Dual Roof AC'  },
-      { icon: 'bag',  label: 'Luggage',      val: '4 Large Bags'  },
+      { icon: 'seat', label: 'Seating', val: '7 Passengers' },
+      { icon: 'fuel', label: 'Fuel', val: 'Diesel' },
+      { icon: 'ac', label: 'AC', val: 'Dual Roof AC' },
+      { icon: 'bag', label: 'Luggage', val: '4 Large Bags' },
       { icon: 'gear', label: 'Transmission', val: 'Manual / Auto' },
-      { icon: 'km',   label: 'Mileage',      val: '14–17 km/L'   }
+      { icon: 'km', label: 'Mileage', val: '14–17 km/L' }
     ],
-    features: ['Dual Roof AC','USB Charging (All Rows)','GPS Navigation','Premium Music System','Captain Seats (Row 2)','4WD Capability','Sanitised After Each Trip','Verified Driver'],
+    features: ['Dual Roof AC', 'USB Charging (All Rows)', 'GPS Navigation', 'Premium Music System', 'Captain Seats (Row 2)', '4WD Capability', 'Sanitised After Each Trip', 'Verified Driver'],
     priceKm: 18, priceDay: 4500, minFare: 600,
     bookType: 'suv'
   },
@@ -99,14 +92,14 @@ const VEHICLE_DATA = {
       'https://images.unsplash.com/photo-1551830820-330a71b99659?w=900&q=80'
     ],
     specs: [
-      { icon: 'seat', label: 'Seating',      val: '7 Passengers'  },
-      { icon: 'fuel', label: 'Fuel',         val: 'Diesel'        },
-      { icon: 'ac',   label: 'AC',           val: 'Multi-Zone AC' },
-      { icon: 'bag',  label: 'Luggage',      val: '5 Large Bags'  },
+      { icon: 'seat', label: 'Seating', val: '7 Passengers' },
+      { icon: 'fuel', label: 'Fuel', val: 'Diesel' },
+      { icon: 'ac', label: 'AC', val: 'Multi-Zone AC' },
+      { icon: 'bag', label: 'Luggage', val: '5 Large Bags' },
       { icon: 'gear', label: 'Transmission', val: 'Automatic 4WD' },
-      { icon: 'km',   label: 'Mileage',      val: '12–15 km/L'   }
+      { icon: 'km', label: 'Mileage', val: '12–15 km/L' }
     ],
-    features: ['Multi-Zone AC','USB & Wireless Charging','GPS Navigation','JBL Sound System','Leather Seats','4WD Terrain Modes','Sunroof','Verified Driver'],
+    features: ['Multi-Zone AC', 'USB & Wireless Charging', 'GPS Navigation', 'JBL Sound System', 'Leather Seats', '4WD Terrain Modes', 'Sunroof', 'Verified Driver'],
     priceKm: 24, priceDay: 6000, minFare: 800,
     bookType: 'suv'
   },
@@ -125,14 +118,14 @@ const VEHICLE_DATA = {
       'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80'
     ],
     specs: [
-      { icon: 'seat', label: 'Seating',      val: '7 Passengers'  },
-      { icon: 'fuel', label: 'Fuel',         val: 'Petrol / CNG'  },
-      { icon: 'ac',   label: 'AC',           val: 'Fully AC'      },
-      { icon: 'bag',  label: 'Luggage',      val: '3 Large Bags'  },
-      { icon: 'gear', label: 'Transmission', val: 'Manual'        },
-      { icon: 'km',   label: 'Mileage',      val: '17–20 km/L'   }
+      { icon: 'seat', label: 'Seating', val: '7 Passengers' },
+      { icon: 'fuel', label: 'Fuel', val: 'Petrol / CNG' },
+      { icon: 'ac', label: 'AC', val: 'Fully AC' },
+      { icon: 'bag', label: 'Luggage', val: '3 Large Bags' },
+      { icon: 'gear', label: 'Transmission', val: 'Manual' },
+      { icon: 'km', label: 'Mileage', val: '17–20 km/L' }
     ],
-    features: ['Air Conditioning','USB Charging Ports','GPS Navigation','Touchscreen Infotainment','Foldable 3rd Row','Roof Rails','Sanitised After Each Trip','Verified Driver'],
+    features: ['Air Conditioning', 'USB Charging Ports', 'GPS Navigation', 'Touchscreen Infotainment', 'Foldable 3rd Row', 'Roof Rails', 'Sanitised After Each Trip', 'Verified Driver'],
     priceKm: 16, priceDay: 3800, minFare: 500,
     bookType: 'muv'
   },
@@ -151,14 +144,14 @@ const VEHICLE_DATA = {
       'https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=900&q=80'
     ],
     specs: [
-      { icon: 'seat', label: 'Seating',      val: '12 Passengers'     },
-      { icon: 'fuel', label: 'Fuel',         val: 'Diesel'            },
-      { icon: 'ac',   label: 'AC',           val: 'Roof-Mounted AC'   },
-      { icon: 'bag',  label: 'Luggage',      val: '8 Large Bags'      },
-      { icon: 'gear', label: 'Transmission', val: 'Manual'            },
-      { icon: 'km',   label: 'Mileage',      val: '10–13 km/L'       }
+      { icon: 'seat', label: 'Seating', val: '12 Passengers' },
+      { icon: 'fuel', label: 'Fuel', val: 'Diesel' },
+      { icon: 'ac', label: 'AC', val: 'Roof-Mounted AC' },
+      { icon: 'bag', label: 'Luggage', val: '8 Large Bags' },
+      { icon: 'gear', label: 'Transmission', val: 'Manual' },
+      { icon: 'km', label: 'Mileage', val: '10–13 km/L' }
     ],
-    features: ['Roof-Mounted AC','Push-Back Seats','GPS Navigation','Premium Music System','Reading Lights','Luggage Boot','Sanitised After Each Trip','Verified Driver'],
+    features: ['Roof-Mounted AC', 'Push-Back Seats', 'GPS Navigation', 'Premium Music System', 'Reading Lights', 'Luggage Boot', 'Sanitised After Each Trip', 'Verified Driver'],
     priceKm: 28, priceDay: 7000, minFare: 1200,
     bookType: 'tempo'
   },
@@ -176,14 +169,14 @@ const VEHICLE_DATA = {
       'https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=900&q=80'
     ],
     specs: [
-      { icon: 'seat', label: 'Seating',      val: '20 Passengers'     },
-      { icon: 'fuel', label: 'Fuel',         val: 'Diesel'            },
-      { icon: 'ac',   label: 'AC',           val: 'Roof-Mounted AC'   },
-      { icon: 'bag',  label: 'Luggage',      val: 'Group Luggage'     },
-      { icon: 'gear', label: 'Transmission', val: 'Manual'            },
-      { icon: 'km',   label: 'Mileage',      val: '8–11 km/L'        }
+      { icon: 'seat', label: 'Seating', val: '20 Passengers' },
+      { icon: 'fuel', label: 'Fuel', val: 'Diesel' },
+      { icon: 'ac', label: 'AC', val: 'Roof-Mounted AC' },
+      { icon: 'bag', label: 'Luggage', val: 'Group Luggage' },
+      { icon: 'gear', label: 'Transmission', val: 'Manual' },
+      { icon: 'km', label: 'Mileage', val: '8–11 km/L' }
     ],
-    features: ['Roof-Mounted AC','Wide Push-Back Seats','GPS Navigation','Music System','Enhanced Suspension','Large Luggage Boot','Sanitised After Each Trip','Verified Driver'],
+    features: ['Roof-Mounted AC', 'Wide Push-Back Seats', 'GPS Navigation', 'Music System', 'Enhanced Suspension', 'Large Luggage Boot', 'Sanitised After Each Trip', 'Verified Driver'],
     priceKm: 38, priceDay: 9500, minFare: 2000,
     bookType: 'tempo'
   },
@@ -202,39 +195,36 @@ const VEHICLE_DATA = {
       'https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=900&q=80'
     ],
     specs: [
-      { icon: 'seat', label: 'Seating',      val: '35+ Passengers'    },
-      { icon: 'fuel', label: 'Fuel',         val: 'Diesel'            },
-      { icon: 'ac',   label: 'AC',           val: 'Individual Vents'  },
-      { icon: 'bag',  label: 'Luggage',      val: 'Under-Bus Storage' },
-      { icon: 'gear', label: 'Transmission', val: 'Automatic'         },
-      { icon: 'km',   label: 'Mileage',      val: '6–9 km/L'         }
+      { icon: 'seat', label: 'Seating', val: '35+ Passengers' },
+      { icon: 'fuel', label: 'Fuel', val: 'Diesel' },
+      { icon: 'ac', label: 'AC', val: 'Individual Vents' },
+      { icon: 'bag', label: 'Luggage', val: 'Under-Bus Storage' },
+      { icon: 'gear', label: 'Transmission', val: 'Automatic' },
+      { icon: 'km', label: 'Mileage', val: '6–9 km/L' }
     ],
-    features: ['Individual AC Vents','Reclining Seats','GPS Tracking','Entertainment Screens','Onboard Pantry','Emergency Exit','Sanitised After Each Trip','Verified Driver + Co-Driver'],
+    features: ['Individual AC Vents', 'Reclining Seats', 'GPS Tracking', 'Entertainment Screens', 'Onboard Pantry', 'Emergency Exit', 'Sanitised After Each Trip', 'Verified Driver + Co-Driver'],
     priceKm: 55, priceDay: 14000, minFare: 3500,
     bookType: 'bus'
   },
 
   /* ── HOME PAGE GENERIC ALIASES ── */
-  'sedan':  null, // resolved below
-  'suv':    null,
-  'tempo':  null
+  'sedan': null,
+  'suv': null,
+  'tempo': null
 };
 
 /* Resolve generic aliases */
 VEHICLE_DATA['sedan'] = VEHICLE_DATA['sedan-dzire'];
-VEHICLE_DATA['suv']   = VEHICLE_DATA['suv-innova'];
+VEHICLE_DATA['suv'] = VEHICLE_DATA['suv-innova'];
 VEHICLE_DATA['tempo'] = VEHICLE_DATA['tempo-12'];
 
-/* ─────────────────────────────────────────────────────────────
-   SVG HELPERS
-───────────────────────────────────────────────────────────── */
 const SPEC_ICONS = {
   seat: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3 19c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
   fuel: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 18V6l3-4h7l3 4v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="7" y="9" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.4"/></svg>`,
-  ac:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M3 10h14M5.3 5.3l9.4 9.4M14.7 5.3L5.3 14.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.4"/></svg>`,
-  bag:  `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="7" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M7 7V5.5a3 3 0 016 0V7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  ac: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v14M3 10h14M5.3 5.3l9.4 9.4M14.7 5.3L5.3 14.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.4"/></svg>`,
+  bag: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="7" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M7 7V5.5a3 3 0 016 0V7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
   gear: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="6" r="2.5" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="14" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 8.5V11M14 8.5V11M10 8v5.5M6 11l4 3M14 11l-4 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-  km:   `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 17c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M10 10V6M7 12l3-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="17" r="1.5" fill="currentColor"/></svg>`
+  km: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 17c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M10 10V6M7 12l3-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="17" r="1.5" fill="currentColor"/></svg>`
 };
 
 const FEAT_ICON = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -248,9 +238,7 @@ function buildStars(r) {
   return h;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   MODAL HTML INJECTION (called once per page)
-───────────────────────────────────────────────────────────── */
+
 function injectModalHTML() {
   if (document.getElementById('vehicleModal')) return;
 
@@ -386,9 +374,6 @@ function injectModalHTML() {
   document.body.insertAdjacentHTML('beforeend', html);
 }
 
-/* ─────────────────────────────────────────────────────────────
-   TRANSFORM DB DATA → MODAL FORMAT
-   ───────────────────────────────────────────────────────────── */
 function transformVehicleForModal(v) {
   const capitalize = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : 'N/A';
   let type = (v.type || 'standard').toLowerCase();
@@ -421,23 +406,20 @@ function transformVehicleForModal(v) {
   };
 }
 
-/* ─────────────────────────────────────────────────────────────
-   POPULATE MODAL
-   ───────────────────────────────────────────────────────────── */
 function populateModal(V) {
   /* ── Populate header ── */
-  document.getElementById('vmType').textContent      = V.type;
-  document.getElementById('vmStars').innerHTML       = buildStars(V.rating);
+  document.getElementById('vmType').textContent = V.type;
+  document.getElementById('vmStars').innerHTML = buildStars(V.rating);
   document.getElementById('vmRatingNum').textContent = V.rating;
-  document.getElementById('vmTrips').textContent     = `(${V.trips.toLocaleString()} trips)`;
-  document.getElementById('vmTitle').textContent     = V.name;
-  document.getElementById('vmDesc').textContent      = V.desc;
+  document.getElementById('vmTrips').textContent = `(${V.trips.toLocaleString()} trips)`;
+  document.getElementById('vmTitle').textContent = V.name;
+  document.getElementById('vmDesc').textContent = V.desc;
 
   /* ── Badge ── */
   const badge = document.getElementById('vmBadge');
   if (badge) {
     badge.textContent = V.badge;
-    badge.className   = `vm-img-badge ${V.badgeClass}`;
+    badge.className = `vm-img-badge ${V.badgeClass}`;
   }
 
   /* ── Gallery ── */
@@ -452,8 +434,8 @@ function populateModal(V) {
     thumbs.innerHTML = '';
     V.images.forEach((src, i) => {
       const t = document.createElement('button');
-      t.className   = `vm-thumb${i === 0 ? ' active' : ''}`;
-      t.innerHTML   = `<img src="${src}" alt="${V.name} view ${i+1}" loading="lazy"/>`;
+      t.className = `vm-thumb${i === 0 ? ' active' : ''}`;
+      t.innerHTML = `<img src="${src}" alt="${V.name} view ${i + 1}" loading="lazy"/>`;
       t.addEventListener('click', () => {
         if (mainImg) {
           mainImg.classList.add('vm-img-fade');
@@ -495,10 +477,10 @@ function populateModal(V) {
 
   /* ── Pricing ── */
   if (document.getElementById('vmPriceKm')) {
-    document.getElementById('vmPriceKm').textContent  = V.priceKm;
+    document.getElementById('vmPriceKm').textContent = V.priceKm;
   }
   if (document.getElementById('vmPriceDay')) {
-    document.getElementById('vmPriceDay').innerHTML   = `or <strong>₹${V.priceDay.toLocaleString()}</strong> / day`;
+    document.getElementById('vmPriceDay').innerHTML = `or <strong>₹${V.priceDay.toLocaleString()}</strong> / day`;
   }
 
   const pbody = document.getElementById('vmPricingBody');
@@ -513,10 +495,10 @@ function populateModal(V) {
 
   /* ── Advance Payment (Tier-Based) ── */
   const ADVANCE_RATES = { sedan: 0.10, suv: 0.15, muv: 0.15, tempo: 0.20, bus: 0.20 };
-  const advRate    = ADVANCE_RATES[V.bookType] || 0.10;
+  const advRate = ADVANCE_RATES[V.bookType] || 0.10;
   const advanceAmt = Math.round(V.priceDay * advRate);
-  const el_advAmt  = document.getElementById('vmAdvanceAmt');
-  const el_advPct  = document.getElementById('vmAdvancePctBadge');
+  const el_advAmt = document.getElementById('vmAdvanceAmt');
+  const el_advPct = document.getElementById('vmAdvancePctBadge');
   if (el_advAmt) el_advAmt.textContent = `₹${advanceAmt.toLocaleString()}`;
   if (el_advPct) el_advPct.textContent = `${Math.round(advRate * 100)}%`;
 
@@ -530,7 +512,7 @@ function populateModal(V) {
   }
 
   /* ── Show modal ── */
-  const modal  = document.getElementById('vehicleModal');
+  const modal = document.getElementById('vehicleModal');
   if (modal) {
     modal.classList.add('vm-active');
     document.body.style.overflow = 'hidden';
@@ -552,9 +534,6 @@ function populateModal(V) {
   }
 }
 
-/* ─────────────────────────────────────────────────────────────
-   OPEN MODAL
-   ───────────────────────────────────────────────────────────── */
 async function openVehicleModal(key) {
   injectModalHTML();
 
@@ -585,8 +564,8 @@ async function openVehicleModal(key) {
   // Fallback to direct fetch
   if (!V) {
     const API_BASE = window.location.port === '5500' || window.location.port === '3000'
-        ? 'http://localhost:5000/api/public'
-        : '/api/public';
+      ? 'http://localhost:5000/api/public'
+      : '/api/public';
     try {
       const res = await fetch(`${API_BASE}/vehicles/${key}`);
       const result = await res.json();
@@ -619,9 +598,6 @@ async function openVehicleModal(key) {
   populateModal(V);
 }
 
-/* ─────────────────────────────────────────────────────────────
-   CLOSE MODAL
-   ───────────────────────────────────────────────────────────── */
 function closeVehicleModal() {
   const modal = document.getElementById('vehicleModal');
   if (!modal) return;
@@ -629,9 +605,6 @@ function closeVehicleModal() {
   document.body.style.overflow = '';
 }
 
-/* ─────────────────────────────────────────────────────────────
-   AUTO-WIRE  all  [data-vehicle]  triggers using event delegation
-   ───────────────────────────────────────────────────────────── */
 document.addEventListener('click', e => {
   const trigger = e.target.closest('[data-vehicle]');
   if (trigger) {
