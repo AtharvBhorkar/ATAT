@@ -307,7 +307,6 @@ counters.forEach(counter => observer.observe(counter));
   const evTrack = document.getElementById('evTrack');
   const evLeft  = document.getElementById('evLeft');
   const evRight = document.getElementById('evRight');
-  const evCards = evTrack ? evTrack.querySelectorAll('.event-card') : [];
 
   let evIndex = 0;
 
@@ -319,7 +318,9 @@ counters.forEach(counter => observer.observe(counter));
   };
 
   const updateEvents = () => {
-    if (!evTrack || evCards.length === 0) return;
+    if (!evTrack) return;
+    const evCards = evTrack.querySelectorAll('.event-card');
+    if (evCards.length === 0) return;
     const perView = getEvPerView();
     const total = Math.max(0, evCards.length - perView);
     evIndex = Math.min(evIndex, total);
@@ -332,6 +333,7 @@ counters.forEach(counter => observer.observe(counter));
 
   if (evLeft && evRight && evTrack) {
     evLeft.addEventListener('click', () => {
+      const evCards = evTrack.querySelectorAll('.event-card');
       const perView = getEvPerView();
       const total = Math.max(0, evCards.length - perView);
       evIndex = evIndex > 0 ? evIndex - 1 : total;
@@ -339,6 +341,7 @@ counters.forEach(counter => observer.observe(counter));
     });
 
     evRight.addEventListener('click', () => {
+      const evCards = evTrack.querySelectorAll('.event-card');
       const perView = getEvPerView();
       const total = Math.max(0, evCards.length - perView);
       evIndex = evIndex < total ? evIndex + 1 : 0;
@@ -352,6 +355,11 @@ counters.forEach(counter => observer.observe(counter));
     
     updateEvents();
   }
+
+  window.initUpcomingDeparturesSlider = () => {
+    evIndex = 0;
+    updateEvents();
+  };
 
 
   /* ─── SEARCH WIDGET: SET TODAY AS MIN DATE & HANDLE SEARCH ─── */

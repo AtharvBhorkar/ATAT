@@ -155,6 +155,53 @@
     bindPackageTabs(packages);
   }
 
+  function renderUpcomingDepartures(packages) {
+    var track = $('#evTrack');
+    if (!track || !packages.length) return;
+
+    /* Generate upcoming departure dates dynamically: today + 7 days + idx * 7 days */
+    function getUpcomingDateString(idx) {
+      var d = new Date();
+      d.setDate(d.getDate() + 7 + idx * 7);
+      var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      var mName = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'][d.getMonth()];
+      return days[d.getDay()] + ', ' + d.getDate() + ' ' + mName;
+    }
+
+    function eventCardHTML(p, idx) {
+      var slug = p.slug || p._id;
+      var title = p.title || p.name || 'Package';
+      var fallbackImg = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80';
+      var dateStr = getUpcomingDateString(idx);
+      var loc = p.destination ? (p.destination + (p.state ? ', ' + p.state : '')) : 'India';
+
+      return '' +
+        '<div class="event-card" onclick="window.location.href=\'package-detail.html?slug=' + esc(slug) + '\'" style="cursor: pointer;" data-reveal>' +
+          '<div class="event-img">' +
+            '<img src="' + esc(p.image) + '" alt="' + esc(title) + '" loading="lazy" onerror="this.src=\'' + fallbackImg + '\'" />' +
+          '</div>' +
+          '<div class="event-info">' +
+            '<p class="event-date">' + dateStr + '</p>' +
+            '<h4>' + esc(title.toUpperCase()) + '</h4>' +
+            '<p class="event-loc">' +
+              '<svg width="12" height="12" viewBox="0 0 12 12" fill="none">' +
+                '<path d="M6 1C4.3 1 3 2.3 3 4c0 2.5 3 7 3 7s3-4.5 3-7c0-1.7-1.3-3-3-3z" stroke="currentColor" stroke-width="1.2" />' +
+                '<circle cx="6" cy="4" r="1.2" fill="currentColor" />' +
+              '</svg>' +
+              esc(loc) +
+            '</p>' +
+          '</div>' +
+        '</div>';
+    }
+
+    track.innerHTML = packages.map(function (p, i) { return eventCardHTML(p, i); }).join('');
+
+    reinitReveal();
+    if (typeof window.initUpcomingDeparturesSlider === 'function') {
+      window.initUpcomingDeparturesSlider();
+    }
+  }
+
   /* ══════════ Re-init Helpers ══════════ */
   function reinitReveal() {
     /* Try common reveal/scroll animation initializers */
@@ -254,7 +301,10 @@
       if (!packages && statsRes.status === 'fulfilled' && statsRes.value.success && statsRes.value.data && statsRes.value.data.featuredPackages && statsRes.value.data.featuredPackages.length) {
         packages = statsRes.value.data.featuredPackages;
       }
-      if (packages) renderPackages(packages);
+      if (packages) {
+        renderPackages(packages);
+        renderUpcomingDepartures(packages);
+      }
 
       console.log('[Voyago] Home page loaded from API \u2714');
 
