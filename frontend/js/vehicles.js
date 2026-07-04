@@ -5,8 +5,10 @@
 ═══════════════════════════════════════ */
 
 const API_BASE = window.location.port === '5500' || window.location.port === '3000'
-    ? 'http://localhost:5000/api/public'
-    : '/api/public';
+? 'http://localhost:5000/api'
+: '/api';
+
+
 
 /* ─── FETCH VEHICLES FROM BACKEND ─── */
 async function loadVehicles() {

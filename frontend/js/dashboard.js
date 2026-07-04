@@ -587,15 +587,21 @@ function renderVehicleFeatures() {
 }
 
 function toggleFeature(labelEl, featName) {
-    var idx = state.vehicleFeatures.indexOf(featName);
-    if (idx === -1) {
+    if (!labelEl || !featName) return;
+
+    var input = labelEl.querySelector('input');
+    var isSelected = state.vehicleFeatures.includes(featName);
+
+    if (!isSelected) {
         state.vehicleFeatures.push(featName);
         labelEl.classList.add('checked');
-        labelEl.querySelector('input').checked = true;
+        if (input) input.checked = true;
     } else {
-        state.vehicleFeatures.splice(idx, 1);
+        state.vehicleFeatures = state.vehicleFeatures.filter(function(feature) {
+            return feature !== featName;
+        });
         labelEl.classList.remove('checked');
-        labelEl.querySelector('input').checked = false;
+        if (input) input.checked = false;
     }
 }
 
