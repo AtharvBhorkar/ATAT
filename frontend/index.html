@@ -33,11 +33,11 @@
         <li><a href="packages.html">Packages</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li class="mobile-only"><a href="login.html" class="nav-btn-signin">Sign In</a></li>
+        <li class="mobile-only"><a href="blog.html" class="nav-btn-signin">Blog</a></li>
         <li class="mobile-only"><a href="booking.html" class="nav-btn-book">Book a Ride</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="login.html" class="btn-ghost">Sign In</a>
+        <a href="blog.html" class="btn-ghost">Blog</a>
         <a href="booking.html" class="btn-primary">Book a Ride</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
@@ -208,7 +208,7 @@
   </div>
 
   <!-- ══════════════ VEHICLE CATEGORIES ══════════════ -->
-  <section class="section vehicles-section" id="vehicles">
+  <!-- <section class="section vehicles-section" id="vehicles">
     <div class="container">
       <div class="section-header" data-reveal>
         <p class="section-eyebrow">Our Fleet</p>
@@ -344,10 +344,34 @@
         <a href="vehicles.html" class="btn-outline">View All Vehicles</a>
       </div>
     </div>
-  </section>
+  </section> -->
 
+
+
+  <section class="fleet-preview" id="vehicles">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <span class="section-tag">Our Fleet</span>
+        <h2>Travel in Comfort with Our Premium Vehicles</h2>
+        <p>
+          Choose from sedans, SUVs, tempo travellers, and buses for every kind of trip — from family tours to large
+          group
+          travel.
+        </p>
+      </div>
+
+      <div class="vehicles-grid" id="vehiclesGrid">
+        <!-- Vehicles will be fetched from backend -->
+      </div>
+
+      <div class="section-cta" data-reveal>
+        <a href="vehicles.html" class="btn-outline">View All Vehicles</a>
+      </div>
+    </div>
+  </section>
+  
   <!-- ══════════════ POPULAR PACKAGES ══════════════ -->
-  <section class="section packages-section" id="packages">
+  <!-- <section class="section packages-section" id="packages">
     <div class="container">
       <div class="section-header" data-reveal>
         <p class="section-eyebrow light">Tour Packages</p>
@@ -488,7 +512,42 @@
         <a href="packages.html" class="btn-white">Explore All Packages</a>
       </div>
     </div>
+  </section> -->
+
+
+  <section class="featured-packages" id="packages">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <span class="section-tag">Featured Packages</span>
+        <h2>Explore Our Best Travel Packages</h2>
+        <p>Choose from hill stations, pilgrimages, and quick weekend escapes.</p>
+      </div>
+
+      <div class="packages-tabs">
+        <button class="tab-btn active" data-tab="all">All</button>
+        <button class="tab-btn" data-tab="hill">Hill Stations</button>
+        <button class="tab-btn" data-tab="pilgrimage">Pilgrimage</button>
+        <button class="tab-btn" data-tab="weekend">Weekend Escapes</button>
+      </div>
+
+      <div class="packages-slider-outer">
+        <div class="packages-slider" id="packagesGrid">
+          <!-- Packages will come from backend -->
+        </div>
+      </div>
+
+      <div class="slider-controls">
+        <button class="slider-prev" id="sliderPrev" aria-label="Previous">&#8592;</button>
+        <div class="slider-dots" id="sliderDots"></div>
+        <button class="slider-next" id="sliderNext" aria-label="Next">&#8594;</button>
+      </div>
+
+      <div class="section-cta" data-reveal>
+        <a href="packages.html" class="btn-white">Explore All Packages</a>
+      </div>
+    </div>
   </section>
+
 
   <!-- ══════════════ WHY CHOOSE US ══════════════ -->
   <section class="why-section" id="why">

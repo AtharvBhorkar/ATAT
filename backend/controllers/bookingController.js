@@ -5,6 +5,7 @@ const {
   sendUserEmail
 } = require('../utils/notifications');
 
+
 /* ─────────────────────────────────────────────────────────────
    GET ALL BOOKINGS
 ───────────────────────────────────────────────────────────── */
@@ -105,7 +106,15 @@ exports.createBooking = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Booking created. Confirmation email being sent...',
-      data: booking
+      data: {
+        _id: booking._id,
+        bookingId: booking.bookingId,
+        email: booking.email,  // ← EXPLICITLY RETURN EMAIL
+        name: booking.name,
+        phone: booking.phone,
+        pickupLocation: booking.pickupLocation,
+        dropoffLocation: booking.dropoffLocation
+      }
     });
 
   } catch (error) {

@@ -981,27 +981,35 @@ document.addEventListener('DOMContentLoaded', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-      .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json();
-      })
-      .then(res => {
-        if (res.success && res.data) {
-          lastBookingResponse = res.data;
-          showStep('success');
-          // Hide sidebar on success for cleaner look
-          const sidebar = document.querySelector('.booking-summary-sidebar');
-          if (sidebar) sidebar.style.display = 'none';
-          const grid = document.querySelector('.booking-grid');
-          if (grid) grid.style.gridTemplateColumns = '1fr';
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(res => {
+      if (res.success && res.data) {
+        lastBookingResponse = res.data;
+        
+        // ✅ Display confirmation details
+        if (successResId) successResId.textContent = res.data.bookingId || 'N/A';
+        if (successEmail) successEmail.textContent = res.data.email || 'N/A';
+        
+        console.log('✅ Success:', {
+          bookingId: res.data.bookingId,
+          email: res.data.email,
+          name: res.data.name
+        });
+        
+        showStep('success');
+        const sidebar = document.querySelector('.booking-summary-sidebar');
+        if (sidebar) sidebar.style.display = 'none';
+        const grid = document.querySelector('.booking-grid');
+        if (grid) grid.style.gridTemplateColumns = '1fr';
+      } else {
+        showStep(5);
+        alert('Booking failed: ' + (res.message || 'Unknown error'));
+      }
+    })
 
-          successResId.textContent = res.data.bookingId || res.data._id || 'N/A';
-          successEmail.textContent = res.data.email || payload.email;
-        } else {
-          showStep(5);
-          alert('Booking failed: ' + (res.message || 'Unknown error. Please try again.'));
-        }
-      })
       .catch(err => {
         console.error('Booking submission error:', err);
         showStep(5);

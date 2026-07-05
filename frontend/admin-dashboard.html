@@ -143,9 +143,11 @@
                 </div>
 
                 <!-- ========== VEHICLES ========== -->
+                <!-- ========== VEHICLES ========== -->
                 <div class="section" id="sec-vehicles">
                     <div class="filters-bar">
                         <input class="filter-input" id="vSearch" placeholder="Search vehicles...">
+
                         <select class="filter-select" id="vTypeFilter">
                             <option value="">All Types</option>
                             <option value="Sedan">Sedan</option>
@@ -155,24 +157,29 @@
                             <option value="Luxury">Luxury</option>
                             <option value="Motorcycle">Motorcycle</option>
                         </select>
+
                         <select class="filter-select" id="vStatusFilter">
                             <option value="">All Status</option>
                             <option value="active">Active</option>
                             <option value="maintenance">Maintenance</option>
                             <option value="disabled">Disabled</option>
                         </select>
+
                         <div style="flex:1"></div>
+
                         <button class="btn btn-primary" id="addVehicleBtn">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2.5">
-                                <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                             Add Vehicle
                         </button>
                     </div>
+
                     <div class="admin-vehicles-grid" id="vehiclesGrid"></div>
                 </div>
+
 
                 <!-- ========== PACKAGES ========== -->
                 <div class="section" id="sec-packages">
@@ -265,8 +272,8 @@
                                 <h4>Support Email</h4>
                                 <p>Main contact email for customers</p>
                             </div>
-                            <input type="email" class="form-control" id="supportEmail" placeholder="amantourandtravelsncr@gmail.com"
-                                style="width:220px;">
+                            <input type="email" class="form-control" id="supportEmail"
+                                placeholder="amantourandtravelsncr@gmail.com" style="width:220px;">
                         </div>
                         <div class="settings-row">
                             <div class="settings-row-info">
@@ -353,7 +360,7 @@
 
 
 
-    
+
 
     <!-- Vehicle Form Modal -->
     <div class="modal-backdrop" id="vehicleModal">

@@ -124,7 +124,7 @@
           '<p>' + esc(desc) + '</p>' +
           '<div class="pkg-footer">' +
             '<div class="pkg-price"><span class="from">from</span> <strong>' + fmt(p.price) + '</strong> <span class="per">/ person</span></div>' +
-            '<a href="package-detail.html?slug=' + esc(slug) + '" class="pkg-btn">Book Now</a>' +
+            '<a href="booking.html" class="pkg-btn">Book Now</a>' +
           '</div>' +
         '</div>' +
       '</div>';

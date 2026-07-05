@@ -805,6 +805,42 @@ function switchVPanelImg(thumb, src) {
     thumb.classList.add('active');
 }
 
+
+
+/* ── Event delegation for vehicle actions ── */
+document.addEventListener('click', function (e) {
+    var vAction = e.target.closest('[data-action]');
+    if (vAction) {
+        var action = vAction.dataset.action;
+        var id = vAction.dataset.id;
+        
+        if (action === 'view-vehicle') {
+            viewVehicle(id);
+        }
+        else if (action === 'edit-vehicle') {
+            editVehicle(id);
+        }
+        else if (action === 'toggle-vehicle') {
+            toggleVehicle(id);
+        }
+        else if (action === 'delete-vehicle') {
+            confirmDeleteVehicle(id, vAction.dataset.name);
+        }
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ═══════════════════════════
    PACKAGES
 ════════════════════════════ */
@@ -1039,266 +1075,305 @@ function confirmDeletePackage(id, name) {
 ════════════════════════════ */
 
 // ── Add this modal HTML to your page (or inject it) ──
-function injectBookingModal() {
-    if (document.getElementById('bookingModal')) return;
-    var div = document.createElement('div');
-    div.id = 'bookingModal';
-    div.className = 'modal-overlay';
-    div.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center;padding:20px;';
-    div.innerHTML = `
-        <div class="modal-box" style="background:#fff;border-radius:12px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-            <button onclick="closeBookingModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#666;line-height:1;">&times;</button>
-            <div id="bookingModalContent" style="padding:32px;"></div>
-        </div>
-    `;
-    document.body.appendChild(div);
+// function injectBookingModal() {
+//     if (document.getElementById('bookingModal')) return;
+//     var div = document.createElement('div');
+//     div.id = 'bookingModal';
+//     div.className = 'modal-overlay';
+//     div.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;justify-content:center;align-items:center;padding:20px;';
+//     div.innerHTML = `
+//         <div class="modal-box" style="background:#fff;border-radius:12px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+//             <button onclick="closeBookingModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:#666;line-height:1;">&times;</button>
+//             <div id="bookingModalContent" style="padding:32px;"></div>
+//         </div>
+//     `;
+//     document.body.appendChild(div);
 
-    // Close on overlay click
-    div.addEventListener('click', function(e) {
-        if (e.target === div) closeBookingModal();
-    });
-}
+//     // Close on overlay click
+//     div.addEventListener('click', function(e) {
+//         if (e.target === div) closeBookingModal();
+//     });
+// }
 
-function openBookingModal() {
-    var m = document.getElementById('bookingModal');
-    if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-}
+// function openBookingModal() {
+//     var m = document.getElementById('bookingModal');
+//     if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+// }
 
-function closeBookingModal() {
-    var m = document.getElementById('bookingModal');
-    if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
-}
+// function closeBookingModal() {
+//     var m = document.getElementById('bookingModal');
+//     if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
+// }
 
 // ── LOAD BOOKINGS ──
-async function loadBookings() {
-    try {
-        var search = (document.getElementById('bSearch') || {}).value || '';
-        var status = (document.getElementById('bStatusFilter') || {}).value || '';
+// async function loadBookings() {
+//     try {
+//         var search = (document.getElementById('bSearch') || {}).value || '';
+//         var status = (document.getElementById('bStatusFilter') || {}).value || '';
 
-        var params = 'limit=100';
-        if (search) params += '&search=' + encodeURIComponent(search);
-        if (status) params += '&status=' + encodeURIComponent(status);
+//         var params = 'limit=100';
+//         if (search) params += '&search=' + encodeURIComponent(search);
+//         if (status) params += '&status=' + encodeURIComponent(status);
 
-        var res = await API.admin.getBookings(params);
-        if (res.success) {
-            state.bookings = res.data || [];
-            renderBookings();
-        } else {
-            toast(res.message || 'Failed to load bookings', 'error');
-        }
-    } catch (err) {
-        toast('Server error loading bookings', 'error');
-    }
-}
+//         var res = await API.admin.getBookings(params);
+//         if (res.success) {
+//             state.bookings = res.data || [];
+//             renderBookings();
+//         } else {
+//             toast(res.message || 'Failed to load bookings', 'error');
+//         }
+//     } catch (err) {
+//         toast('Server error loading bookings', 'error');
+//     }
+// }
 
 // ── RENDER TABLE ──
-function renderBookings() {
-    var tbody = document.getElementById('bookingsBody');
-    if (!tbody) return;
+// function renderBookings() {
+//     var tbody = document.getElementById('bookingsBody');
+//     if (!tbody) return;
 
-    if (state.bookings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--medium-gray)">No bookings found</td></tr>';
-        return;
-    }
+//     if (state.bookings.length === 0) {
+//         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--medium-gray)">No bookings found</td></tr>';
+//         return;
+//     }
 
-    var statusColors = {
-        'pending': 'badge-orange',
-        'confirmed': 'badge-blue',
-        'in-progress': 'badge-maroon',
-        'completed': 'badge-green',
-        'cancelled': 'badge-red'
-    };
+//     var statusColors = {
+//         'pending': 'badge-orange',
+//         'confirmed': 'badge-blue',
+//         'in-progress': 'badge-maroon',
+//         'completed': 'badge-green',
+//         'cancelled': 'badge-red'
+//     };
 
-    tbody.innerHTML = state.bookings.map(function (b) {
-        return '<tr>' +
-            '<td><code style="font-size:11px">' + escAttr(b.bookingId || '—') + '</code></td>' +
-            '<td><strong>' + escAttr(b.fullName || b.name || '—') + '</strong><br><span style="font-size:11px;color:var(--medium-gray)">' + escAttr(b.email || '') + '</span></td>' +
-            '<td>' + escAttr(b.type === 'vehicle' ? (b.vehicleName || 'Vehicle') : (b.packageName || 'Package')) + '</td>' +
-            '<td style="white-space:nowrap">' + formatDate(b.travelDate || b.createdAt) + '</td>' +
-            '<td><strong>' + formatCurrency(b.totalPrice) + '</strong></td>' +
-            '<td><span class="badge ' + (statusColors[b.status] || 'badge-gray') + '">' + escAttr(b.status || '—') + '</span></td>' +
-            '<td>' +
-                '<button class="btn btn-sm btn-secondary" data-action="view-booking" data-id="' + b._id + '">View</button> ' +
-                '<button class="btn btn-sm btn-danger" data-action="delete-booking" data-id="' + b._id + '" title="Delete">&times;</button>' +
-            '</td>' +
-            '</tr>';
-    }).join('');
-}
+//     tbody.innerHTML = state.bookings.map(function (b) {
+//         return '<tr>' +
+//             '<td><code style="font-size:11px">' + escAttr(b.bookingId || '—') + '</code></td>' +
+//             '<td><strong>' + escAttr(b.fullName || b.name || '—') + '</strong><br><span style="font-size:11px;color:var(--medium-gray)">' + escAttr(b.email || '') + '</span></td>' +
+//             '<td>' + escAttr(b.type === 'vehicle' ? (b.vehicleName || 'Vehicle') : (b.packageName || 'Package')) + '</td>' +
+//             '<td style="white-space:nowrap">' + formatDate(b.travelDate || b.createdAt) + '</td>' +
+//             '<td><strong>' + formatCurrency(b.totalPrice) + '</strong></td>' +
+//             '<td><span class="badge ' + (statusColors[b.status] || 'badge-gray') + '">' + escAttr(b.status || '—') + '</span></td>' +
+//             '<td>' +
+//                 '<button class="btn btn-sm btn-secondary" data-action="view-booking" data-id="' + b._id + '">View</button> ' +
+//                 '<button class="btn btn-sm btn-danger" data-action="delete-booking" data-id="' + b._id + '" title="Delete">&times;</button>' +
+//             '</td>' +
+//             '</tr>';
+//     }).join('');
+// }
 
 // ── VIEW BOOKING — Opens proper modal ──
-async function viewBooking(id) {
-    injectBookingModal();
+// async function viewBooking(id) {
+//     injectBookingModal();
 
-    var content = document.getElementById('bookingModalContent');
-    content.innerHTML = '<div style="text-align:center;padding:40px;color:#999;">Loading...</div>';
-    openBookingModal();
+//     var content = document.getElementById('bookingModalContent');
+//     content.innerHTML = '<div style="text-align:center;padding:40px;color:#999;">Loading...</div>';
+//     openBookingModal();
 
-    try {
-        var res = await API.admin.getBooking(id);
-        if (!res.success) {
-            content.innerHTML = '<div style="text-align:center;padding:40px;color:red;">Failed to load booking</div>';
-            return;
-        }
-        renderBookingDetail(res.data);
-    } catch (err) {
-        content.innerHTML = '<div style="text-align:center;padding:40px;color:red;">Server error</div>';
-    }
-}
+//     try {
+//         var res = await API.admin.getBooking(id);
+//         if (!res.success) {
+//             content.innerHTML = '<div style="text-align:center;padding:40px;color:red;">Failed to load booking</div>';
+//             return;
+//         }
+//         renderBookingDetail(res.data);
+//     } catch (err) {
+//         content.innerHTML = '<div style="text-align:center;padding:40px;color:red;">Server error</div>';
+//     }
+// }
 
 // ── RENDER BOOKING DETAIL INSIDE MODAL ──
-function renderBookingDetail(b) {
-    var content = document.getElementById('bookingModalContent');
-    if (!content) return;
+// function renderBookingDetail(b) {
+//     var content = document.getElementById('bookingModalContent');
+//     if (!content) return;
 
-    var statusColors = {
-        'pending': '#e67e22', 'confirmed': '#2980b9', 'in-progress': '#800000',
-        'completed': '#27ae60', 'cancelled': '#c0392b'
-    };
+//     var statusColors = {
+//         'pending': '#e67e22', 'confirmed': '#2980b9', 'in-progress': '#800000',
+//         'completed': '#27ae60', 'cancelled': '#c0392b'
+//     };
 
-    var allStatuses = ['pending', 'confirmed', 'in-progress', 'completed', 'cancelled'];
+//     var allStatuses = ['pending', 'confirmed', 'in-progress', 'completed', 'cancelled'];
 
-    var statusOptions = allStatuses.map(function(s) {
-        return '<option value="' + s + '"' + (b.status === s ? ' selected' : '') + '>' + s.charAt(0).toUpperCase() + s.slice(1) + '</option>';
-    }).join('');
+//     var statusOptions = allStatuses.map(function(s) {
+//         return '<option value="' + s + '"' + (b.status === s ? ' selected' : '') + '>' + s.charAt(0).toUpperCase() + s.slice(1) + '</option>';
+//     }).join('');
 
-    // Build detail rows
-    function row(label, value) {
-        return '<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;">' +
-            '<span style="color:#888;font-size:13px;">' + label + '</span>' +
-            '<span style="font-weight:600;font-size:14px;text-align:right;max-width:60%;">' + (value || '—') + '</span>' +
-            '</div>';
-    }
+//     // Build detail rows
+//     function row(label, value) {
+//         return '<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0;">' +
+//             '<span style="color:#888;font-size:13px;">' + label + '</span>' +
+//             '<span style="font-weight:600;font-size:14px;text-align:right;max-width:60%;">' + (value || '—') + '</span>' +
+//             '</div>';
+//     }
 
-    var html = '';
-    // Header
-    html += '<div style="margin-bottom:24px;">';
-    html += '<h2 style="margin:0 0 4px 0;font-size:22px;">Booking Details</h2>';
-    html += '<code style="font-size:13px;color:#888;">' + escAttr(b.bookingId || b._id) + '</code>';
-    html += '</div>';
+//     var html = '';
+//     // Header
+//     html += '<div style="margin-bottom:24px;">';
+//     html += '<h2 style="margin:0 0 4px 0;font-size:22px;">Booking Details</h2>';
+//     html += '<code style="font-size:13px;color:#888;">' + escAttr(b.bookingId || b._id) + '</code>';
+//     html += '</div>';
 
-    // Status bar
-    html += '<div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">';
-    html += '<div style="display:flex;align-items:center;gap:10px;">';
-    html += '<span style="width:12px;height:12px;border-radius:50%;background:' + (statusColors[b.status] || '#999') + ';display:inline-block;"></span>';
-    html += '<span style="font-weight:700;font-size:15px;text-transform:capitalize;color:' + (statusColors[b.status] || '#999') + ';">' + escAttr(b.status) + '</span>';
-    html += '</div>';
-    html += '<div style="display:flex;align-items:center;gap:8px;">';
-    html += '<label style="font-size:13px;color:#666;">Change:</label>';
-    html += '<select id="modalStatusSelect" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:13px;cursor:pointer;">' + statusOptions + '</select>';
-    html += '<button onclick="updateBookingStatus(\'' + b._id + '\')" class="btn btn-sm" style="background:var(--maroon);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;">Update</button>';
-    html += '</div>';
-    html += '</div>';
+//     // Status bar
+//     html += '<div style="background:#f8f8f8;border-radius:8px;padding:16px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">';
+//     html += '<div style="display:flex;align-items:center;gap:10px;">';
+//     html += '<span style="width:12px;height:12px;border-radius:50%;background:' + (statusColors[b.status] || '#999') + ';display:inline-block;"></span>';
+//     html += '<span style="font-weight:700;font-size:15px;text-transform:capitalize;color:' + (statusColors[b.status] || '#999') + ';">' + escAttr(b.status) + '</span>';
+//     html += '</div>';
+//     html += '<div style="display:flex;align-items:center;gap:8px;">';
+//     html += '<label style="font-size:13px;color:#666;">Change:</label>';
+//     html += '<select id="modalStatusSelect" style="padding:6px 10px;border:1px solid #ddd;border-radius:6px;font-size:13px;cursor:pointer;">' + statusOptions + '</select>';
+//     html += '<button onclick="updateBookingStatus(\'' + b._id + '\')" class="btn btn-sm" style="background:var(--maroon);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;">Update</button>';
+//     html += '</div>';
+//     html += '</div>';
 
-    // Customer Info
-    html += '<h3 style="font-size:15px;color:var(--maroon);margin:0 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Customer Info</h3>';
-    html += row('Full Name', escAttr(b.fullName || b.name));
-    html += row('Email', escAttr(b.email));
-    html += row('Phone', escAttr(b.phone));
-    html += row('Address', escAttr(b.address || b.pickupLocation || ''));
+//     // Customer Info
+//     html += '<h3 style="font-size:15px;color:var(--maroon);margin:0 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Customer Info</h3>';
+//     html += row('Full Name', escAttr(b.fullName || b.name));
+//     html += row('Email', escAttr(b.email));
+//     html += row('Phone', escAttr(b.phone));
+//     html += row('Address', escAttr(b.address || b.pickupLocation || ''));
 
-    // Booking Info
-    html += '<h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Booking Info</h3>';
-    html += row('Type', (b.type || '—').charAt(0).toUpperCase() + (b.type || '—').slice(1));
-    html += row(b.type === 'vehicle' ? 'Vehicle' : 'Package', escAttr(b.vehicleName || b.packageName || '—'));
-    if (b.vehicleName) html += row('Vehicle Type', escAttr(b.vehicleType || '—'));
-    html += row('Travel Date', formatDate(b.travelDate));
-    html += row('Return Date', b.returnDate ? formatDate(b.returnDate) : '—');
-    html += row('Guests / Passengers', b.guests || b.passengers || '—');
-    html += row('Created', formatDate(b.createdAt));
+//     // Booking Info
+//     html += '<h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Booking Info</h3>';
+//     html += row('Type', (b.type || '—').charAt(0).toUpperCase() + (b.type || '—').slice(1));
+//     html += row(b.type === 'vehicle' ? 'Vehicle' : 'Package', escAttr(b.vehicleName || b.packageName || '—'));
+//     if (b.vehicleName) html += row('Vehicle Type', escAttr(b.vehicleType || '—'));
+//     html += row('Travel Date', formatDate(b.travelDate));
+//     html += row('Return Date', b.returnDate ? formatDate(b.returnDate) : '—');
+//     html += row('Guests / Passengers', b.guests || b.passengers || '—');
+//     html += row('Created', formatDate(b.createdAt));
 
-    // Pricing
-    html += '<h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Pricing</h3>';
-    html += row('Base Price', formatCurrency(b.basePrice || b.price));
-    if (b.extraCharges) html += row('Extra Charges', formatCurrency(b.extraCharges));
-    if (b.discount) html += row('Discount', '-' + formatCurrency(b.discount));
-    if (b.tax) html += row('Tax', formatCurrency(b.tax));
-    html += '<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:2px solid var(--maroon);">';
-    html += '<span style="font-weight:700;font-size:16px;">Total</span>';
-    html += '<span style="font-weight:700;font-size:18px;color:var(--maroon);">' + formatCurrency(b.totalPrice) + '</span>';
-    html += '</div>';
+//     // Pricing
+//     html += '<h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Pricing</h3>';
+//     html += row('Base Price', formatCurrency(b.basePrice || b.price));
+//     if (b.extraCharges) html += row('Extra Charges', formatCurrency(b.extraCharges));
+//     if (b.discount) html += row('Discount', '-' + formatCurrency(b.discount));
+//     if (b.tax) html += row('Tax', formatCurrency(b.tax));
+//     html += '<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:2px solid var(--maroon);">';
+//     html += '<span style="font-weight:700;font-size:16px;">Total</span>';
+//     html += '<span style="font-weight:700;font-size:18px;color:var(--maroon);">' + formatCurrency(b.totalPrice) + '</span>';
+//     html += '</div>';
 
-    // Special Requests
-    if (b.specialRequests || b.notes) {
-        html += '<h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Notes</h3>';
-        html += '<p style="background:#f8f8f8;padding:12px;border-radius:6px;font-size:13px;color:#555;">' + escAttr(b.specialRequests || b.notes) + '</p>';
-    }
+//     // Special Requests
+//     if (b.specialRequests || b.notes) {
+//         html += '<h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Notes</h3>';
+//         html += '<p style="background:#f8f8f8;padding:12px;border-radius:6px;font-size:13px;color:#555;">' + escAttr(b.specialRequests || b.notes) + '</p>';
+//     }
 
-    // Payment Info
-    if (b.paymentStatus || b.paymentMethod) {
-        html += '<h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Payment</h3>';
-        html += row('Method', escAttr(b.paymentMethod || '—'));
-        var payColor = b.paymentStatus === 'paid' ? '#27ae60' : '#e67e22';
-        html += row('Status', '<span style="color:' + payColor + ';font-weight:700;text-transform:capitalize;">' + escAttr(b.paymentStatus || 'pending') + '</span>');
-    }
+//     // Payment Info
+//     if (b.paymentStatus || b.paymentMethod) {
+//         html += '<h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">Payment</h3>';
+//         html += row('Method', escAttr(b.paymentMethod || '—'));
+//         var payColor = b.paymentStatus === 'paid' ? '#27ae60' : '#e67e22';
+//         html += row('Status', '<span style="color:' + payColor + ';font-weight:700;text-transform:capitalize;">' + escAttr(b.paymentStatus || 'pending') + '</span>');
+//     }
 
-    // Action Buttons
-    html += '<div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">';
+//     // Action Buttons
+//     html += '<div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">';
 
-    // Quick status buttons
-    if (b.status === 'pending') {
-        html += '<button onclick="updateBookingStatus(\'' + b._id + '\', \'confirmed\')" class="btn" style="background:#2980b9;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">✓ Confirm</button>';
-    }
-    if (b.status === 'confirmed') {
-        html += '<button onclick="updateBookingStatus(\'' + b._id + '\', \'in-progress\')" class="btn" style="background:var(--maroon);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">▶ Start Trip</button>';
-    }
-    if (b.status === 'in-progress') {
-        html += '<button onclick="updateBookingStatus(\'' + b._id + '\', \'completed\')" class="btn" style="background:#27ae60;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">✔ Complete</button>';
-    }
-    if (b.status !== 'cancelled' && b.status !== 'completed') {
-        html += '<button onclick="updateBookingStatus(\'' + b._id + '\', \'cancelled\')" class="btn" style="background:#c0392b;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">✕ Cancel</button>';
-    }
+//     // Quick status buttons
+//     if (b.status === 'pending') {
+//         html += '<button onclick="updateBookingStatus(\'' + b._id + '\', \'confirmed\')" class="btn" style="background:#2980b9;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">✓ Confirm</button>';
+//     }
+//     if (b.status === 'confirmed') {
+//         html += '<button onclick="updateBookingStatus(\'' + b._id + '\', \'in-progress\')" class="btn" style="background:var(--maroon);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">▶ Start Trip</button>';
+//     }
+//     if (b.status === 'in-progress') {
+//         html += '<button onclick="updateBookingStatus(\'' + b._id + '\', \'completed\')" class="btn" style="background:#27ae60;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">✔ Complete</button>';
+//     }
+//     if (b.status !== 'cancelled' && b.status !== 'completed') {
+//         html += '<button onclick="updateBookingStatus(\'' + b._id + '\', \'cancelled\')" class="btn" style="background:#c0392b;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;">✕ Cancel</button>';
+//     }
 
-    // Delete button
-    html += '<button onclick="deleteBooking(\'' + b._id + '\')" class="btn" style="background:#fff;color:#c0392b;border:2px solid #c0392b;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;margin-left:auto;">🗑 Delete</button>';
-    html += '</div>';
+//     // Delete button
+//     html += '<button onclick="deleteBooking(\'' + b._id + '\')" class="btn" style="background:#fff;color:#c0392b;border:2px solid #c0392b;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;margin-left:auto;">🗑 Delete</button>';
+//     html += '</div>';
 
-    content.innerHTML = html;
-}
+//     content.innerHTML = html;
+// }
 
 // ── UPDATE BOOKING STATUS ──
-async function updateBookingStatus(id, forceStatus) {
-    var newStatus = forceStatus;
-    if (!newStatus) {
-        var sel = document.getElementById('modalStatusSelect');
-        newStatus = sel ? sel.value : null;
-    }
-    if (!newStatus) { toast('Select a status', 'error'); return; }
+// async function updateBookingStatus(id, forceStatus) {
+//     var newStatus = forceStatus;
+//     if (!newStatus) {
+//         var sel = document.getElementById('modalStatusSelect');
+//         newStatus = sel ? sel.value : null;
+//     }
+//     if (!newStatus) { toast('Select a status', 'error'); return; }
 
-    try {
-        var res = await API.admin.updateBooking(id, { status: newStatus });
-        if (res.success) {
-            toast('Status updated to ' + newStatus, 'success');
-            // Re-fetch and re-render inside modal
-            var detail = await API.admin.getBooking(id);
-            if (detail.success) renderBookingDetail(detail.data);
-            // Also refresh table
-            loadBookings();
-        } else {
-            toast(res.message || 'Failed to update status', 'error');
-        }
-    } catch (err) {
-        toast('Server error updating status', 'error');
-    }
-}
+//     try {
+//         var res = await API.admin.updateBooking(id, { status: newStatus });
+//         if (res.success) {
+//             toast('Status updated to ' + newStatus, 'success');
+//             // Re-fetch and re-render inside modal
+//             var detail = await API.admin.getBooking(id);
+//             if (detail.success) renderBookingDetail(detail.data);
+//             // Also refresh table
+//             loadBookings();
+//         } else {
+//             toast(res.message || 'Failed to update status', 'error');
+//         }
+//     } catch (err) {
+//         toast('Server error updating status', 'error');
+//     }
+// }
 
 // ── DELETE BOOKING ──
-async function deleteBooking(id) {
-    // Confirm before delete
-    if (!confirm('Are you sure you want to permanently delete this booking?')) return;
+// async function deleteBooking(id) {
+//     // Confirm before delete
+//     if (!confirm('Are you sure you want to permanently delete this booking?')) return;
 
-    try {
-        var res = await API.admin.deleteBooking(id);
-        if (res.success) {
-            toast('Booking deleted', 'success');
-            closeBookingModal();
-            loadBookings();
-        } else {
-            toast(res.message || 'Failed to delete booking', 'error');
-        }
-    } catch (err) {
-        toast('Server error deleting booking', 'error');
-    }
-}
+//     try {
+//         var res = await API.admin.deleteBooking(id);
+//         if (res.success) {
+//             toast('Booking deleted', 'success');
+//             closeBookingModal();
+//             loadBookings();
+//         } else {
+//             toast(res.message || 'Failed to delete booking', 'error');
+//         }
+//     } catch (err) {
+//         toast('Server error deleting booking', 'error');
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ── DELEGATION: Wire up table buttons ──
 // Add this inside your main event delegation (the big switch/case or if/else block)
@@ -1310,6 +1385,634 @@ async function deleteBooking(id) {
 //   else if (action === 'delete-booking') {
 //       deleteBooking(id);
 //   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   BOOKINGS MANAGEMENT
+========================================================= */
+
+// Ensure state exists
+window.state = window.state || {};
+state.bookings = state.bookings || [];
+
+/* ---------- Helpers ---------- */
+function safeText(value) {
+  if (value === null || value === undefined || value === '') return '—';
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatDateSafe(date) {
+  if (!date) return '—';
+  try {
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '—';
+    return d.toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  } catch (e) {
+    return '—';
+  }
+}
+
+function formatCurrencySafe(value) {
+  const num = Number(value || 0);
+  return `₹${num.toLocaleString('en-IN')}`;
+}
+
+function getBookingDisplayName(b) {
+  return b.fullName || b.name || b.customerName || '—';
+}
+
+function getBookingEmail(b) {
+  return b.email || b.customerEmail || '—';
+}
+
+function getBookingPhone(b) {
+  return b.phone || b.mobile || b.contact || '—';
+}
+
+function getBookingTypeLabel(b) {
+  if (b.type === 'vehicle') return 'Vehicle';
+  if (b.type === 'package') return 'Package';
+  return b.type ? String(b.type).charAt(0).toUpperCase() + String(b.type).slice(1) : '—';
+}
+
+function getBookingItemName(b) {
+  return b.vehicleName || b.packageName || b.itemName || '—';
+}
+
+function getGuestCount(b) {
+  return b.guests || b.passengers || b.numberOfPeople || '—';
+}
+
+function getPickupAddress(b) {
+  return b.address || b.pickupLocation || b.pickupAddress || '—';
+}
+
+function bookingStatusBadge(status) {
+  const map = {
+    pending: 'badge-orange',
+    confirmed: 'badge-blue',
+    'in-progress': 'badge-maroon',
+    completed: 'badge-green',
+    cancelled: 'badge-red'
+  };
+  return map[status] || 'badge-gray';
+}
+
+/* ---------- Modal ---------- */
+function injectBookingModal() {
+  if (document.getElementById('bookingModal')) return;
+
+  const div = document.createElement('div');
+  div.id = 'bookingModal';
+  div.className = 'modal-overlay';
+  div.style.cssText = `
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    z-index:9999;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+  `;
+
+  div.innerHTML = `
+    <div class="modal-box" style="
+      background:#fff;
+      border-radius:12px;
+      max-width:760px;
+      width:100%;
+      max-height:90vh;
+      overflow-y:auto;
+      position:relative;
+      box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    ">
+      <button id="bookingModalCloseBtn" style="
+        position:absolute;
+        top:16px;
+        right:16px;
+        background:none;
+        border:none;
+        font-size:24px;
+        cursor:pointer;
+        color:#666;
+        line-height:1;
+      ">&times;</button>
+
+      <div id="bookingModalContent" style="padding:32px;"></div>
+    </div>
+  `;
+
+  document.body.appendChild(div);
+
+  // close on overlay click
+  div.addEventListener('click', function (e) {
+    if (e.target === div) closeBookingModal();
+  });
+
+  // close button
+  const closeBtn = document.getElementById('bookingModalCloseBtn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeBookingModal);
+  }
+}
+
+function openBookingModal() {
+  const modal = document.getElementById('bookingModal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBookingModal() {
+  const modal = document.getElementById('bookingModal');
+  if (!modal) return;
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+/* ---------- Load Bookings ---------- */
+async function loadBookings() {
+  try {
+    const search = document.getElementById('bSearch')?.value?.trim() || '';
+    const status = document.getElementById('bStatusFilter')?.value || '';
+
+    let params = 'limit=100';
+    if (search) params += '&search=' + encodeURIComponent(search);
+    if (status) params += '&status=' + encodeURIComponent(status);
+
+    const res = await API.admin.getBookings(params);
+
+    if (res && res.success) {
+      state.bookings = Array.isArray(res.data) ? res.data : [];
+      renderBookings();
+    } else {
+      state.bookings = [];
+      renderBookings();
+      toast(res?.message || 'Failed to load bookings', 'error');
+    }
+  } catch (err) {
+    console.error('loadBookings error:', err);
+    state.bookings = [];
+    renderBookings();
+    toast('Server error loading bookings', 'error');
+  }
+}
+
+/* ---------- Render Bookings Table ---------- */
+function renderBookings() {
+  const tbody = document.getElementById('bookingsBody');
+  if (!tbody) return;
+
+  if (!Array.isArray(state.bookings) || state.bookings.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align:center;padding:40px;color:var(--medium-gray)">
+          No bookings found
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = state.bookings.map((b) => {
+    return `
+      <tr>
+        <td>
+          <code style="font-size:11px">${safeText(b.bookingId || b._id || '—')}</code>
+        </td>
+
+        <td>
+          <strong>${safeText(getBookingDisplayName(b))}</strong><br>
+          <span style="font-size:11px;color:var(--medium-gray)">
+            ${safeText(getBookingEmail(b))}
+          </span>
+        </td>
+
+        <td>${safeText(getBookingItemName(b))}</td>
+
+        <td style="white-space:nowrap">${formatDateSafe(b.travelDate || b.createdAt)}</td>
+
+        <td><strong>${formatCurrencySafe(b.totalPrice || b.price || 0)}</strong></td>
+
+        <td>
+          <span class="badge ${bookingStatusBadge(b.status)}">
+            ${safeText(b.status || 'pending')}
+          </span>
+        </td>
+
+        <td>
+          <button class="btn btn-sm btn-secondary" onclick="viewBooking('${b._id}')">
+            View
+          </button>
+          <button class="btn btn-sm btn-danger" onclick="deleteBooking('${b._id}')" title="Delete">
+            &times;
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+/* ---------- View Booking ---------- */
+async function viewBooking(id) {
+  injectBookingModal();
+  openBookingModal();
+
+  const content = document.getElementById('bookingModalContent');
+  if (content) {
+    content.innerHTML = `
+      <div style="text-align:center;padding:40px;color:#999;">
+        Loading booking details...
+      </div>
+    `;
+  }
+
+  try {
+    const res = await API.admin.getBooking(id);
+
+    if (!res || !res.success || !res.data) {
+      if (content) {
+        content.innerHTML = `
+          <div style="text-align:center;padding:40px;color:red;">
+            Failed to load booking details
+          </div>
+        `;
+      }
+      return;
+    }
+
+    renderBookingDetail(res.data);
+  } catch (err) {
+    console.error('viewBooking error:', err);
+    if (content) {
+      content.innerHTML = `
+        <div style="text-align:center;padding:40px;color:red;">
+          Server error loading booking
+        </div>
+      `;
+    }
+  }
+}
+
+/* ---------- Render Booking Detail ---------- */
+function renderBookingDetail(b) {
+  const content = document.getElementById('bookingModalContent');
+  if (!content) return;
+
+  const statusColors = {
+    pending: '#e67e22',
+    confirmed: '#2980b9',
+    'in-progress': '#800000',
+    completed: '#27ae60',
+    cancelled: '#c0392b'
+  };
+
+  const allStatuses = ['pending', 'confirmed', 'in-progress', 'completed', 'cancelled'];
+
+  const statusOptions = allStatuses.map((s) => {
+    return `<option value="${s}" ${b.status === s ? 'selected' : ''}>
+      ${s.charAt(0).toUpperCase() + s.slice(1)}
+    </option>`;
+  }).join('');
+
+  function row(label, value, isHtml = false) {
+    return `
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        gap:16px;
+        padding:10px 0;
+        border-bottom:1px solid #f0f0f0;
+      ">
+        <span style="color:#888;font-size:13px;min-width:160px;">${label}</span>
+        <span style="font-weight:600;font-size:14px;text-align:right;flex:1;">
+          ${isHtml ? value : safeText(value)}
+        </span>
+      </div>
+    `;
+  }
+
+  let html = '';
+
+  // Header
+  html += `
+    <div style="margin-bottom:24px;">
+      <h2 style="margin:0 0 4px 0;font-size:22px;">Booking Details</h2>
+      <code style="font-size:13px;color:#888;">${safeText(b.bookingId || b._id)}</code>
+    </div>
+  `;
+
+  // Status bar
+  html += `
+    <div style="
+      background:#f8f8f8;
+      border-radius:8px;
+      padding:16px;
+      margin-bottom:24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:12px;
+    ">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="
+          width:12px;
+          height:12px;
+          border-radius:50%;
+          background:${statusColors[b.status] || '#999'};
+          display:inline-block;
+        "></span>
+        <span style="
+          font-weight:700;
+          font-size:15px;
+          text-transform:capitalize;
+          color:${statusColors[b.status] || '#999'};
+        ">
+          ${safeText(b.status || 'pending')}
+        </span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <label style="font-size:13px;color:#666;">Change status:</label>
+        <select id="modalStatusSelect" style="
+          padding:6px 10px;
+          border:1px solid #ddd;
+          border-radius:6px;
+          font-size:13px;
+          cursor:pointer;
+        ">
+          ${statusOptions}
+        </select>
+        <button
+          onclick="updateBookingStatus('${b._id}')"
+          class="btn btn-sm"
+          style="
+            background:var(--maroon);
+            color:#fff;
+            border:none;
+            padding:6px 14px;
+            border-radius:6px;
+            cursor:pointer;
+            font-size:13px;
+          "
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Customer info
+  html += `
+    <h3 style="font-size:15px;color:var(--maroon);margin:0 0 8px 0;text-transform:uppercase;letter-spacing:1px;">
+      Customer Info
+    </h3>
+  `;
+  html += row('Full Name', getBookingDisplayName(b));
+  html += row('Email', getBookingEmail(b));
+  html += row('Phone', getBookingPhone(b));
+  html += row('Address / Pickup', getPickupAddress(b));
+
+  // Booking info
+  html += `
+    <h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">
+      Booking Info
+    </h3>
+  `;
+  html += row('Type', getBookingTypeLabel(b));
+  html += row(b.type === 'vehicle' ? 'Vehicle' : 'Package', getBookingItemName(b));
+
+  if (b.vehicleType) html += row('Vehicle Type', b.vehicleType);
+  if (b.packageCategory) html += row('Package Category', b.packageCategory);
+
+  html += row('Travel Date', formatDateSafe(b.travelDate));
+  html += row('Return Date', b.returnDate ? formatDateSafe(b.returnDate) : '—');
+  html += row('Guests / Passengers', getGuestCount(b));
+  html += row('Created At', formatDateSafe(b.createdAt));
+
+  // Pricing
+  html += `
+    <h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">
+      Pricing
+    </h3>
+  `;
+  html += row('Base Price', formatCurrencySafe(b.basePrice || b.price || 0));
+  if (b.extraCharges) html += row('Extra Charges', formatCurrencySafe(b.extraCharges));
+  if (b.discount) html += row('Discount', '-' + formatCurrencySafe(b.discount));
+  if (b.tax) html += row('Tax', formatCurrencySafe(b.tax));
+
+  html += `
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      padding:12px 0;
+      border-bottom:2px solid var(--maroon);
+      margin-top:4px;
+    ">
+      <span style="font-weight:700;font-size:16px;">Total</span>
+      <span style="font-weight:700;font-size:18px;color:var(--maroon);">
+        ${formatCurrencySafe(b.totalPrice || b.price || 0)}
+      </span>
+    </div>
+  `;
+
+  // Notes
+  if (b.specialRequests || b.notes) {
+    html += `
+      <h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">
+        Notes
+      </h3>
+      <p style="background:#f8f8f8;padding:12px;border-radius:6px;font-size:13px;color:#555;">
+        ${safeText(b.specialRequests || b.notes)}
+      </p>
+    `;
+  }
+
+  // Payment
+  if (b.paymentStatus || b.paymentMethod) {
+    const payColor = b.paymentStatus === 'paid' ? '#27ae60' : '#e67e22';
+
+    html += `
+      <h3 style="font-size:15px;color:var(--maroon);margin:20px 0 8px 0;text-transform:uppercase;letter-spacing:1px;">
+        Payment
+      </h3>
+    `;
+    html += row('Method', b.paymentMethod || '—');
+    html += row(
+      'Status',
+      `<span style="color:${payColor};font-weight:700;text-transform:capitalize;">
+        ${safeText(b.paymentStatus || 'pending')}
+      </span>`,
+      true
+    );
+  }
+
+  // Action buttons
+  html += `
+    <div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">
+  `;
+
+  if (b.status === 'pending') {
+    html += `
+      <button
+        onclick="updateBookingStatus('${b._id}', 'confirmed')"
+        class="btn"
+        style="background:#2980b9;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;"
+      >
+        ✓ Confirm
+      </button>
+    `;
+  }
+
+  if (b.status === 'confirmed') {
+    html += `
+      <button
+        onclick="updateBookingStatus('${b._id}', 'in-progress')"
+        class="btn"
+        style="background:var(--maroon);color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;"
+      >
+        ▶ Start Trip
+      </button>
+    `;
+  }
+
+  if (b.status === 'in-progress') {
+    html += `
+      <button
+        onclick="updateBookingStatus('${b._id}', 'completed')"
+        class="btn"
+        style="background:#27ae60;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;"
+      >
+        ✔ Complete
+      </button>
+    `;
+  }
+
+  if (b.status !== 'cancelled' && b.status !== 'completed') {
+    html += `
+      <button
+        onclick="updateBookingStatus('${b._id}', 'cancelled')"
+        class="btn"
+        style="background:#c0392b;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;"
+      >
+        ✕ Cancel
+      </button>
+    `;
+  }
+
+  html += `
+      <button
+        onclick="deleteBooking('${b._id}')"
+        class="btn"
+        style="background:#fff;color:#c0392b;border:2px solid #c0392b;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;margin-left:auto;"
+      >
+        🗑 Delete
+      </button>
+    </div>
+  `;
+
+  content.innerHTML = html;
+}
+
+/* ---------- Update Booking Status ---------- */
+async function updateBookingStatus(id, forceStatus) {
+  let newStatus = forceStatus;
+
+  if (!newStatus) {
+    const sel = document.getElementById('modalStatusSelect');
+    newStatus = sel ? sel.value : null;
+  }
+
+  if (!newStatus) {
+    toast('Select a status', 'error');
+    return;
+  }
+
+  try {
+    const res = await API.admin.updateBooking(id, { status: newStatus });
+
+    if (res && res.success) {
+      toast('Status updated to ' + newStatus, 'success');
+
+      // refresh modal detail
+      const detail = await API.admin.getBooking(id);
+      if (detail && detail.success && detail.data) {
+        renderBookingDetail(detail.data);
+      }
+
+      // refresh table
+      await loadBookings();
+    } else {
+      toast(res?.message || 'Failed to update status', 'error');
+    }
+  } catch (err) {
+    console.error('updateBookingStatus error:', err);
+    toast('Server error updating status', 'error');
+  }
+}
+
+/* ---------- Delete Booking ---------- */
+async function deleteBooking(id) {
+  const ok = confirm('Are you sure you want to permanently delete this booking?');
+  if (!ok) return;
+
+  try {
+    const res = await API.admin.deleteBooking(id);
+
+    if (res && res.success) {
+      toast('Booking deleted', 'success');
+      closeBookingModal();
+      await loadBookings();
+    } else {
+      toast(res?.message || 'Failed to delete booking', 'error');
+    }
+  } catch (err) {
+    console.error('deleteBooking error:', err);
+    toast('Server error deleting booking', 'error');
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
