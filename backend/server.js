@@ -33,6 +33,8 @@ const paymentRoutes = require('./routes/payments');
 const settingsRoutes = require('./routes/settings');
 const userRoutes = require('./routes/userRoutes');
 
+
+
 // Ensure upload directories exist
 const dirs = [
   path.join(__dirname, 'uploads'),
@@ -131,6 +133,7 @@ app.use('/api/public', publicApiRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/human', userRoutes);
+       // driver CRUD routes
 
 // Ignore Chrome devtools file
 app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {

@@ -115,6 +115,7 @@ const API = (() => {
     }
   }
 
+  /* ── Public Endpoints ────────────────────── */
   const publicApi = {
     getVehicles: (p) => request('/public/vehicles' + (p ? '?' + p : '')),
     getVehicle: (id) => request('/public/vehicles/' + id),
@@ -125,69 +126,54 @@ const API = (() => {
     createContact: (d) => request('/contacts', { method: 'POST', body: d })
   };
 
+  /* ── Admin Endpoints ─────────────────────── */
   const adminApi = {
+    /* Auth */
     login: async (d, remember = true) => {
       const res = await request('/admin/login', {
         method: 'POST',
         body: d
       });
-
       if (res.success && res.token) {
         setToken(res.token, remember);
       }
-
       return res;
     },
-
-    register: (d) => request('/admin/register', {
-      method: 'POST',
-      body: d
-    }),
-
+    register: (d) => request('/admin/register', { method: 'POST', body: d }),
     getMe: () => request('/admin/me'),
     getDashboard: () => request('/admin/dashboard'),
-    changePassword: (d) =>
-      request('/admin/change-password', { method: 'PUT', body: d }),
+    changePassword: (d) => request('/admin/change-password', { method: 'PUT', body: d }),
 
+    /* Vehicles */
     getVehicles: (p) => request('/vehicles' + (p ? '?' + p : '')),
     getVehicle: (id) => request('/vehicles/' + id),
     createVehicle: (d) => request('/vehicles', { method: 'POST', body: d }),
-    updateVehicle: (id, d) =>
-      request('/vehicles/' + id, { method: 'PUT', body: d }),
-    deleteVehicle: (id) =>
-      request('/vehicles/' + id, { method: 'DELETE' }),
-    toggleVehicle: (id) =>
-      request('/vehicles/' + id + '/toggle', { method: 'PATCH' }),
+    updateVehicle: (id, d) => request('/vehicles/' + id, { method: 'PUT', body: d }),
+    deleteVehicle: (id) => request('/vehicles/' + id, { method: 'DELETE' }),
+    toggleVehicle: (id) => request('/vehicles/' + id + '/toggle', { method: 'PATCH' }),
 
+    /* Packages */
     getPackages: (p) => request('/packages' + (p ? '?' + p : '')),
     getPackage: (id) => request('/packages/' + id),
     createPackage: (d) => request('/packages', { method: 'POST', body: d }),
-    updatePackage: (id, d) =>
-      request('/packages/' + id, { method: 'PUT', body: d }),
-    deletePackage: (id) =>
-      request('/packages/' + id, { method: 'DELETE' }),
-    togglePackage: (id) =>
-      request('/packages/' + id + '/toggle', { method: 'PATCH' }),
-    toggleFeatured: (id) =>
-      request('/packages/' + id + '/featured', { method: 'PATCH' }),
+    updatePackage: (id, d) => request('/packages/' + id, { method: 'PUT', body: d }),
+    deletePackage: (id) => request('/packages/' + id, { method: 'DELETE' }),
+    togglePackage: (id) => request('/packages/' + id + '/toggle', { method: 'PATCH' }),
+    toggleFeatured: (id) => request('/packages/' + id + '/featured', { method: 'PATCH' }),
 
+    /* Bookings */
     getBookings: (p) => request('/bookings' + (p ? '?' + p : '')),
     getBooking: (id) => request('/bookings/' + id),
-    updateBooking: (id, d) =>
-      request('/bookings/' + id, { method: 'PUT', body: d }),
-    updateBookingStatus: (id, d) =>
-      request('/bookings/' + id + '/status', { method: 'PATCH', body: d }),
-    deleteBooking: (id) =>
-      request('/bookings/' + id, { method: 'DELETE' }),
+    updateBooking: (id, d) => request('/bookings/' + id, { method: 'PUT', body: d }),
+    updateBookingStatus: (id, d) => request('/bookings/' + id + '/status', { method: 'PATCH', body: d }),
+    deleteBooking: (id) => request('/bookings/' + id, { method: 'DELETE' }),
 
+    /* Contacts */
     getContacts: (p) => request('/contacts' + (p ? '?' + p : '')),
     getContact: (id) => request('/contacts/' + id),
-    deleteContact: (id) =>
-      request('/contacts/' + id, { method: 'DELETE' }),
-    markRead: (id) =>
-      request('/contacts/' + id + '/read', { method: 'PATCH' }),
-    markUnread: (id) =>
-      request('/contacts/' + id + '/unread', { method: 'PATCH' })
+    deleteContact: (id) => request('/contacts/' + id, { method: 'DELETE' }),
+    markRead: (id) => request('/contacts/' + id + '/read', { method: 'PATCH' }),
+    markUnread: (id) => request('/contacts/' + id + '/unread', { method: 'PATCH' })
   };
 
   return {

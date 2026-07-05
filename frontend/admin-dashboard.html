@@ -12,14 +12,13 @@
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="/css/dashboard.css">
-
-
 </head>
 
 <body>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="app">
+        <!-- ========== SIDEBAR ========== -->
         <aside class="sidebar" id="sidebar">
             <button class="sidebar-close" id="sidebarClose" aria-label="Close">&times;</button>
             <div class="sidebar-head">
@@ -59,6 +58,12 @@
                     </svg>
                     Bookings
                 </button>
+                <button class="nav-item" data-section="contacts">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    </svg>
+                    Contacts
+                </button>
 
                 <div class="nav-section-label">System</div>
                 <button class="nav-item" data-section="settings">
@@ -86,6 +91,7 @@
             </div>
         </aside>
 
+        <!-- ========== MAIN CONTENT ========== -->
         <div class="main">
             <header class="header">
                 <div class="header-left">
@@ -143,11 +149,9 @@
                 </div>
 
                 <!-- ========== VEHICLES ========== -->
-                <!-- ========== VEHICLES ========== -->
                 <div class="section" id="sec-vehicles">
                     <div class="filters-bar">
                         <input class="filter-input" id="vSearch" placeholder="Search vehicles...">
-
                         <select class="filter-select" id="vTypeFilter">
                             <option value="">All Types</option>
                             <option value="Sedan">Sedan</option>
@@ -157,16 +161,13 @@
                             <option value="Luxury">Luxury</option>
                             <option value="Motorcycle">Motorcycle</option>
                         </select>
-
                         <select class="filter-select" id="vStatusFilter">
                             <option value="">All Status</option>
                             <option value="active">Active</option>
                             <option value="maintenance">Maintenance</option>
                             <option value="disabled">Disabled</option>
                         </select>
-
                         <div style="flex:1"></div>
-
                         <button class="btn btn-primary" id="addVehicleBtn">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2.5">
@@ -176,24 +177,16 @@
                             Add Vehicle
                         </button>
                     </div>
-
                     <div class="admin-vehicles-grid" id="vehiclesGrid"></div>
                 </div>
-
 
                 <!-- ========== PACKAGES ========== -->
                 <div class="section" id="sec-packages">
                     <div class="filters-bar">
-
-                        <!-- Search -->
                         <input class="filter-input" id="pSearch" type="text" placeholder="Search packages..."
                             autocomplete="off">
-
-                        <!-- Category Filter -->
-                        <select class="filter-select" id="pCatFilter" name="category"
-                            title="Filter packages by category">
+                        <select class="filter-select" id="pCatFilter" name="category">
                             <option value="">All Categories</option>
-
                             <option value="adventure">Adventure</option>
                             <option value="pilgrimage">Pilgrimage</option>
                             <option value="beach">Beach</option>
@@ -203,22 +196,16 @@
                             <option value="honeymoon">Honeymoon</option>
                             <option value="family">Family</option>
                         </select>
-
                         <div style="flex:1"></div>
-
-                        <!-- Add Button -->
                         <button class="btn btn-primary" id="addPkgBtn" type="button">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2.5">
                                 <line x1="12" y1="5" x2="12" y2="19" />
-                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                             Add Package
                         </button>
-
                     </div>
-
-                    <!-- Grid -->
                     <div class="pkg-grid" id="packagesGrid"></div>
                 </div>
 
@@ -232,6 +219,7 @@
                             <option value="pending">Pending</option>
                             <option value="cancelled">Cancelled</option>
                             <option value="completed">Completed</option>
+                            <option value="in-progress">In Progress</option>
                         </select>
                     </div>
                     <div class="data-table-wrap">
@@ -241,8 +229,9 @@
                                     <tr>
                                         <th>Booking ID</th>
                                         <th>Customer</th>
+                                        <th>Phone</th>
                                         <th>Package / Vehicle</th>
-                                        <th>Date</th>
+                                        <th>Travel Date</th>
                                         <th>Amount</th>
                                         <th>Status</th>
                                         <th>Actions</th>
@@ -254,6 +243,40 @@
                     </div>
                 </div>
 
+                <!-- ========== CONTACTS ========== -->
+                <div class="section" id="sec-contacts">
+                    <div class="filters-bar">
+                        <input class="filter-input" id="cSearch" placeholder="Search contacts...">
+                        <div style="flex:1"></div>
+                        <button class="btn btn-primary" onclick="exportContacts()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Export
+                        </button>
+                    </div>
+                    <div class="data-table-wrap">
+                        <div class="table-responsive">
+                            <table class="data-table" id="contactsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Subject</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contactsBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- ========== SETTINGS ========== -->
                 <div class="section" id="sec-settings">
@@ -272,15 +295,23 @@
                                 <h4>Support Email</h4>
                                 <p>Main contact email for customers</p>
                             </div>
-                            <input type="email" class="form-control" id="supportEmail"
-                                placeholder="amantourandtravelsncr@gmail.com" style="width:220px;">
+                            <input type="email" class="form-control" id="supportEmail" placeholder="support@atat.com"
+                                style="width:220px;">
                         </div>
                         <div class="settings-row">
                             <div class="settings-row-info">
                                 <h4>Support Phone</h4>
                                 <p>Main contact number</p>
                             </div>
-                            <input type="tel" class="form-control" id="supportPhone" placeholder="+1-800-123-4567"
+                            <input type="tel" class="form-control" id="supportPhone" placeholder="+91-XXXXX-XXXXX"
+                                style="width:220px;">
+                        </div>
+                        <div class="settings-row">
+                            <div class="settings-row-info">
+                                <h4>WhatsApp Number</h4>
+                                <p>WhatsApp business number</p>
+                            </div>
+                            <input type="tel" class="form-control" id="whatsappPhone" placeholder="+91-XXXXX-XXXXX"
                                 style="width:220px;">
                         </div>
                         <div class="settings-row">
@@ -292,7 +323,7 @@
                                 <option value="USD">USD ($)</option>
                                 <option value="EUR">EUR</option>
                                 <option value="GBP">GBP</option>
-                                <option value="INR">INR</option>
+                                <option value="INR" selected>INR (₹)</option>
                             </select>
                         </div>
                     </div>
@@ -350,17 +381,11 @@
                         <button class="btn btn-primary" onclick="changePassword()">Change Password</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-
-
-
-
-
-
+    <!-- ========== MODALS ========== -->
 
     <!-- Vehicle Form Modal -->
     <div class="modal-backdrop" id="vehicleModal">
@@ -408,7 +433,6 @@
                                 <label>Model</label>
                                 <input class="form-control" name="model" placeholder="e.g. Fortuner">
                             </div>
-
                             <div class="form-group">
                                 <label>Year</label>
                                 <input class="form-control" name="year" type="number" min="2000" max="2026"
@@ -435,26 +459,23 @@
                             </div>
                             <div class="form-group">
                                 <label>Fuel Type</label>
-                                <select class="form-control" name="fuelType">
-                                    <option value="">Select...</option>
-                                    <option>Petrol</option>
-                                    <option>Diesel</option>
-                                    <option>Electric</option>
-                                    <option>Hybrid</option>
-                                </select>
+                                <input class="form-control" name="fuelType" type="text"
+                                    placeholder="e.g. Petrol, Diesel, Electric, Hybrid">
                             </div>
                             <div class="form-group">
                                 <label>Transmission</label>
-                                <select class="form-control" name="transmission">
-                                    <option value="">Select...</option>
-                                    <option>Automatic</option>
-                                    <option>Manual</option>
-                                </select>
+                                <input class="form-control" name="transmission" type="text"
+                                    placeholder="e.g. Automatic, Manual">
                             </div>
                         </div>
-                        <div class="form-group" style="margin-bottom:16px">
-                            <label>Features</label>
-                            <div class="features-grid" id="featuresGrid"></div>
+                        <div class="form-row full">
+                            <div class="form-group">
+                                <label>Features</label>
+                                <input class="form-control" name="features" type="text"
+                                    placeholder="e.g. GPS, Bluetooth, USB Charger, Sunroof, Rear Camera">
+                                <small style="color:var(--muted);font-size:12px;margin-top:4px;display:block">Separate
+                                    multiple features with commas</small>
+                            </div>
                         </div>
                     </div>
                     <div class="form-tab-pane" id="vtab-media">
@@ -472,30 +493,25 @@
                         </div>
                     </div>
                     <div class="form-tab-pane" id="vtab-pricing">
-
                         <div class="form-row triple">
                             <div class="form-group">
                                 <label>Price Per Day</label>
                                 <input class="form-control" name="pricePerDay" type="number" placeholder="2500">
                             </div>
-
                             <div class="form-group">
                                 <label>Daily Rate</label>
                                 <input class="form-control" name="dailyRate" type="number" placeholder="2500">
                             </div>
-
                             <div class="form-group">
                                 <label>Price Per KM</label>
                                 <input class="form-control" name="pricePerKm" type="number" placeholder="18">
                             </div>
                         </div>
-
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Badge</label>
                                 <input class="form-control" name="badge" placeholder="Most Popular">
                             </div>
-
                             <div class="form-group">
                                 <label>Badge Color</label>
                                 <select class="form-control" name="badgeClass">
@@ -507,30 +523,21 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-row triple">
-
                             <div class="form-group">
                                 <label>Rating</label>
                                 <input class="form-control" name="rating" type="number" step="0.1" min="0" max="5">
                             </div>
-
                             <div class="form-group">
                                 <label>Total Trips</label>
                                 <input class="form-control" name="totalTrips" type="number">
                             </div>
-
                             <div class="form-group">
                                 <label>Total KM (Lakhs)</label>
                                 <input class="form-control" name="totalKmLakhs" type="number">
                             </div>
-
                         </div>
-
                         <div class="form-row triple">
-
-
-
                             <div class="form-group">
                                 <label>AC</label>
                                 <select class="form-control" name="ac">
@@ -538,7 +545,6 @@
                                     <option value="false">No</option>
                                 </select>
                             </div>
-
                             <div class="form-group">
                                 <label>Status</label>
                                 <select class="form-control" name="status">
@@ -547,7 +553,6 @@
                                     <option value="disabled">Disabled</option>
                                 </select>
                             </div>
-
                         </div>
                     </div>
                 </form>
@@ -588,7 +593,6 @@
                             <div class="form-error">Category is required</div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label>Duration</label>
@@ -600,9 +604,6 @@
                                 placeholder="1299.00" required>
                             <div class="form-error">Price is required</div>
                         </div>
-
-
-
                     </div>
                     <div class="form-row full">
                         <div class="form-group">
@@ -614,8 +615,7 @@
                     <div class="form-row full">
                         <div class="form-group">
                             <label>Image URL</label>
-                            <input class="form-control" name="image"
-                                placeholder="https://picsum.photos/seed/pkg/800/400">
+                            <input class="form-control" name="image" placeholder="https://example.com/image.jpg">
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom:16px">
@@ -668,12 +668,12 @@
         </div>
     </div>
 
+    <!-- Toast Container -->
     <div id="toastBox"></div>
 
-
+    <!-- Scripts -->
     <script src="/js/api.js"></script>
     <script src="/js/dashboard.js"></script>
-
 </body>
 
 </html>
