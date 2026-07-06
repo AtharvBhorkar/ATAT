@@ -37,21 +37,7 @@ const vehicleSchema = new mongoose.Schema(
       trim: true,
     },
 
-    type: {
-      type: String,
-      required: true,
-      enum: [
-        "sedan",
-        "suv",
-        "muv",
-        "tempo",
-        "bus",
-        "luxury",
-        "hatchback",
-        "van",
-        "bike",
-      ],
-    },
+    type: String,
 
     brand: String,
 
