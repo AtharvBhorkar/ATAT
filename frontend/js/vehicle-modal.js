@@ -1,5 +1,3 @@
-
-
 const VEHICLE_DATA = {
 
   /* ── SEDANS ── */
@@ -218,6 +216,9 @@ VEHICLE_DATA['sedan'] = VEHICLE_DATA['sedan-dzire'];
 VEHICLE_DATA['suv'] = VEHICLE_DATA['suv-innova'];
 VEHICLE_DATA['tempo'] = VEHICLE_DATA['tempo-12'];
 
+/* ★ FIXED: Reliable placeholder — no more 404s ★ */
+const FALLBACK_IMAGE = 'https://placehold.co/900x500/e8e0d4/6E1F2B?text=No+Image&font=inter';
+
 const SPEC_ICONS = {
   seat: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3 19c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
   fuel: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 18V6l3-4h7l3 4v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="7" y="9" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.4"/></svg>`,
@@ -232,7 +233,6 @@ const FEAT_ICON = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><
 function buildStars(r) {
   let h = '';
   for (let i = 0; i < 5; i++) {
-    const f = i < Math.floor(r) ? '#D9A441' : (i < r ? 'url(#half)' : 'none');
     h += `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5l1.4 3.8H12l-2.9 2.3 1.1 3.8L7 9.1l-3.2 2.3 1.1-3.8L2 5.3h3.6z" fill="${i < Math.floor(r) ? '#D9A441' : 'none'}" stroke="#D9A441" stroke-width="1"/></svg>`;
   }
   return h;
@@ -381,6 +381,11 @@ function transformVehicleForModal(v) {
   if (type === 'tempo traveller' || type === 'tempo') bookType = 'tempo';
   if (type === 'luxury bus' || type === 'bus') bookType = 'bus';
 
+  /* ★ FIXED: Uses FALLBACK_IMAGE constant instead of /images/no-image.jpg ★ */
+  const images = v.images && v.images.length > 0
+    ? v.images
+    : (v.image ? [v.image] : [FALLBACK_IMAGE]);
+
   return {
     name: v.name || 'Unnamed Vehicle',
     type: capitalize(type),
@@ -389,7 +394,7 @@ function transformVehicleForModal(v) {
     rating: v.rating || 0,
     trips: v.totalTrips || 0,
     desc: v.description || v.note || 'Comfortable vehicle for your journey.',
-    images: v.images && v.images.length > 0 ? v.images : (v.image ? [v.image] : ['/images/no-image.jpg']),
+    images: images,
     specs: [
       { icon: 'seat', label: 'Seating', val: `${v.seats || 4} Passengers` },
       { icon: 'fuel', label: 'Fuel', val: capitalize(v.fuelType || v.fuel || 'N/A') },

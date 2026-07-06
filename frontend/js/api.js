@@ -3,7 +3,11 @@
 ═══════════════════════════════════════════════ */
 
 const API = (() => {
-  const BASE = 'http://localhost:5000/api';
+  // ✅ FIXED: dynamic origin instead of hardcoded localhost.
+  // Works in local dev (http://localhost:5000/api) AND in
+  // production/staging (https://yourdomain.com/api) without
+  // any code changes needed at deploy time.
+  const BASE = window.location.origin + '/api';
   const TOKEN_KEY = 'voyago_token';
 
   function getToken() {
@@ -109,7 +113,7 @@ const API = (() => {
     } catch (err) {
       return {
         success: false,
-        message: 'Network error. Is the backend server running on port 5000?',
+        message: 'Network error. Is the backend server reachable?',
         error: err.message
       };
     }
@@ -167,6 +171,21 @@ const API = (() => {
     updateBooking: (id, d) => request('/bookings/' + id, { method: 'PUT', body: d }),
     updateBookingStatus: (id, d) => request('/bookings/' + id + '/status', { method: 'PATCH', body: d }),
     deleteBooking: (id) => request('/bookings/' + id, { method: 'DELETE' }),
+
+    /* Drivers */
+    getDrivers: (p) => request('/drivers' + (p ? '?' + p : '')),
+    getDriver: (id) => request('/drivers/' + id),
+    createDriver: (d) => request('/drivers', { method: 'POST', body: d }),
+    updateDriver: (id, d) => request('/drivers/' + id, { method: 'PUT', body: d }),
+    deleteDriver: (id) => request('/drivers/' + id, { method: 'DELETE' }),
+    toggleDriver: (id) => request('/drivers/' + id + '/toggle', { method: 'PATCH' }),
+
+    /* Send Booking Confirmation */
+    sendBookingConfirmation: (bookingId, options) =>
+      request('/bookings/' + bookingId + '/confirm', {
+        method: 'POST',
+        body: options
+      }),
 
     /* Contacts */
     getContacts: (p) => request('/contacts' + (p ? '?' + p : '')),

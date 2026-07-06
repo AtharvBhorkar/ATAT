@@ -19,6 +19,51 @@ const reviewSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// ===============================
+// TYPE NORMALIZATION
+// Accepts any casing ("suv", "Suv", "SUV", " suv ")
+// and maps it to the canonical enum value below.
+// This fixes "`suv` is not a valid enum value" errors
+// caused by legacy lowercase data or inconsistent
+// casing from different parts of the frontend.
+// ===============================
+const VEHICLE_TYPES = [
+  "Sedan",
+  "SUV",
+  "Hatchback",
+  "Van",
+  "Luxury",
+  "Electric",
+  "Hybrid",
+  "MUV",
+  "Mini Bus",
+];
+
+const TYPE_ALIAS_MAP = {
+  sedan: "Sedan",
+  suv: "SUV",
+  hatchback: "Hatchback",
+  van: "Van",
+  luxury: "Luxury",
+  electric: "Electric",
+  hybrid: "Hybrid",
+  muv: "MUV",
+  "mini bus": "Mini Bus",
+  minibus: "Mini Bus",
+  "mini-bus": "Mini Bus",
+  bus: "Mini Bus",
+};
+
+function normalizeVehicleType(value) {
+  if (value === null || value === undefined) return value;
+  var raw = String(value).trim();
+  if (!raw) return raw;
+  // Already an exact canonical match — pass through untouched
+  if (VEHICLE_TYPES.indexOf(raw) !== -1) return raw;
+  var key = raw.toLowerCase();
+  return TYPE_ALIAS_MAP[key] || raw; // fall through so enum still reports unknown values clearly
+}
+
 const vehicleSchema = new mongoose.Schema(
   {
     // ===============================
@@ -37,7 +82,13 @@ const vehicleSchema = new mongoose.Schema(
       trim: true,
     },
 
-    type: String,
+    type: {
+      type: String,
+      enum: VEHICLE_TYPES,
+      required: true,
+      trim: true,
+      set: normalizeVehicleType,
+    },
 
     brand: String,
 
@@ -59,7 +110,7 @@ const vehicleSchema = new mongoose.Schema(
       default: 2,
     },
 
-    fuelType:String,
+    fuelType: String,
 
     transmission: {
       type: String,
@@ -123,6 +174,18 @@ const vehicleSchema = new mongoose.Schema(
     image: String,
 
     images: [
+      {
+        type: String,
+      },
+    ],
+
+    // ===============================
+    // ROUTES
+    // (was missing — admin UI "Available Routes"
+    // field had nowhere to persist to before this)
+    // ===============================
+
+    routes: [
       {
         type: String,
       },

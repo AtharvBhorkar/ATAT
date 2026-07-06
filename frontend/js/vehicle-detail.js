@@ -164,6 +164,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if(mainImg) {
     mainImg.src = V.heroImg;
     mainImg.alt = `${V.name} - main view`;
+    // Ensure image fits perfectly on all devices
+    mainImg.style.objectFit = 'cover';
   }
 
   if(thumbsWrap) {
@@ -171,14 +173,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     V.images.forEach((src, i) => {
       const thumb = document.createElement('div');
       thumb.className = `gallery-thumb${i === 0 ? ' active' : ''}`;
-      thumb.innerHTML = `<img src="${src}" alt="${V.name} angle ${i + 1}" loading="lazy"/><div class="gallery-thumb-overlay"></div>`;
+      thumb.innerHTML = `<img src="${src}" alt="${V.name} angle ${i + 1}" loading="lazy" style="object-fit:cover;width:100%;height:100%;"/><div class="gallery-thumb-overlay"></div>`;
       thumb.addEventListener('click', () => {
         if(mainImg) {
-          mainImg.classList.add('switching');
+          // Smooth fade transition
+          mainImg.style.opacity = '0';
           setTimeout(() => {
             mainImg.src = src;
-            mainImg.classList.remove('switching');
-          }, 220);
+            mainImg.style.opacity = '1';
+          }, 200);
         }
         document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
         thumb.classList.add('active');
@@ -322,12 +325,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       { label: 'Per KM', price: `₹${V.pricing.perKm}`, unit: 'per kilometre', featured: true },
       { label: 'Per Day', price: `₹${V.pricing.perDay.toLocaleString()}`, unit: 'per day', featured: false }
     ];
+    // Clear existing cards except the book button
+    const bookBtnMobile = $('vdBookBtnMobile');
+    pricingMobileWrap.innerHTML = '';
     mobileCards.forEach(c => {
       const el = document.createElement('div');
       el.className = `vd-pricing-card-item${c.featured ? ' featured' : ''}`;
       el.innerHTML = `<span class="pc-label">${c.label}</span><div class="pc-price">${c.price}</div><span class="pc-unit">${c.unit}</span>`;
-      pricingMobileWrap.insertBefore(el, $('vdBookBtnMobile'));
+      pricingMobileWrap.appendChild(el);
     });
+    pricingMobileWrap.appendChild(bookBtnMobile);
   }
 
   /* ── BOOK BUTTON LINKS ── */
@@ -449,7 +456,7 @@ async function buildSimilarVehicles(currentId, currentType) {
       card.setAttribute('data-reveal', '');
       card.innerHTML = `
         <div class="vehicle-img-wrap">
-          <img src="${img}" alt="${v.name}" loading="lazy" />
+          <img src="${img}" alt="${v.name}" loading="lazy" style="object-fit:cover;width:100%;height:100%;" />
           <span class="vehicle-badge ${v.badgeClass || 'badge--maroon'}">${v.badge || ''}</span>
           <div class="vehicle-img-overlay">
             <a href="${detailURL}" class="quick-view-btn">View Details</a>
