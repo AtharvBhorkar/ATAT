@@ -4,15 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | Voyago - Premium Travel Experience</title>
-    <meta name="description" content="Get in touch with Voyago to curate your next premium travel experience.">
+    <title>Contact Us | ATAT - Premium Travel Experience</title>
+    <meta name="description" content="Get in touch with ATAT to curate your next premium travel experience.">
     <!-- Google Fonts for Modern Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
     <!-- FontAwesome for Premium Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom Stylesheet -->
@@ -21,51 +23,86 @@
     <!-- Inline override for Navbar Background and Premium Animations -->
     <style>
         /* PREMIUM SECTION ANIMATIONS */
-        .premium-reveal { opacity: 0; transform: translateY(40px); filter: blur(10px); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); will-change: opacity, transform, filter; }
-        .premium-reveal.in-view { opacity: 1; transform: translateY(0); filter: blur(0); }
-        .premium-item { opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
-        .premium-reveal.in-view .premium-item { opacity: 1; transform: translateY(0); }
-        .premium-reveal.in-view .premium-item:nth-child(1) { transition-delay: 0.1s; }
-        .premium-reveal.in-view .premium-item:nth-child(2) { transition-delay: 0.2s; }
-        .premium-reveal.in-view .premium-item:nth-child(3) { transition-delay: 0.3s; }
-        .premium-reveal.in-view .premium-item:nth-child(4) { transition-delay: 0.4s; }
-        .premium-reveal.in-view .premium-item:nth-child(5) { transition-delay: 0.5s; }
+        .premium-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            filter: blur(10px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform, filter;
+        }
 
-        </style>
+        .premium-reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        .premium-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .premium-reveal.in-view .premium-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .premium-reveal.in-view .premium-item:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .premium-reveal.in-view .premium-item:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+
+        .premium-reveal.in-view .premium-item:nth-child(3) {
+            transition-delay: 0.3s;
+        }
+
+        .premium-reveal.in-view .premium-item:nth-child(4) {
+            transition-delay: 0.4s;
+        }
+
+        .premium-reveal.in-view .premium-item:nth-child(5) {
+            transition-delay: 0.5s;
+        }
+    </style>
 </head>
 
 <body>
 
 
     <!-- ══════════════ NAVBAR ══════════════ -->
-<nav class="navbar" id="navbar">
-  <div class="nav-inner">
-    <!-- Updated Logo Link with Image -->
-    <a href="index.html" class="logo-brand">
-      <img src="../assets/logo1.png" alt="ATAT Aman Tour and Travels" class="logo-img" style="border-radius: 50%; object-fit: cover; aspect-ratio: 1/1;" />
-    </a>
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <!-- Updated Logo Link with Image -->
+            <a href="index.html" class="logo-brand">
+                <img src="../assets/logo1.png" alt="ATAT Aman Tour and Travels" class="logo-img"
+                    style="border-radius: 50%; object-fit: cover; aspect-ratio: 1/1;" />
+            </a>
 
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="vehicles.html">Vehicles</a></li>
-      <li><a href="packages.html">Packages</a></li>
-      <li><a href="pricing.html">Pricing</a></li>
-      <li><a href="contact.html" class="active">Contact</a></li>
-      <li class="mobile-only"><a href="login.html" class="nav-btn-signin">Sign In</a></li>
-      <li class="mobile-only"><a href="booking.html" class="nav-btn-book">Book a Ride</a></li>
-    </ul>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="vehicles.html">Vehicles</a></li>
+                <li><a href="packages.html">Packages</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+                <li class="mobile-only"><a href="login.html" class="nav-btn-signin">Blog</a></li>
+                <li class="mobile-only"><a href="booking.html" class="nav-btn-book">Book a Ride</a></li>
+            </ul>
 
-    <div class="nav-actions">
-      <a href="login.html" class="btn-ghost">Sign In</a>
-      <a href="booking.html" class="btn-primary">Book a Ride</a>
-    </div>
+            <div class="nav-actions">
+                <a href="login.html" class="btn-ghost">Blog</a>
+                <a href="booking.html" class="btn-primary">Book a Ride</a>
+            </div>
 
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
 
     <!-- Editorial Hero Section -->
     <header class="contact-hero">
@@ -91,14 +128,14 @@
                         <div class="icon-circle"><i class="fa-solid fa-phone"></i></div>
                         <div class="info">
                             <span class="label">Call Us</span>
-                            <a href="tel:+18005550199">+1 (800) 555-0199</a>
+                            <a href="tel:+916205956801">+91 6205956801</a>
                         </div>
                     </div>
                     <div class="editorial-contact-item">
                         <div class="icon-circle"><i class="fa-brands fa-whatsapp"></i></div>
                         <div class="info">
                             <span class="label">WhatsApp</span>
-                            <a href="https://wa.me/18005550199" target="_blank" class="chat-link">Click to chat <i
+                            <a href="https://wa.me/916205956801" target="_blank" class="chat-link">Click to chat <i
                                     class="fa-solid fa-arrow-up-right-from-square"></i></a>
                         </div>
                     </div>
@@ -106,14 +143,14 @@
                         <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
                         <div class="info">
                             <span class="label">Email</span>
-                            <a href="mailto:concierge@voyago.com">concierge@voyago.com</a>
+                            <a href="mailto:amantourandtravelsncr@gmail.com">amantourandtravelsncr@gmail.com</a>
                         </div>
                     </div>
                     <div class="editorial-contact-item">
                         <div class="icon-circle"><i class="fa-solid fa-location-dot"></i></div>
                         <div class="info">
-                            <span class="label">Global Headquarters</span>
-                            <p>128 Mayfair Square,<br>London, W1J 6BQ</p>
+                            <span class="label">Our Office</span>
+                            <p>Y-325B, Sector 12,<br>Noida, 201301</p>
                         </div>
                     </div>
                 </div>
@@ -166,7 +203,8 @@
     <section class="contact-map" style="padding: 4rem 0;">
         <div class="container fade-up delay-2">
             <div class="contained-map-wrapper">
-                <iframe src="https://maps.google.com/maps?q=Mayfair,%20London&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                <iframe
+                    src="https://maps.google.com/maps?q=Y-325B,+Sector+12,+Noida,+201301&t=&z=15&ie=UTF8&iwloc=&output=embed"
                     allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
             </div>
@@ -177,44 +215,44 @@
     <section class="global-offices">
         <div class="container">
             <div class="section-header text-center fade-up">
-                <p class="subtitle">Our Locations</p>
-                <h2>Global <span class="italic-accent">Presence</span></h2>
+                <p class="subtitle">Our Location</p>
+                <h2>Where to <span class="italic-accent">Find Us</span></h2>
             </div>
             <div class="offices-grid">
                 <!-- Office 1 -->
                 <div class="office-card fade-up">
                     <div class="office-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80"
-                            alt="London">
+                        <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=800&q=80"
+                            alt="Noida Office">
                     </div>
                     <div class="office-info">
-                        <h3>London</h3>
-                        <p>128 Mayfair Square,<br>London, W1J 6BQ</p>
-                        <a href="mailto:london@voyago.com">london@voyago.com</a>
+                        <h3>Noida (HQ)</h3>
+                        <p>Y-325B, Sector 12,<br>Noida, 201301</p>
+                        <a href="mailto:amantourandtravelsncr@gmail.com">amantourandtravelsncr@gmail.com</a>
                     </div>
                 </div>
                 <!-- Office 2 -->
                 <div class="office-card fade-up delay-1">
                     <div class="office-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80"
-                            alt="New York">
+                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80"
+                            alt="Delhi NCR">
                     </div>
                     <div class="office-info">
-                        <h3>New York</h3>
-                        <p>One World Trade Center,<br>New York, NY 10007</p>
-                        <a href="mailto:ny@voyago.com">ny@voyago.com</a>
+                        <h3>Delhi NCR</h3>
+                        <p>Serving across<br>Delhi & NCR Region</p>
+                        <a href="tel:+916205956801">+91 6205956801</a>
                     </div>
                 </div>
                 <!-- Office 3 -->
                 <div class="office-card fade-up delay-2">
                     <div class="office-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80"
-                            alt="Dubai">
+                        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=800&q=80"
+                            alt="Pan India">
                     </div>
                     <div class="office-info">
-                        <h3>Dubai</h3>
-                        <p>Burj Khalifa, Downtown,<br>Dubai, UAE</p>
-                        <a href="mailto:dubai@voyago.com">dubai@voyago.com</a>
+                        <h3>Pan India</h3>
+                        <p>Tours & Transfers<br>Across India</p>
+                        <a href="mailto:amantourandtravelsncr@gmail.com">amantourandtravelsncr@gmail.com</a>
                     </div>
                 </div>
             </div>
@@ -230,54 +268,71 @@
             </div>
             <div class="social-grid">
                 <div class="social-item fade-up">
-                    <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80" alt="Paris Tourist Place">
+                    <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=600&q=80"
+                        alt="Paris Tourist Place">
                     <div class="overlay">
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-twitter"></i></a>
+                        <a href="https://wa.me/916205956801" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="social-item fade-up delay-1">
-                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=600&q=80" alt="Travel">
+                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=600&q=80"
+                        alt="Travel">
                     <div class="overlay">
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-twitter"></i></a>
+                        <a href="https://wa.me/916205956801" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="social-item fade-up delay-2">
-                    <img src="https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=600&q=80" alt="Travel">
+                    <img src="https://images.unsplash.com/photo-1504150558240-0b4fd8946624?auto=format&fit=crop&w=600&q=80"
+                        alt="Travel">
                     <div class="overlay">
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-twitter"></i></a>
+                        <a href="https://wa.me/916205956801" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="social-item fade-up delay-3">
-                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Travel">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80"
+                        alt="Travel">
                     <div class="overlay">
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-twitter"></i></a>
+                        <a href="https://wa.me/916205956801" target="_blank" rel="noopener noreferrer"><i
+                                class="fa-brands fa-whatsapp"></i></a>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
-    </section>
-
-
-    <!-- Newsletter Hero Section -->
-    <section class="newsletter-hero">
-        <div class="container fade-up">
-            <h2>Join the <span class="italic-accent" style="color: var(--bg-color);">Inner Circle</span></h2>
-            <p>Subscribe to receive exclusive invitations, bespoke travel inspiration, and updates from the world of premium travel.</p>
-            <form class="newsletter-hero-form">
-                <input type="email" placeholder="Enter your email address" required>
-                <button type="submit">Subscribe</button>
-            </form>
         </div>
     </section>
+
+
+
+
+
+
 
     <!-- FAQ Section -->
     <section class="contact-faq">
@@ -323,8 +378,8 @@
     </section>
 
 
-  <!-- ------------- FOOTER ------------- -->
-  <footer class="footer">
+    <!-- ------------- FOOTER ------------- -->
+    <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
@@ -440,41 +495,41 @@
     </script>
     <script>
         {
-        /* ------- PREMIUM ANIMATIONS ------- */
-        const premiumSections = document.querySelectorAll('section, .section, .hero, .footer-col');
-        premiumSections.forEach(sec => {
-            sec.classList.add('premium-reveal');
-            sec.querySelectorAll('h1, h2, h3, p, .card, .stat-card').forEach(el => el.classList.add('premium-item'));
-        });
-        const premiumObs = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('in-view');
-                    premiumObs.unobserve(entry.target);
-                }
+            /* ------- PREMIUM ANIMATIONS ------- */
+            const premiumSections = document.querySelectorAll('section, .section, .hero, .footer-col');
+            premiumSections.forEach(sec => {
+                sec.classList.add('premium-reveal');
+                sec.querySelectorAll('h1, h2, h3, p, .card, .stat-card').forEach(el => el.classList.add('premium-item'));
             });
-        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
-        premiumSections.forEach(sec => premiumObs.observe(sec));
+            const premiumObs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        premiumObs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+            premiumSections.forEach(sec => premiumObs.observe(sec));
 
-        /* ------- NAVBAR SCROLL ------- */
-        const navbar = document.getElementById('navbar');
-        const onScroll = () => { if(navbar) navbar.classList.toggle('scrolled', window.scrollY > 40); };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-        /* ------- HAMBURGER MENU ------- */
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
-        if(hamburger && navLinks) {
-            hamburger.addEventListener('click', () => {
-                const open = hamburger.classList.toggle('open');
-                navLinks.classList.toggle('open', open);
-                hamburger.setAttribute('aria-expanded', open);
-            });
-            // Close on link click
-            navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); }));
-            // Close on outside click
-            document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
-        }
+            /* ------- NAVBAR SCROLL ------- */
+            const navbar = document.getElementById('navbar');
+            const onScroll = () => { if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 40); };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+            /* ------- HAMBURGER MENU ------- */
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', () => {
+                    const open = hamburger.classList.toggle('open');
+                    navLinks.classList.toggle('open', open);
+                    hamburger.setAttribute('aria-expanded', open);
+                });
+                // Close on link click
+                navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); }));
+                // Close on outside click
+                document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
+            }
         }
     </script>
 
