@@ -250,23 +250,40 @@
         });
     }
 
+    const LOCAL_PRICING = {
+        hatchback: { halfDay: 700,  eightHr: 1300, fullDay: 2200, extraKm: 11, extraHr: 100, night: 200, maxPax: 4 },
+        sedan:     { halfDay: 900,  eightHr: 1600, fullDay: 2700, extraKm: 13, extraHr: 100, night: 200, maxPax: 4 },
+        luxury:    { halfDay: 1000, eightHr: 1800, fullDay: 3500, extraKm: 15, extraHr: 120, night: 200, maxPax: 4 },
+        suv:       { halfDay: null, eightHr: 2500, fullDay: 3800, extraKm: 16, extraHr: 200, night: 250, maxPax: 6 },
+        muv:       { halfDay: null, eightHr: 3000, fullDay: 4800, extraKm: 21, extraHr: 200, night: 250, maxPax: 6 }
+    };
+
+    function getLocalPricing(type) {
+        const key = (type || '').toLowerCase();
+        return LOCAL_PRICING[key] || LOCAL_PRICING.sedan;
+    }
+
     function renderVehicleTable() {
         const tbody = document.getElementById('vehicleTableBody');
         if (!tbody) return;
         if (vehicles.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:#999;">No vehicles found.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#999;">No vehicles found.</td></tr>';
             return;
         }
         let html = '';
         vehicles.forEach((v, i) => {
+            const lp = getLocalPricing(v.type);
             html += `<tr>
                         <td>${i + 1}</td>
                         <td><strong>${v.name}</strong></td>
                         <td>${v.type}</td>
-                        <td>${v.specifications.seating}</td>
-                        <td>${v.pricing.perKm}</td>
-                        <td>₹${v.pricing.perDay.toLocaleString()}</td>
-                        <td><span class="rating-cell">${getStarsSmall(v.rating)} ${v.rating}</span></td>
+                        <td>${lp.halfDay ? '₹' + lp.halfDay.toLocaleString() : 'NA'}</td>
+                        <td>₹${lp.eightHr.toLocaleString()}</td>
+                        <td>₹${lp.fullDay.toLocaleString()}</td>
+                        <td>₹${lp.extraKm}</td>
+                        <td>₹${lp.extraHr}</td>
+                        <td>₹${lp.night}</td>
+                        <td>${lp.maxPax}</td>
                         <td>${getBadgeHTML(v.badge)}</td>
                     </tr>`;
         });
