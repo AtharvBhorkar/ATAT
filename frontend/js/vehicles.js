@@ -1,14 +1,19 @@
-/* ═══════════════════════════════════════
-   VOYAGO — vehicles.js & vehicle-modal.js
+/* ═══════════════════════════════════════════════════════════════
+   VEHICLES PAGE - FIXED IMAGE HANDLING
    100% Connected to Express + MongoDB backend
-   Debug Ready Version
-═══════════════════════════════════════ */
+════════════════════════════════════════════════════════════════ */
 
 const API_BASE = window.location.port === '5500' || window.location.port === '3000'
-? 'http://localhost:5000/api'
-: '/api';
+  ? 'http://localhost:5000/api'
+  : '/api';
 
-
+// ✅ PROPER IMAGE URL FORMATTING
+function getImageUrl(imagePath) {
+  if (!imagePath || imagePath === 'undefined') return '/images/no-image.jpg';
+  if (imagePath.startsWith('http')) return imagePath; // External URL
+  if (imagePath.startsWith('/')) return imagePath; // Already has leading slash
+  return '/' + imagePath; // Add leading slash
+}
 
 /* ─── FETCH VEHICLES FROM BACKEND ─── */
 async function loadVehicles() {
@@ -19,14 +24,14 @@ async function loadVehicles() {
   grid.innerHTML = '<div class="empty-state">Connecting to database...</div>';
 
   const url = `${API_BASE}/vehicles?limit=100`;
-  console.log(`🚀 Trying to fetch vehicles from: ${url}`);
+  console.log(`🚀 Fetching vehicles from: ${url}`);
 
   try {
     const res = await fetch(url);
-    console.log(`📡 Backend Response Status: ${res.status} ${res.statusText}`);
+    console.log(`📡 Response Status: ${res.status}`);
     
     const result = await res.json();
-    console.log("📦 Raw JSON Data from Backend:", result);
+    console.log("📦 Vehicles data:", result);
 
     if (!result.success) {
       throw new Error(result.message || 'Backend returned unsuccessful response');
@@ -35,32 +40,29 @@ async function loadVehicles() {
     const vehiclesList = result.data || result.vehicles || [];
     
     if (vehiclesList.length === 0) {
-      console.warn("⚠️ Backend connected successfully, but the database is EMPTY!");
+      console.warn("⚠️ No vehicles in database");
       grid.innerHTML = `
         <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-          <h3 style="margin-bottom: 10px;">⚠️ Database is Empty</h3>
-          <p style="color: #666; margin-bottom: 20px;">Backend is connected, but there are no vehicles in the database.<br>Please add vehicles using your Admin Dashboard at <a href="/admin/dashboard" style="color: #b8552e; font-weight: bold;">localhost:5000/admin/dashboard</a></p>
+          <h3>No Vehicles Available</h3>
+          <p style="color: #666;">Currently, there are no vehicles available for booking.<br>Please check back soon!</p>
         </div>`;
       return;
     }
 
-    console.log(`✅ Successfully loaded ${vehiclesList.length} vehicles from database`);
+    console.log(`✅ Loaded ${vehiclesList.length} vehicles`);
     renderVehicles(vehiclesList);
 
-    // Wait for DOM update then init filters
+    // Init filters after render
     requestAnimationFrame(() => {
       initFilters();
     });
 
   } catch (err) {
-    console.error("❌ FAILED TO CONNECT TO BACKEND:", err);
+    console.error("❌ Error loading vehicles:", err);
     grid.innerHTML = `
       <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
-        <h3 style="margin-bottom: 10px;">Connection Error</h3>
-        <p style="color: #b8552e; margin-bottom: 10px;">Could not connect to backend server.</p>
-        <p style="color: #666; font-size: 14px;"><strong>Error:</strong> ${err.message}<br><br>
-        Please make sure your Node.js server is running:<br>
-        <code style="background:#f4f4f4; padding:5px 10px; border-radius:4px; display:inline-block; margin-top:5px;">node backend/server.js</code></p>
+        <h3>Connection Error</h3>
+        <p style="color: #b8552e;">Could not connect to the server.<br><small>${err.message}</small></p>
       </div>`;
   }
 }
@@ -81,10 +83,9 @@ function renderVehicles(vehicles) {
     card.dataset.price = Number(vehicle.pricePerDay || 0);
     card.dataset.seats = Number(vehicle.seats || 4);
     
-    // Use slug or _id for the modal trigger
     const vehicleKey = vehicle.slug || vehicle._id;
 
-    // Smart badge selection
+    // Smart badge
     let badgeHtml = '';
     if (vehicle.badge) {
       const badgeCls = vehicle.badgeClass || 'badge--maroon';
@@ -101,6 +102,9 @@ function renderVehicles(vehicles) {
       ? (vehicle.description.length > 120 ? vehicle.description.substring(0, 120) + '...' : vehicle.description)
       : 'Comfortable, well-maintained vehicle perfect for your journey.';
 
+    // ✅ PROPER IMAGE URL WITH ERROR FALLBACK
+    const imageUrl = getImageUrl(vehicle.image || (vehicle.images && vehicle.images[0]) || '');
+
     const starSvg = `<svg width="14" height="14" viewBox="0 0 14 14" fill="#D9A441" style="display:inline-block; vertical-align:middle; margin-right:3px;"><path d="M7 1.5l1.4 3.8H12l-2.9 2.3 1.1 3.8L7 9.1l-3.2 2.3 1.1-3.8L2 5.3h3.6z"/></svg>`;
 
     const specIcons = {
@@ -114,7 +118,12 @@ function renderVehicles(vehicles) {
 
     card.innerHTML = `
       <div class="vehicle-img-wrap">
-        <img src="${vehicle.image || '/images/no-image.jpg'}" alt="${vehicle.name}" loading="lazy" onerror="this.src='https://placehold.co/600x400/e8e8e8/999?text=No+Image'">
+        <img 
+          src="${imageUrl}" 
+          alt="${vehicle.name || 'Vehicle'}" 
+          loading="lazy"
+          onerror="this.src='/images/no-image.jpg'"
+        >
         <div class="vehicle-img-overlay">
           <button class="quick-view-btn">Quick View</button>
         </div>
@@ -125,7 +134,7 @@ function renderVehicles(vehicles) {
         <div class="vehicle-header">
           <div>
             <div class="vehicle-type-label">${typeLabel}</div>
-            <h3 class="vehicle-name">${vehicle.name}</h3>
+            <h3 class="vehicle-name">${vehicle.name || 'Vehicle'}</h3>
           </div>
           <div class="vehicle-rating">
             ${starSvg} ${vehicle.rating || '4.5'}
@@ -166,7 +175,7 @@ function renderVehicles(vehicles) {
       </div>
     `;
 
-    // Make the whole card clickable to open modal
+    // Make card clickable for modal
     card.addEventListener('click', (e) => {
       if (e.target.classList.contains('btn-book')) return;
       e.preventDefault();
@@ -177,7 +186,7 @@ function renderVehicles(vehicles) {
   });
 }
 
-/* ─── INITIALIZE FILTERS (runs AFTER cards are in the DOM) ─── */
+/* ─── FILTERS ─── */
 function initFilters() {
   const cards        = Array.from(document.querySelectorAll('.vehicle-card'));
   const typeChips    = document.querySelectorAll('.filter-chips .chip');
@@ -194,7 +203,7 @@ function initFilters() {
   let activeType = 'all';
   let acOnly     = false;
 
-  // Read URL params on load
+  // Read URL params
   const urlParams = new URLSearchParams(window.location.search);
   const typeParam = urlParams.get('type');
   if (typeParam) {
@@ -206,7 +215,6 @@ function initFilters() {
     }
   }
 
-  // Sort helper
   const sortCards = (list) => {
     const val = sortSelect?.value || 'default';
     return list.sort((a, b) => {
@@ -218,7 +226,6 @@ function initFilters() {
     });
   };
 
-  // Main filter + sort + re-render
   const applyFilters = () => {
     let visible = 0;
 
@@ -232,7 +239,7 @@ function initFilters() {
 
       if (show) {
         card.classList.remove('hidden', 'card-enter');
-        void card.offsetWidth; // trigger reflow for re-animation
+        void card.offsetWidth;
         card.classList.add('card-enter');
         visible++;
       } else {
@@ -285,9 +292,8 @@ function initFilters() {
   applyFilters();
 }
 
-
 /* ═══════════════════════════════════════════════════════════════
-   VEHICLE MODAL — Dynamic Backend Fetch (No Hardcoded Data)
+   VEHICLE MODAL
    ═══════════════════════════════════════════════════════════════ */
 
 function transformVehicleForModal(v) {
@@ -305,7 +311,10 @@ function transformVehicleForModal(v) {
     rating: v.rating || 0,
     trips: v.totalTrips || 0,
     desc: v.description || v.note || 'Comfortable vehicle for your journey.',
-    images: v.images && v.images.length > 0 ? v.images : (v.image ? [v.image] : ['/images/no-image.jpg']),
+    // ✅ PROPER IMAGE URLS
+    images: v.images && v.images.length > 0 
+      ? v.images.map(img => getImageUrl(img)).filter(Boolean) 
+      : (v.image ? [getImageUrl(v.image)] : ['/images/no-image.jpg']),
     specs: [
       { icon: 'seat', label: 'Seating', val: `${v.seats || 4} Passengers` },
       { icon: 'fuel', label: 'Fuel', val: capitalize(v.fuelType || v.fuel || 'N/A') },
@@ -322,7 +331,6 @@ function transformVehicleForModal(v) {
   };
 }
 
-/* SVG HELPERS */
 const SPEC_ICONS = {
   seat: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3 19c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
   fuel: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 18V6l3-4h7l3 4v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="7" y="9" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.4"/></svg>`,
@@ -344,6 +352,7 @@ function buildStars(r) {
 
 function injectModalHTML() {
   if (document.getElementById('vehicleModal')) return;
+
   const html = `
   <div id="vehicleModal" class="vm-backdrop" role="dialog" aria-modal="true" aria-labelledby="vmTitle">
     <div class="vm-drawer" id="vmDrawer">
@@ -351,7 +360,7 @@ function injectModalHTML() {
       <div class="vm-inner" id="vmInner">
         <div class="vm-left">
           <div class="vm-gallery">
-            <div class="vm-gallery-main-wrap"><img id="vmMainImg" src="" alt="" class="vm-gallery-main" /><span class="vm-img-badge" id="vmBadge"></span></div>
+            <div class="vm-gallery-main-wrap"><img id="vmMainImg" src="" alt="" class="vm-gallery-main" onerror="this.src='/images/no-image.jpg'" /><span class="vm-img-badge" id="vmBadge"></span></div>
             <div class="vm-thumbs" id="vmThumbs"></div>
           </div>
           <div class="vm-info-header">
@@ -381,6 +390,7 @@ function injectModalHTML() {
       <div class="vm-mobile-footer" id="vmMobileFooter"><a href="#" class="vm-book-btn-mobile-sticky" id="vmMobileStickyBookBtn">Book This Vehicle</a></div>
     </div>
   </div>`;
+
   document.body.insertAdjacentHTML('beforeend', html);
 }
 
@@ -405,7 +415,7 @@ function populateModal(V) {
   V.images.forEach((src, i) => {
     const t = document.createElement('button');
     t.className   = `vm-thumb${i === 0 ? ' active' : ''}`;
-    t.innerHTML   = `<img src="${src}" alt="${V.name} view ${i+1}" loading="lazy"/>`;
+    t.innerHTML   = `<img src="${src}" alt="${V.name} view ${i+1}" loading="lazy" onerror="this.src='/images/no-image.jpg'"/>`;
     t.addEventListener('click', () => {
       mainImg.classList.add('vm-img-fade');
       setTimeout(() => { mainImg.src = src; mainImg.classList.remove('vm-img-fade'); }, 200);
@@ -471,7 +481,7 @@ async function openVehicleModal(key) {
     
     const res = await fetch(url);
     const result = await res.json();
-    console.log("📦 Single Vehicle Data:", result);
+    console.log("📦 Single vehicle data:", result);
     
     if (!result.success || !result.data) {
       throw new Error('Vehicle not found in database');
@@ -485,7 +495,7 @@ async function openVehicleModal(key) {
     populateModal(V);
 
   } catch (err) {
-    console.error("❌ Modal Fetch Error:", err);
+    console.error("❌ Modal fetch error:", err);
     const modalInner = document.getElementById('vmInner');
     if(modalInner) {
       modalInner.innerHTML = `<div style="text-align:center;padding:60px;color:#b8552e;"><h3>Failed to load details</h3><p style="margin:10px 0;">${err.message}</p><button onclick="closeVehicleModal()" style="margin-top:10px;padding:8px 16px;cursor:pointer;border:1px solid #b8552e;background:none;border-radius:4px;color:#b8552e;">Close</button></div>`;
@@ -500,7 +510,7 @@ function closeVehicleModal() {
   document.body.style.overflow = '';
 }
 
-/* AUTO-WIRE [data-vehicle] TRIGGERS */
+// Auto-wire data-vehicle triggers
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-vehicle]').forEach(el => {
     el.addEventListener('click', e => { e.preventDefault(); openVehicleModal(el.dataset.vehicle); });
@@ -513,13 +523,13 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   loadVehicles();
 
-  /* ─── NAVBAR SCROLL ─── */
+  /* NAVBAR SCROLL */
   const navbar = document.getElementById('navbar');
   const onScroll = () => { if(navbar) navbar.classList.toggle('scrolled', window.scrollY > 40); };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ─── HAMBURGER MENU ─── */
+  /* HAMBURGER MENU */
   const hamburger  = document.getElementById('hamburger');
   const navLinks   = document.getElementById('navLinks');
   if (hamburger && navLinks) {
@@ -536,22 +546,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ─── PAGE HERO PARALLAX ─── */
+  /* PAGE HERO PARALLAX */
   const heroBg = document.getElementById('pageHeroBg');
   if (heroBg) { window.addEventListener('scroll', () => { heroBg.style.transform = `translateY(${window.scrollY * 0.3}px)`; }, { passive: true }); }
 
-  /* ─── SCROLL INDICATOR HIDE ─── */
+  /* SCROLL INDICATOR */
   const scrollIndicator = document.getElementById('scrollIndicator');
   if (scrollIndicator) {
     scrollIndicator.style.transition = 'opacity 0.4s ease';
     window.addEventListener('scroll', () => { scrollIndicator.style.opacity = window.scrollY > 80 ? '0' : '1'; }, { passive: true });
   }
 
-  /* ─── FILTER BAR ELEVATION ─── */
+  /* FILTER BAR ELEVATION */
   const filterBarWrap = document.getElementById('filterBarWrap');
   if (filterBarWrap) { window.addEventListener('scroll', () => { filterBarWrap.classList.toggle('elevated', filterBarWrap.getBoundingClientRect().top <= 72); }, { passive: true }); }
 
-  /* ─── SCROLL REVEAL ─── */
+  /* SCROLL REVEAL */
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
@@ -562,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.08, rootMargin: '0px 0px -48px 0px' });
   document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
 
-  /* ─── GRID / LIST VIEW TOGGLE ─── */
+  /* GRID / LIST VIEW */
   const gridViewBtn = document.getElementById('gridViewBtn');
   const listViewBtn = document.getElementById('listViewBtn');
   const grid        = document.getElementById('vehiclesGrid');
@@ -571,10 +581,12 @@ document.addEventListener('DOMContentLoaded', () => {
     listViewBtn.addEventListener('click', () => { grid.classList.add('list-view'); listViewBtn.classList.add('active'); gridViewBtn.classList.remove('active'); });
   }
 
-  /* ─── SMOOTH SCROLL TO GRID on hash ─── */
+  // Smooth scroll to grid
   const urlParams = new URLSearchParams(window.location.search);
   const typeParam = urlParams.get('type');
   if (window.location.hash === '#vehicles' || typeParam) {
     setTimeout(() => { const section = document.querySelector('.vehicles-section'); if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 400);
   }
 });
+
+console.log('✅ Vehicles page loaded');
