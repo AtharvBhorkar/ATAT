@@ -984,22 +984,35 @@ async function changePassword() {
 /* ═══════════════════════════
    GLOBAL CLICK HANDLER
 ════════════════════════════ */
+document.addEventListener('input', function (e) {
+    var target = e.target;
+    if (target.dataset.imgIdx !== undefined) {
+        var idx = parseInt(target.dataset.imgIdx, 10);
+        if (!isNaN(idx) && state.vehicleImages[idx] !== undefined) {
+            state.vehicleImages[idx] = target.value;
+        }
+    }
+    if (target.dataset.routeIdx !== undefined) {
+        var idx = parseInt(target.dataset.routeIdx, 10);
+        if (!isNaN(idx) && state.vehicleRoutes[idx] !== undefined) {
+            state.vehicleRoutes[idx] = target.value;
+        }
+    }
+    if (target.dataset.includeIdx !== undefined) {
+        var idx = parseInt(target.dataset.includeIdx, 10);
+        if (!isNaN(idx) && state.packageIncludes[idx] !== undefined) {
+            state.packageIncludes[idx] = target.value;
+        }
+    }
+});
+
 document.addEventListener('click', function (e) {
-    /* Image URL sync */
-    var imgInput = e.target.closest('[data-img-idx]');
-    if (imgInput) { var idx = parseInt(imgInput.dataset.imgIdx, 10); if (!isNaN(idx) && state.vehicleImages[idx] !== undefined) state.vehicleImages[idx] = imgInput.value; }
     /* Remove image */
     var rmImg = e.target.closest('[data-remove-img]');
     if (rmImg) { removeVehicleImage(parseInt(rmImg.dataset.removeImg, 10)); return; }
-    /* Route sync */
-    var routeInput = e.target.closest('[data-route-idx]');
-    if (routeInput) { var ri = parseInt(routeInput.dataset.routeIdx, 10); if (!isNaN(ri) && state.vehicleRoutes[ri] !== undefined) state.vehicleRoutes[ri] = routeInput.value; }
     /* Remove route */
     var rmRoute = e.target.closest('[data-remove-route]');
     if (rmRoute) { removeVehicleRoute(parseInt(rmRoute.dataset.removeRoute, 10)); return; }
-    /* Include sync */
-    var incInput = e.target.closest('[data-include-idx]');
-    if (incInput) { var ii = parseInt(incInput.dataset.includeIdx, 10); if (!isNaN(ii) && state.packageIncludes[ii] !== undefined) state.packageIncludes[ii] = incInput.value; }
     /* Remove include */
     var rmInc = e.target.closest('[data-remove-include]');
     if (rmInc) { removePackageInclude(parseInt(rmInc.dataset.removeInclude, 10)); return; }
