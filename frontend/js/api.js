@@ -3,9 +3,7 @@
 ═══════════════════════════════════════════════ */
 
 const API = (() => {
-  const BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-  ? DEV_BASE
-  : PROD_BASE;
+  const BASE = 'http://localhost:5000/api';
   const TOKEN_KEY = 'voyago_token';
 
   function getToken() {

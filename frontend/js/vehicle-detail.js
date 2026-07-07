@@ -7,14 +7,9 @@
 /* ─────────────────────────────────────────
    API CONFIGURATION
 ───────────────────────────────────────── */
-// const API_BASE = window.location.port === '5500' || window.location.port === '3000'
-//     ? 'http://localhost:5000/api/public'
-//     : '/api/public';
-const API_BASE =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-        ? "http://localhost:5000/api/public"
-        : "https://atat-backend.onrender.com/api/public";
+const API_BASE = window.location.port === '5500' || window.location.port === '3000'
+    ? 'http://localhost:5000/api/public'
+    : '/api/public';
 
 /* ─────────────────────────────────────────
    HELPERS & SVGs

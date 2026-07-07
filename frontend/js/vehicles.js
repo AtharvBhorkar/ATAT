@@ -3,14 +3,9 @@
    100% Connected to Express + MongoDB backend
 ════════════════════════════════════════════════════════════════ */
 const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23EDE5D8'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='20' fill='%237a6a64' text-anchor='middle' dominant-baseline='middle'%3ENo Image%3C/text%3E%3C/svg%3E";
-// const API_BASE = window.location.port === '5500' || window.location.port === '3000'
-//   ? 'http://localhost:5000/api'
-//   : '/api';
-const API_BASE =
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? "http://localhost:5000/api"
-    : "https://atat-backend.onrender.com/api";
+const API_BASE = window.location.port === '5500' || window.location.port === '3000'
+  ? 'http://localhost:5000/api'
+  : '/api';
 
 // ✅ PROPER IMAGE URL FORMATTING
 function getImageUrl(imagePath) {
