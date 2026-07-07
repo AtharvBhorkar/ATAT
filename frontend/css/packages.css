@@ -13,27 +13,50 @@
       text-decoration: none;
     }
     .logo-img {
-      height: 54px; /* Set height to fit within 72px navbar beautifully */
-      width: auto;
-      display: block;
-      object-fit: contain;
-      transition: transform var(--transition);
-      border-radius: 50px; /* Optional: adds a subtle rounding to the logo edges */
-    }
-    .logo-img:hover {
-      transform: scale(1.03);
-    }
+  height: 54px;
+  width: 54px;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+  background: var(--white);
+  padding: 6px;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,.15),
+    0 6px 12px rgba(0,0,0,.18),
+    0 14px 28px rgba(0,0,0,.16),
+    0 0 0 3px rgba(217,164,65,.25);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.logo-img:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow:
+    0 4px 8px rgba(0,0,0,.18),
+    0 10px 20px rgba(0,0,0,.22),
+    0 22px 40px rgba(0,0,0,.22),
+    0 0 0 3px rgba(217,164,65,.45);
+}
     .logo-img-footer {
-      height: 72px;
-      width: auto;
-      display: block;
-      object-fit: contain;
-      margin-bottom: 24px;
-      border-radius: 50px; /* Optional: adds a subtle rounding to the logo edges */
-    }
+  height: 72px;
+  width: 72px;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 24px;
+  background: var(--white);
+  padding: 8px;
+  box-shadow:
+    0 3px 6px rgba(0,0,0,.3),
+    0 8px 16px rgba(0,0,0,.28),
+    0 18px 36px rgba(0,0,0,.24),
+    0 0 0 3px rgba(217,164,65,.3);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.logo-img-footer:hover {
+  transform: translateY(-3px) scale(1.05);
+}
     @media (max-width: 480px) {
-      .logo-img { height: 46px; }
-    }
+  .logo-img { height: 46px; width: 46px; }
+}
 
     /* ─── CTA SECTION OVERRIDES (MATCH INDEX.HTML) ─── */
     .cta-banner {
@@ -845,34 +868,7 @@
    Packages Page Custom Styles
    ═══════════════════════════════════════════════════════════════ */
 
-    /* ─── NEW LOGO STYLING ─── */
-    .logo-brand {
-      display: flex;
-      align-items: center;
-      height: 100%;
-      flex-shrink: 0;
-      text-decoration: none;
-    }
-    .logo-img {
-      height: 54px; /* Set height to fit within 72px navbar beautifully */
-      width: auto;
-      display: block;
-      object-fit: contain;
-      transition: transform var(--transition);
-    }
-    .logo-img:hover {
-      transform: scale(1.03);
-    }
-    .logo-img-footer {
-      height: 72px;
-      width: auto;
-      display: block;
-      object-fit: contain;
-      margin-bottom: 24px;
-    }
-    @media (max-width: 480px) {
-      .logo-img { height: 46px; }
-    }
+    
 
     /* ─── CTA SECTION OVERRIDES (MATCH INDEX.HTML) ─── */
     .cta-banner {
