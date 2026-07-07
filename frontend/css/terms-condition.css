@@ -1201,6 +1201,10 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 .footer-legal a:hover { color: rgba(255,255,255,.7); }
 
 
+.footer-credit a{
+   color: #D4AF37;
+}
+
 /* FOOTEr responisve */
 
 @media (max-width: 1100px) {
@@ -1216,6 +1220,7 @@ body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--
 ul {
   list-style: none;
 }
+
 
 
 /* HERO — Tablet & Mobile responsive */
