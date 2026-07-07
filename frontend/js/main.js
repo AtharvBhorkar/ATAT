@@ -228,79 +228,17 @@ counters.forEach(counter => observer.observe(counter));
   updateSlider();
 
 
-  /* ─── TESTIMONIALS CAROUSEL ─── */
+  /* ─── TESTIMONIALS INFINITE LOOP ─── */
   const track = document.getElementById('testTrack');
-  const tlPrev = document.getElementById("tlPrev");
-  const tlNext = document.getElementById("tlNext");
-  const tlDots = document.getElementById("tlDots");
-  const cards   = document.querySelectorAll('.testimonial-card');
-
-  let tlIndex = 0;
-
-  const getTlPerView = () => window.innerWidth < 700 ? 1 : 2;
-
-  const updateTestimonials = () => {
-    if (!track || cards.length === 0) return;
-    const perView = getTlPerView();
-    const total   = Math.ceil(cards.length / perView) - 1;
-    tlIndex       = Math.min(tlIndex, total);
-
-    const cardW = cards[0]?.offsetWidth || 0;
-    const gap   = 28;
-    track.style.transform  = `translateX(-${tlIndex * (cardW + gap) * perView}px)`;
-    track.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
-
-    // Dots
-    if (tlDots) {
-      tlDots.innerHTML = '';
-      for (let i = 0; i <= total; i++) {
-        const dot = document.createElement('button');
-        dot.className = 'dot' + (i === tlIndex ? ' active' : '');
-        dot.setAttribute('aria-label', `Review ${i + 1}`);
-        dot.addEventListener('click', () => { tlIndex = i; updateTestimonials(); resetTlAutoplay(); });
-        tlDots.appendChild(dot);
-      }
-    }
-  };
-
-  // Auto-advance testimonials
-  let tlInterval = setInterval(() => {
-    if (cards.length === 0) return;
-    const total = Math.ceil(cards.length / getTlPerView()) - 1;
-    tlIndex = tlIndex < total ? tlIndex + 1 : 0;
-    updateTestimonials();
-  }, 5000);
-
-  const resetTlAutoplay = () => {
-    clearInterval(tlInterval);
-    tlInterval = setInterval(() => {
-      if (cards.length === 0) return;
-      const total = Math.ceil(cards.length / getTlPerView()) - 1;
-      tlIndex = tlIndex < total ? tlIndex + 1 : 0;
-      updateTestimonials();
-    }, 5000);
-  };
-
-  if (tlPrev && tlNext) {
-    const total = () => Math.ceil(cards.length / getTlPerView()) - 1;
-    tlPrev.addEventListener('click', () => {
-      tlIndex = tlIndex > 0 ? tlIndex - 1 : total();
-      updateTestimonials();
-      resetTlAutoplay();
-    });
-    tlNext.addEventListener('click', () => {
-      tlIndex = tlIndex < total() ? tlIndex + 1 : 0;
-      updateTestimonials();
-      resetTlAutoplay();
+  if (track) {
+    // cards ko ek baar duplicate karo taaki loop seamless dikhe
+    const originalCards = Array.from(track.children);
+    originalCards.forEach(card => {
+      const clone = card.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
     });
   }
-
-  window.addEventListener('resize', () => {
-    tlIndex = 0;
-    updateTestimonials();
-  });
-
-  updateTestimonials();
 
 
   /* ─── UPCOMING DEPARTURES SLIDER ─── */
@@ -394,47 +332,4 @@ counters.forEach(counter => observer.observe(counter));
       document.querySelector('.stats-strip')?.scrollIntoView({ behavior: 'smooth' });
     });
   }
-
-
-  /* ─── ACTIVE NAV LINK (scroll spy) ─── */
-  const sections = document.querySelectorAll('section[id]');
-  
-  const updateActiveNavLink = () => {
-    let activeId = '';
-    const scrollY = window.scrollY;
-
-    if (scrollY < 200) {
-      navLinks.querySelectorAll('a').forEach(a => {
-        const href = a.getAttribute('href');
-        const isHome = href === 'home.html' || href === '#';
-        a.style.fontWeight = isHome ? '700' : '';
-        a.classList.toggle('active', isHome);
-      });
-      return;
-    }
-
-    sections.forEach(sec => {
-      const top = sec.offsetTop - 120;
-      const height = sec.offsetHeight;
-      const id = sec.getAttribute('id');
-
-      if (scrollY >= top && scrollY < top + height) {
-        activeId = id;
-      }
-    });
-
-    if (activeId) {
-      navLinks.querySelectorAll('a').forEach(a => {
-        const href = a.getAttribute('href');
-        const isMatch = href === `#${activeId}` || href === `${activeId}.html` || href.endsWith(`#${activeId}`);
-        a.style.fontWeight = isMatch ? '700' : '';
-        a.classList.toggle('active', isMatch);
-      });
-    }
-  };
-
-  window.addEventListener('scroll', updateActiveNavLink, { passive: true });
-  updateActiveNavLink();
-  
-});
-
+  });

@@ -94,6 +94,7 @@
     let catFilter = 'all';
     let sortOption = 'default';
     let isDataLoaded = false;
+    let tripType = 'local';
 
     async function fetchFromAPI(endpoint) {
         const response = await fetch(`${API_BASE}${endpoint}`, {
@@ -263,9 +264,76 @@
         return LOCAL_PRICING[key] || LOCAL_PRICING.sedan;
     }
 
+    const OUTSTATION_PRICING = {
+        hatchback: { ratePerKm: 11, minKmPerDay: 250, extraKm: 11, driverTA: 200, maxPax: 4 },
+        sedan:     { ratePerKm: 13, minKmPerDay: 250, extraKm: 13, driverTA: 200, maxPax: 4 },
+        luxury:    { ratePerKm: 15, minKmPerDay: 250, extraKm: 15, driverTA: 200, maxPax: 4 },
+        suv:       { ratePerKm: 16, minKmPerDay: 250, extraKm: 16, driverTA: 200, maxPax: 6 },
+        muv:       { ratePerKm: 21, minKmPerDay: 250, extraKm: 21, driverTA: 200, maxPax: 6 },
+        tempo:     { ratePerKm: 32, minKmPerDay: 250, extraKm: 32, driverTA: 200, maxPax: 20 },
+        bus:       { ratePerKm: 32, minKmPerDay: 250, extraKm: 32, driverTA: 200, maxPax: 20 }
+    };
+
+    function getOutstationPricing(type) {
+        const key = (type || '').toLowerCase();
+        return OUTSTATION_PRICING[key] || OUTSTATION_PRICING.sedan;
+    }
+
     function renderVehicleTable() {
+        const thead = document.getElementById('vehicleTableHead');
         const tbody = document.getElementById('vehicleTableBody');
         if (!tbody) return;
+
+        if (tripType === 'outstation') {
+            if (thead) thead.innerHTML = `<tr>
+                        <th>#</th>
+                        <th>Vehicle</th>
+                        <th>Category</th>
+                        <th>Rate / Per KM</th>
+                        <th>Minm per Day</th>
+                        <th>Extra KM</th>
+                        <th>Driver TA</th>
+                        <th>Max Passenger</th>
+                        <th>Badge</th>
+                    </tr>`;
+
+            if (vehicles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;color:#999;">No vehicles found.</td></tr>';
+                return;
+            }
+            let html = '';
+            vehicles.forEach((v, i) => {
+                const op = getOutstationPricing(v.type);
+                html += `<tr>
+                            <td>${i + 1}</td>
+                            <td><strong>${v.name}</strong></td>
+                            <td>${v.type}</td>
+                            <td>₹${op.ratePerKm}</td>
+                            <td>${op.minKmPerDay} KM</td>
+                            <td>₹${op.extraKm}</td>
+                            <td>₹${op.driverTA}</td>
+                            <td>${op.maxPax}</td>
+                            <td>${getBadgeHTML(v.badge)}</td>
+                        </tr>`;
+            });
+            tbody.innerHTML = html;
+            return;
+        }
+
+        if (thead) thead.innerHTML = `<tr>
+                        <th>#</th>
+                        <th>Vehicle</th>
+                        <th>Category</th>
+                        <th>Half Day<br>(4Hrs/40Km)</th>
+                        <th>8 Hrs<br>(80Km)</th>
+                        <th>12 Hrs<br>(Fullday)</th>
+                        <th>Extra KM</th>
+                        <th>Extra Hrs</th>
+                        <th>Night Charges</th>
+                        <th>Max Passenger</th>
+                        <th>Badge</th>
+                    </tr>`;
+
         if (vehicles.length === 0) {
             tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#999;">No vehicles found.</td></tr>';
             return;
@@ -698,6 +766,17 @@
         });
     });
 
+    document.querySelectorAll('#tripTypeTabs button').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('#tripTypeTabs button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            tripType = this.dataset.trip;
+            renderVehicleTable();
+        });
+    });
+
+    
+
     function initRevealObserver() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -731,6 +810,42 @@
         const grid = document.getElementById('packageCardsGrid');
         if (grid) { grid.classList.add('reveal-stagger'); reRevealObserver.observe(grid); }
     };
+
+    const imgLightbox = document.getElementById('imgLightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(imgId) {
+        const sourceImg = document.getElementById(imgId);
+        if (!sourceImg || !sourceImg.src || !imgLightbox || !lightboxImg) return;
+        lightboxImg.src = sourceImg.src;
+        lightboxImg.alt = sourceImg.alt || '';
+        imgLightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        if (!imgLightbox) return;
+        imgLightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.view-full-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openLightbox(btn.dataset.target);
+        });
+    });
+
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (imgLightbox) {
+        imgLightbox.addEventListener('click', (e) => {
+            if (e.target === imgLightbox) closeLightbox();
+        });
+    }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
 
     const navbar = document.getElementById('navbar');
     const onNavScroll = () => {

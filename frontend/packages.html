@@ -39,12 +39,12 @@
         <li><a href="packages.html" class="active">Packages</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li class="mobile-only"><a href="login.html" class="nav-btn-signin">Sign In</a></li>
+        <li class="mobile-only"><a href="blog.html" class="nav-btn-signin">Blog</a></li>
         <li class="mobile-only"><a href="booking.html" class="nav-btn-book">Book a Ride</a></li>
       </ul>
 
       <div class="nav-actions">
-        <a href="login.html" class="btn-ghost">Sign In</a>
+        <a href="blog.html" class="btn-ghost">Blog</a>
         <a href="booking.html" class="btn-primary">Book a Ride</a>
       </div>
 
@@ -66,6 +66,10 @@
         </span>
         <span>Tour Packages</span>
       </div>
+      <div class="coming-soon-badge" data-anim="fade-up" data-delay="0">
+        <span class="coming-soon-dot"></span>
+        <span>Launching Soon</span>
+      </div>
       <p class="hero-eyebrow">Handcrafted Journeys</p>
       <h1 class="hero-headline">
         Explore India's <br><em>Beautiful Horizons</em>
@@ -78,7 +82,7 @@
       <div class="search-container" data-reveal>
         <div class="search-box">
           <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.8"/><path d="M14 14l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input type="text" id="pkgSearchInput" placeholder="Search by destination (e.g. Goa, Manali, Kedarnath...)" aria-label="Search destinations" />
+          <input type="text" id="pkgSearchInput" placeholder="Search by destination (e.g. Goa, Manali, Kedarnath...)" aria-label="Search destinations" disabled />
         </div>
       </div>
     </div>
@@ -105,8 +109,22 @@
   </section>
 
   <!-- ★ MAIN CATALOG SECTION ★ -->
-  <main class="packages-main">
+  <main class="packages-main packages-coming-soon">
     <div class="container">
+
+      <!-- Coming Soon Banner Strip -->
+      <div class="coming-soon-strip" data-reveal>
+        <div class="coming-soon-strip-icon">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+            <circle cx="13" cy="13" r="10" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M13 7v6l4 2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="coming-soon-strip-text">
+          <h3>Tour Packages Are Launching Soon</h3>
+          <p>We're finalising handpicked itineraries, pricing, and partner stays. Browse a preview below — booking will open shortly.</p>
+        </div>
+      </div>
 
       <!-- Tabs Navigation -->
       <div class="packages-filter-wrap" data-reveal>
@@ -477,7 +495,7 @@
       </div>
       <div class="cta-contact">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3h3l1.5 3.5L6 8a9 9 0 004 4l1.5-1.5L15 12v3a1 1 0 01-1 1C6.2 16 0 9.8 0 2a1 1 0 011-1h3v2z" fill="currentColor"/></svg>
-        Call us at <a href="tel:+911800000000">+91 1800-000-0000</a> (Toll Free)
+        Call us at <a href="tel:+91 6205956801">+91 6205956801</a> (Toll Free)
       </div>
     </div>
   </section>
@@ -558,7 +576,8 @@
 
       <div class="footer-bottom">
         <div class="footer-bottom-inner">
-          <p>&copy; 2026 ATAT Tours &amp; Travels. All rights reserved.</p>
+          <p>&copy; 2026 Aman Tours &amp; Travels. All rights reserved.</p>
+          <p class="footer-credit">Developed and designed by <a href="https://www.athenura.in/" target="_blank" rel="noopener">Athenura</a></p>
           <div class="footer-legal">
             <a href="terms-condition.html">Terms &amp; Conditions</a>
             <a href="privacy.html">Privacy Policy</a>
@@ -572,3 +591,4 @@
 
   <script src="js/packages.js"></script>
 </body>
+</html>

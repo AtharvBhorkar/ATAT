@@ -12,7 +12,50 @@
   height: 60vh;
   min-height: 480px;
 }
+.footer-credit {
+    order: 1;
+    flex: 1;
+    text-align: center;
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, .3);
+}
 
+.footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.footer-bottom-inner > p:first-child {
+    order: 0;
+}
+
+.footer-legal {
+    order: 2;
+}
+
+.footer-credit a {
+    color: rgba(217, 164, 65, 0.7);
+    font-weight: 600;
+    transition: color var(--transition);
+}
+
+.footer-credit a:hover {
+    color: var(--gold);
+}
+
+@media (max-width: 700px) {
+    .footer-bottom-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-credit {
+        order: 1;
+    }
+}
 /* ─── MAIN LAYOUT ─── */
 .vd-main {
   background: var(--ivory);

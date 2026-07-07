@@ -28,6 +28,25 @@ var state = {
 var _confirmCallback = null;
 
 /* ───────────────────────────
+   NO-IMAGE FALLBACK
+   Inline SVG data-URI so there is never a 404 for a
+   missing /images/no-image.jpg file on the server.
+─────────────────────────── */
+var NO_IMAGE_SRC = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">' +
+    '<rect width="400" height="300" fill="#EDE5D8"/>' +
+    '<g fill="#B9A88F">' +
+    '<path d="M140 120h120v70H140z" fill="none" stroke="#B9A88F" stroke-width="4"/>' +
+    '<circle cx="165" cy="140" r="10" fill="#B9A88F"/>' +
+    '<path d="M140 175l35-30 25 20 30-25 35 25v20H140z" fill="#B9A88F"/>' +
+    '</g>' +
+    '<text x="200" y="225" font-family="Arial, sans-serif" font-size="14" fill="#8a7a63" text-anchor="middle">No Image Available</text>' +
+    '</svg>'
+);
+
+function noImageSrc() { return NO_IMAGE_SRC; }
+
+/* ───────────────────────────
    HELPERS
 ─────────────────────────── */
 function $(sel, ctx) { return (ctx || document).querySelector(sel); }
@@ -39,10 +58,29 @@ function slugify(str) {
 
 // ✅ PROPER IMAGE URL HANDLING
 function getImageUrl(imagePath) {
-    if (!imagePath || imagePath === 'undefined') return '/images/no-image.jpg';
-    if (imagePath.startsWith('http')) return imagePath;
+    if (!imagePath || imagePath === 'undefined' || imagePath === 'null') return '';
+
+    imagePath = String(imagePath).trim();
+    if (!imagePath) return '';
+
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+        return imagePath;
+    }
+    if (imagePath.startsWith('data:')) {
+        return imagePath;
+    }
+
+    // uploaded backend files
+    if (imagePath.startsWith('/uploads/')) return imagePath;
+    if (imagePath.startsWith('uploads/')) return '/' + imagePath;
+
+    // local backend images folder if you use one
+    if (imagePath.startsWith('/images/')) return imagePath;
+    if (imagePath.startsWith('images/')) return '/' + imagePath;
+
+    // generic relative path
     if (imagePath.startsWith('/')) return imagePath;
-    return '/' + imagePath;
+    return '/' + imagePath.replace(/^\/+/, '');
 }
 
 function formatCurrency(n) {
@@ -403,11 +441,14 @@ function renderVehicles() {
     }
     var tc = { sedan: 'badge-blue', suv: 'badge-green', van: 'badge-orange', bus: 'badge-maroon', luxury: 'badge-gold', motorcycle: 'badge-gray', Sedan: 'badge-blue', SUV: 'badge-green', Van: 'badge-orange', Bus: 'badge-maroon', Luxury: 'badge-gold', Motorcycle: 'badge-gray' };
     grid.innerHTML = state.vehicles.map(function (v) {
-        // ✅ PROPER IMAGE HANDLING
+        // ✅ PROPER IMAGE HANDLING (never 404s — falls back to inline SVG)
         var img = getImageUrl(v.image || (v.images && v.images[0]) || '');
         var active = isVehicleActive(v);
+        var imgTag = img
+            ? '<img src="' + escAttr(img) + '" alt="' + escAttr(v.name) + '" loading="lazy" onerror="this.onerror=null;this.src=noImageSrc();">'
+            : '<img src="' + noImageSrc() + '" alt="No image">';
         return '<div class="admin-v-card' + (active ? '' : ' disabled-card') + '">' +
-            '<div class="admin-v-img">' + (img && img !== '/images/no-image.jpg' ? '<img src="' + img + '" alt="' + escAttr(v.name) + '" loading="lazy" onerror="this.src=\'/images/no-image.jpg\'">' : '<img src="/images/no-image.jpg" alt="No image">') +
+            '<div class="admin-v-img">' + imgTag +
             '<div class="admin-v-img-overlay"></div>' +
             '<span class="admin-v-badge badge ' + (tc[v.type] || 'badge-gray') + '">' + (v.type || 'Other') + '</span>' +
             '<span class="admin-v-type">' + escAttr(v.brand || '') + ' ' + escAttr(v.model || '') + '</span>' +
@@ -483,14 +524,14 @@ function switchVehicleTab(tabId) {
 function addVehicleImage() { state.vehicleImages.push(''); renderVehicleImages(); }
 function removeVehicleImage(idx) { state.vehicleImages.splice(idx, 1); renderVehicleImages(); }
 
-// ✅ PROPER IMAGE RENDERING
+// ✅ PROPER IMAGE RENDERING (never 404s — falls back to inline SVG)
 function renderVehicleImages() {
     var list = document.getElementById('imgList');
     if (!list) return;
     list.innerHTML = state.vehicleImages.map(function (url, i) {
-        var imgSrc = getImageUrl(url);
+        var imgSrc = getImageUrl(url) || noImageSrc();
         return '<div class="img-list-item">' +
-            '<img src="' + imgSrc + '" alt="Vehicle" onerror="this.src=\'/images/no-image.jpg\'">' +
+            '<img src="' + escAttr(imgSrc) + '" alt="Vehicle" onerror="this.onerror=null;this.src=noImageSrc();">' +
             '<input class="form-control" placeholder="Image URL" value="' + escAttr(url) + '" data-img-idx="' + i + '">' +
             '<button class="remove-img" data-remove-img="' + i + '">×</button></div>';
     }).join('');
@@ -511,12 +552,17 @@ async function saveVehicle() {
     var form = document.getElementById('vehicleForm');
     if (!form) return;
     var name = getFormVal(form, 'name'), type = getFormVal(form, 'type'), brand = getFormVal(form, 'brand');
+    var pricePerDay = getFormNum(form, 'pricePerDay');
+    var pricePerKm = getFormNum(form, 'pricePerKm');
     $$('#vehicleForm .form-group').forEach(function (g) { g.classList.remove('error'); });
     var hasError = false;
     if (!name) { form.elements['name'].closest('.form-group').classList.add('error'); hasError = true; }
     if (!type) { form.elements['type'].closest('.form-group').classList.add('error'); hasError = true; }
     if (!brand) { form.elements['brand'].closest('.form-group').classList.add('error'); hasError = true; }
-    if (hasError) { toast('Please fill in all required fields', 'error'); return; }
+    // pricePerDay / pricePerKm are required on the backend schema — validate here too
+    if (!pricePerDay) { form.elements['pricePerDay'].closest('.form-group').classList.add('error'); hasError = true; }
+    if (!pricePerKm) { form.elements['pricePerKm'].closest('.form-group').classList.add('error'); hasError = true; }
+    if (hasError) { toast('Please fill in all required fields (name, type, brand, price/day, price/km)', 'error'); return; }
 
     var featuresText = getFormVal(form, 'features');
     var features = featuresText ? featuresText.split(',').map(function (f) { return f.trim(); }).filter(function (f) { return f; }) : [];
@@ -530,9 +576,9 @@ async function saveVehicle() {
         bags: getFormNum(form, 'bags') || undefined,
         fuelType: getFormVal(form, 'fuelType') || undefined,
         transmission: getFormVal(form, 'transmission') || undefined,
-        pricePerDay: getFormNum(form, 'pricePerDay') || undefined,
+        pricePerDay: pricePerDay,
+        pricePerKm: pricePerKm,
         dailyRate: getFormNum(form, 'dailyRate') || undefined,
-        pricePerKm: getFormNum(form, 'pricePerKm') || undefined,
         badge: getFormVal(form, 'badge') || undefined,
         badgeClass: getFormVal(form, 'badgeClass') || undefined,
         rating: getFormNum(form, 'rating') || undefined,
@@ -542,6 +588,7 @@ async function saveVehicle() {
         status: getFormVal(form, 'status') || 'active',
         // ✅ FILTER OUT EMPTY IMAGE URLS
         images: state.vehicleImages.filter(function (u) { return u.trim() && u !== 'undefined'; }),
+        image: (state.vehicleImages.filter(function (u) { return u.trim() && u !== 'undefined'; })[0]) || undefined,
         features: features,
         routes: state.vehicleRoutes.filter(function (r) { return r.trim(); })
     };
@@ -578,11 +625,11 @@ function openVehiclePanel(v) {
     var panel = document.getElementById('vehiclePanel'), body = document.getElementById('panelBody');
     if (!panel || !body) return;
     // ✅ PROPER IMAGE URL HANDLING
-    var mainImg = getImageUrl(v.image || (v.images && v.images[0]) || '');
-    var thumbs = (v.images || []).slice(0, 10).map(function(img) { return getImageUrl(img); });
+    var mainImg = getImageUrl(v.image || (v.images && v.images[0]) || '') || noImageSrc();
+    var thumbs = (v.images || []).slice(0, 10).map(function (img) { return getImageUrl(img) || noImageSrc(); });
     var active = isVehicleActive(v);
-    body.innerHTML = (mainImg && mainImg !== '/images/no-image.jpg' ? '<img class="panel-img-main" src="' + escAttr(mainImg) + '" alt="' + escAttr(v.name) + '" id="vp-main-img" onerror="this.src=\'/images/no-image.jpg\'">' : '') +
-        (thumbs.length > 1 ? '<div class="panel-img-thumbs">' + thumbs.map(function (img, i) { return '<img src="' + escAttr(img) + '" alt="Thumb"' + (i === 0 ? ' class="active"' : '') + ' data-panel-thumb="' + escAttr(img) + '" onerror="this.src=\'/images/no-image.jpg\'">'; }).join('') + '</div>' : '') +
+    body.innerHTML = '<img class="panel-img-main" src="' + escAttr(mainImg) + '" alt="' + escAttr(v.name) + '" id="vp-main-img" onerror="this.onerror=null;this.src=noImageSrc();">' +
+        (thumbs.length > 1 ? '<div class="panel-img-thumbs">' + thumbs.map(function (img, i) { return '<img src="' + escAttr(img) + '" alt="Thumb"' + (i === 0 ? ' class="active"' : '') + ' data-panel-thumb="' + escAttr(img) + '" onerror="this.onerror=null;this.src=noImageSrc();">'; }).join('') + '</div>' : '') +
         '<div class="detail-section-title">Vehicle Info</div>' + detailRow('Name', v.name) + detailRow('Slug', '<code>' + escAttr(v.slug || '') + '</code>') + detailRow('Type', v.type) + detailRow('Brand', v.brand || '—') + detailRow('Model', v.model || '—') + detailRow('Year', v.year || '—') + detailRow('Status', active ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-red">' + (v.status || 'Disabled') + '</span>') +
         '<div class="detail-section-title">Specifications</div><div class="panel-specs-grid">' +
         specItem('👤', 'Seats', v.seats) + specItem('💿', 'Bags', v.bags) + specItem('⚙️', 'Transmission', v.transmission) + specItem('⛽', 'Fuel', v.fuelType || v.fuel) + specItem('❄️', 'AC', v.ac !== false ? 'Yes' : 'No') + specItem('💰', 'Price/Day', formatCurrency(v.pricePerDay)) + specItem('🛣️', 'Price/Km', v.pricePerKm ? formatCurrency(v.pricePerKm) : '—') + specItem('⭐', 'Rating', v.rating || '—') + specItem('📅', 'Created', formatDate(v.createdAt)) + '</div>' +
@@ -632,8 +679,11 @@ function renderPackages() {
         var img = getImageUrl(p.image || (p.images && p.images[0]) || '');
         var active = isPackageActive(p);
         var incHtml = (p.includes || []).slice(0, 4).map(function (inc) { return '<span class="admin-pkg-include-tag">' + escAttr(inc) + '</span>'; }).join('');
+        var imgTag = img
+            ? '<img src="' + escAttr(img) + '" alt="' + escAttr(p.name) + '" loading="lazy" onerror="this.onerror=null;this.src=noImageSrc();">'
+            : '<img src="' + noImageSrc() + '" alt="No image">';
         return '<div class="admin-pkg-card' + (active ? '' : ' disabled-card') + '">' +
-            '<div class="admin-pkg-img">' + (img && img !== '/images/no-image.jpg' ? '<img src="' + img + '" alt="' + escAttr(p.name) + '" loading="lazy" onerror="this.src=\'/images/no-image.jpg\'">' : '<img src="/images/no-image.jpg">') +
+            '<div class="admin-pkg-img">' + imgTag +
             '<div class="admin-pkg-img-overlay"></div><span class="admin-pkg-cat badge ' + (cc[p.category] || 'badge-gray') + '">' + (p.category || 'Other') + '</span>' +
             (p.duration ? '<span class="admin-pkg-duration">' + escAttr(p.duration) + '</span>' : '') +
             '<span class="admin-pkg-status badge ' + (active ? 'badge-green' : 'badge-red') + '">' + (active ? 'Active' : 'Disabled') + '</span></div>' +
@@ -1119,4 +1169,4 @@ document.addEventListener('DOMContentLoaded', function () {
     navigateTo(activeNav ? activeNav.dataset.section : 'dashboard');
 });
 
-console.log('✅ Admin dashboard controller loaded');
+console.log('✅ Admin dashboard controller loaded (fixed: no-image placeholder, tab bug, price validation, routes)');
