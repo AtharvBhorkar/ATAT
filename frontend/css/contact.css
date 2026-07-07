@@ -678,7 +678,7 @@ h4 {
 }
 
 .office-img-wrapper {
-    height: 200px;
+    height: 240px;
     overflow: hidden;
 }
 
@@ -694,25 +694,35 @@ h4 {
 }
 
 .office-info {
-    padding: 2.5rem;
+    padding: 2rem 2.5rem;
 }
 
 .office-info h3 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--accent-color);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .office-info p {
-    color: var(--text-secondary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
     line-height: 1.6;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .office-info a {
-    color: var(--accent-pale);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-color);
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.office-info a:hover {
+    color: var(--accent-pale);
 }
 
 @media (max-width: 992px) {
@@ -1385,3 +1395,35 @@ h4 {
 
 /* Circular logo */
 .logo-img, .logo-img-footer { border-radius: 50% !important; object-fit: cover !important; aspect-ratio: 1/1 !important; }
+
+/* SECTION ANIMATIONS */
+.premium-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(10px);
+    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+}
+
+.premium-reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.premium-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.premium-reveal.in-view .premium-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.premium-reveal.in-view .premium-item:nth-child(1) { transition-delay: 0.1s; }
+.premium-reveal.in-view .premium-item:nth-child(2) { transition-delay: 0.2s; }
+.premium-reveal.in-view .premium-item:nth-child(3) { transition-delay: 0.3s; }
+.premium-reveal.in-view .premium-item:nth-child(4) { transition-delay: 0.4s; }
+.premium-reveal.in-view .premium-item:nth-child(5) { transition-delay: 0.5s; }
