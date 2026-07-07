@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Book a Ride — Voyago Tours & Travels</title>
+  <title>Book a Ride — ATAT Tours & Travels</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -78,7 +78,7 @@
       </div>
 
       <!-- MAIN BOOKING GRID -->
-      <div class="booking-grid">
+      <div class="booking-grid" style="grid-template-columns: 1fr;">
 
         <!-- LEFT COLUMN: DYNAMIC FORM WIZARD -->
         <div class="booking-form-panel">
@@ -202,6 +202,46 @@
                     <input type="date" id="returnDateInput" placeholder="Select date" disabled />
                   </div>
                 </div>
+
+                <!-- Local Travel Toggle Switch -->
+                <div class="form-group span-full local-toggle-wrapper" style="margin-top: 15px; margin-bottom: 5px;">
+                  <label class="switch-container">
+                    <span class="switch-control">
+                      <input type="checkbox" id="localToggle" />
+                      <span class="slider-round"></span>
+                    </span>
+                    <span class="switch-label-text">
+                      Local Travel
+                      <span class="switch-subtext">Book for local city travel</span>
+                    </span>
+                  </label>
+                </div>
+
+                <!-- Local Plan Selection (Visible only when Local Travel is active) -->
+                <div class="form-group span-full" id="localPlanGroup" style="display: none; margin-top: 5px; margin-bottom: 10px;">
+                  <label for="localPlanSelect" class="form-label">Select Local Travel Plan *</label>
+                  <div class="input-wrapper">
+                    <select id="localPlanSelect" class="form-select" style="width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 1px solid #D6CEBE; background: #FFFDF9; font-size: 14px; font-weight: 500; color: var(--text);">
+                      <option value="halfDay">Half Day (4 Hrs / 40 Km)</option>
+                      <option value="eightHrs" selected>8 Hrs / 80 Km</option>
+                      <option value="fullDay">Full Day (12 Hrs / 180 Km)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Outstation Travel Toggle Switch -->
+                <div class="form-group span-full outstation-toggle-wrapper" style="margin-top: 5px;">
+                  <label class="switch-container">
+                    <span class="switch-control">
+                      <input type="checkbox" id="outstationToggle" />
+                      <span class="slider-round"></span>
+                    </span>
+                    <span class="switch-label-text">
+                      Outstation Travel
+                      <span class="switch-subtext">Add ₹200 per day driver charges for outstation trips</span>
+                    </span>
+                  </label>
+                </div>
               </div>
 
               <!-- Action button -->
@@ -311,7 +351,7 @@
               <p class="step-subtitle">Please provide contact information for the ride updates</p>
 
               <div class="form-grid">
-                <div class="form-group">
+                <div class="form-group span-full">
                   <label for="custName" class="form-label">Full Name *</label>
                   <input type="text" id="custName" class="form-input-text" placeholder="John Doe" required />
                   <div class="error-msg" id="nameError">Please enter your full name.</div>
@@ -332,12 +372,6 @@
                       pattern="[6-9][0-9]{9}" required />
                   </div>
                   <div class="error-msg" id="phoneError">Please enter a valid 10-digit mobile number.</div>
-                </div>
-
-                <div class="form-group">
-                  <label for="custGst" class="form-label">GST Number (Optional)</label>
-                  <input type="text" id="custGst" class="form-input-text" placeholder="22AAAAA1111A1Z1"
-                    style="text-transform: uppercase;" />
                 </div>
               </div>
 
@@ -428,7 +462,7 @@
                       </svg>
                     </div>
                     <h2 class="success-heading">Booking Successful!</h2>
-                    <p class="success-para">Thank you for choosing Voyago Tours &amp; Travels.<br>Your trip is
+                    <p class="success-para">Thank you for choosing ATAT Tours &amp; Travels.<br>Your trip is
                       confirmed.</p>
                   </div>
 
@@ -522,7 +556,7 @@
         </div>
 
         <!-- RIGHT COLUMN: STICKY TRIP FARE SUMMARY -->
-        <div class="booking-summary-sidebar">
+        <div class="booking-summary-sidebar" style="display: none;">
           <div class="summary-card">
             <div class="summary-card-header">
               <h3>Trip Fare Summary</h3>
@@ -550,24 +584,28 @@
               <div class="fare-breakdown-wrapper">
                 <h4 class="breakdown-title">Fare Breakdown</h4>
                 <div class="summary-row font-sm">
-                  <span class="summary-label">Base Fare</span>
+                  <span class="summary-label" id="summaryBaseFareLabel">Base Fare</span>
                   <span class="summary-value" id="summaryBaseFare">₹ 2,850</span>
                 </div>
-                <div class="summary-row font-sm">
-                  <span class="summary-label">Distance Charge</span>
-                  <span class="summary-value" id="summaryDistanceCharge">₹ 900</span>
+                <div class="summary-row font-sm" id="outstationChargeRow" style="display: none;">
+                  <span class="summary-label" id="outstationChargeLabel">Driver Charge (Outstation)</span>
+                  <span class="summary-value" id="summaryOutstationCharge">₹ 0</span>
                 </div>
-                <div class="summary-row font-sm">
-                  <span class="summary-label">Driver Allowance</span>
-                  <span class="summary-value" id="summaryDriverAllowance">₹ 400</span>
+                <div class="summary-row font-sm" id="extraKmRow" style="display: none;">
+                  <span class="summary-label" id="extraKmLabel">Extra KM Charge</span>
+                  <span class="summary-value" id="summaryExtraKm">₹ 0</span>
+                </div>
+                <div class="summary-row font-sm" id="localExtraHrsRow" style="display: none;">
+                  <span class="summary-label" id="localExtraHrsLabel">Extra Hours Charge</span>
+                  <span class="summary-value" id="summaryLocalExtraHrs">₹ 0</span>
+                </div>
+                <div class="summary-row font-sm" id="localNightRow" style="display: none;">
+                  <span class="summary-label">Night Charges</span>
+                  <span class="summary-value" id="summaryLocalNight">₹ 0</span>
                 </div>
                 <div class="summary-row font-sm">
                   <span class="summary-label">Toll &amp; Parking</span>
                   <span class="summary-value" id="summaryTollParking">₹ 350</span>
-                </div>
-                <div class="summary-row font-sm">
-                  <span class="summary-label">Taxes &amp; Fees</span>
-                  <span class="summary-value" id="summaryTaxes">₹ 300</span>
                 </div>
               </div>
 
@@ -590,7 +628,7 @@
               </div>
 
               <!-- Secure booking trigger (binds to current step action) -->
-              <button type="button" class="btn-secure-booking" id="sidebarSecureBtn">
+              <!-- <button type="button" class="btn-secure-booking" id="sidebarSecureBtn">
                 <span class="btn-lock-icon">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -599,7 +637,7 @@
                   </svg>
                 </span>
                 <span>Secure &amp; Safe Booking</span>
-              </button>
+              </button> -->
             </div>
           </div>
         </div>
@@ -697,16 +735,17 @@
       </div>
 
       <div class="footer-bottom">
-        <div class="footer-bottom-inner">
-          <p>&copy; 2026 ATAT Tours &amp; Travels. All rights reserved.</p>
-          <div class="footer-legal">
-            <a href="terms-condition.html">Terms &amp; Conditions</a>
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="cancellation-policy.html">Cancellation Policy</a>
-            <a href="faq.html">FAQ</a>
-          </div>
-        </div>
+    <div class="footer-bottom-inner">
+      <p>&copy; 2026 Aman Tours &amp; Travels. All rights reserved.</p>
+      <p class="footer-credit">Developed and designed by <a href="https://www.athenura.in/" target="_blank" rel="noopener">Athenura</a></p>
+      <div class="footer-legal">
+        <a href="terms-condition.html">Terms &amp; Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="cancellation-policy.html">Cancellation Policy</a>
+        <a href="faq.html">FAQ</a>
       </div>
+    </div>
+  </div>
     </div>
   </footer>
 
