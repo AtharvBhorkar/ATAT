@@ -21,59 +21,7 @@
   <link rel="stylesheet" href="css/home.css">
   <link rel="stylesheet" href="css/privacy.css">
   <!-- Inline override for Navbar Background and Premium Animations -->
-  <style>
-    .navbar.scrolled {
-      background: rgba(245, 239, 230, .97);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 2px 24px rgba(26, 16, 16, .1);
-    }
 
-    /* PREMIUM SECTION ANIMATIONS */
-    .premium-reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      filter: blur(10px);
-      transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-      will-change: opacity, transform, filter;
-    }
-
-    .premium-reveal.in-view {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
-    }
-
-    .premium-item {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .premium-reveal.in-view .premium-item {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .premium-reveal.in-view .premium-item:nth-child(1) {
-      transition-delay: 0.1s;
-    }
-
-    .premium-reveal.in-view .premium-item:nth-child(2) {
-      transition-delay: 0.2s;
-    }
-
-    .premium-reveal.in-view .premium-item:nth-child(3) {
-      transition-delay: 0.3s;
-    }
-
-    .premium-reveal.in-view .premium-item:nth-child(4) {
-      transition-delay: 0.4s;
-    }
-
-    .premium-reveal.in-view .premium-item:nth-child(5) {
-      transition-delay: 0.5s;
-    }
-  </style>
 </head>
 
 <body>
@@ -94,12 +42,12 @@
         <li><a href="packages.html">Packages</a></li>
         <li><a href="pricing.html">Pricing</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li class="mobile-only"><a href="login.html" class="nav-btn-signin">Blog</a></li>
+        <li class="mobile-only"><a href="blog.html" class="nav-btn-signin">Blog</a></li>
         <li class="mobile-only"><a href="booking.html" class="nav-btn-book">Book a Ride</a></li>
       </ul>
 
       <div class="nav-actions">
-        <a href="login.html" class="btn-ghost">Blog</a>
+        <a href="blog.html" class="btn-ghost">Blog</a>
         <a href="booking.html" class="btn-primary">Book a Ride</a>
       </div>
 
@@ -437,7 +385,10 @@
 
       <div class="footer-bottom">
         <div class="footer-bottom-inner">
-          <p>&copy; 2026 ATAT Tour &amp; Travels. All rights reserved.</p>
+          <p>&copy; 2026 Aman Tours and Travels. All rights reserved.</p>
+          <p class="footer-credit">Developed and designed by <a href="https://www.athenura.in/" target="_blank"
+              rel="noopener" style="color: var(--gold); font-weight: bold;">Athenura</a></p>
+
           <div class="footer-legal">
             <a href="terms-condition.html">Terms &amp; Conditions</a>
             <a href="privacy.html">Privacy Policy</a>
@@ -452,97 +403,7 @@
 
 
   <!-- Custom Script for Accordion & Animations -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-
-      // Intersection Observer for fade animations
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-      };
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-          }
-        });
-      }, observerOptions);
-
-      document.querySelectorAll('.fade-up').forEach(el => {
-        observer.observe(el);
-      });
-
-      // Accordion Logic
-      const accordions = document.querySelectorAll('.accordion-header');
-
-      accordions.forEach(acc => {
-        acc.addEventListener('click', function () {
-          // Close all others
-          accordions.forEach(other => {
-            if (other !== this) {
-              other.classList.remove('active');
-              other.nextElementSibling.style.maxHeight = null;
-              other.querySelector('.fa-chevron-down').style.transform = 'rotate(0deg)';
-            }
-          });
-
-          // Toggle current
-          this.classList.toggle('active');
-          const content = this.nextElementSibling;
-          const icon = this.querySelector('.fa-chevron-down');
-
-          if (this.classList.contains('active')) {
-            content.style.maxHeight = content.scrollHeight + "px";
-            icon.style.transform = 'rotate(180deg)';
-          } else {
-            content.style.maxHeight = null;
-            icon.style.transform = 'rotate(0deg)';
-          }
-        });
-      });
-    });
-  </script>
-  <script>
-    {
-      /* ------- PREMIUM ANIMATIONS ------- */
-      const premiumSections = document.querySelectorAll('section, .section, .hero, .footer-col');
-      premiumSections.forEach(sec => {
-        sec.classList.add('premium-reveal');
-        sec.querySelectorAll('h1, h2, h3, p, .card, .stat-card').forEach(el => el.classList.add('premium-item'));
-      });
-      const premiumObs = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            premiumObs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
-      premiumSections.forEach(sec => premiumObs.observe(sec));
-
-      /* ------- NAVBAR SCROLL ------- */
-      const navbar = document.getElementById('navbar');
-      const onScroll = () => { if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 40); };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-      /* ------- HAMBURGER MENU ------- */
-      const hamburger = document.getElementById('hamburger');
-      const navLinks = document.getElementById('navLinks');
-      if (hamburger && navLinks) {
-        hamburger.addEventListener('click', () => {
-          const open = hamburger.classList.toggle('open');
-          navLinks.classList.toggle('open', open);
-          hamburger.setAttribute('aria-expanded', open);
-        });
-        // Close on link click
-        navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); }));
-        // Close on outside click
-        document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
-      }
-    }
-  </script>
+  <script src="js/privacy.js?v=1"></script>
 
 
 </body>

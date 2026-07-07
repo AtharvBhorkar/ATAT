@@ -21,54 +21,7 @@
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/about.css?v=2">
-    <!-- Inline override for Navbar Background and Premium Animations -->
-    <style>
-        /*  SECTION ANIMATIONS */
-        .premium-reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            filter: blur(10px);
-            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: opacity, transform, filter;
-        }
 
-        .premium-reveal.in-view {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0);
-        }
-
-        .premium-item {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .premium-reveal.in-view .premium-item {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .premium-reveal.in-view .premium-item:nth-child(1) {
-            transition-delay: 0.1s;
-        }
-
-        .premium-reveal.in-view .premium-item:nth-child(2) {
-            transition-delay: 0.2s;
-        }
-
-        .premium-reveal.in-view .premium-item:nth-child(3) {
-            transition-delay: 0.3s;
-        }
-
-        .premium-reveal.in-view .premium-item:nth-child(4) {
-            transition-delay: 0.4s;
-        }
-
-        .premium-reveal.in-view .premium-item:nth-child(5) {
-            transition-delay: 0.5s;
-        }
-    </style>
 </head>
 
 <body>
@@ -122,7 +75,7 @@
                 <h2 class="section-title">The <span class="italic-accent">Story</span> of Aman tour and travel</h2>
                 <div class="story-divider"></div>
 
-                <p class="premium-text">Founded on the principle that the journey is just as important as the
+                <p>Founded on the principle that the journey is just as important as the
                     destination, ATAT has transformed the landscape of luxury travel.</p>
                 <p>What started as a boutique service has grown into a premier global network, dedicated to providing
                     unparalleled bespoke experiences. We believe in blending state-of-the-art technology with timeless
@@ -353,7 +306,10 @@
 
             <div class="footer-bottom">
                 <div class="footer-bottom-inner">
-                    <p>&copy; 2026 Voyago Tours &amp; Travels. All rights reserved.</p>
+                    <p>&copy; 2026 Aman Tours and Travels. All rights reserved.</p>
+                    <p class="footer-credit">Developed and designed by <a href="https://www.athenura.in/"
+                            target="_blank" rel="noopener" style="color: var(--gold); font-weight: bold;">Athenura</a></p>
+
                     <div class="footer-legal">
                         <a href="terms-condition.html">Terms &amp; Conditions</a>
                         <a href="privacy.html">Privacy Policy</a>
@@ -365,94 +321,7 @@
         </div>
     </footer>
 
-    <!-- Animations Script -->
-    <script>
-
-
-        // Intersection Observer for Scroll Animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('in-view');
-
-                    // Counter animation logic
-                    if (entry.target.classList.contains('stat-card')) {
-                        const counter = entry.target.querySelector('.counter');
-                        if (counter && !counter.classList.contains('counted')) {
-                            const target = parseInt(counter.getAttribute('data-target'));
-                            const suffix = counter.innerText.replace(/[0-9.]/g, '');
-                            animateValue(counter, 0, target, 2000, suffix);
-                            counter.classList.add('counted');
-                        }
-                    }
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-up, .slide-in-left, .slide-in-right, .stat-card').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Function to animate the counter
-        function animateValue(obj, start, end, duration, suffix) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                // Ease out quad calculation
-                const easeProgress = progress * (2 - progress);
-                obj.innerHTML = Math.floor(easeProgress * (end - start) + start) + suffix;
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
-    </script>
-    <script>
-        {
-            /* -------  ANIMATIONS ------- */
-            const premiumSections = document.querySelectorAll('section, .section, .hero, .footer-col');
-            premiumSections.forEach(sec => {
-                sec.classList.add('premium-reveal');
-                sec.querySelectorAll('h1, h2, h3, p, .card, .stat-card').forEach(el => el.classList.add('premium-item'));
-            });
-            const premiumObs = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                        premiumObs.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
-            premiumSections.forEach(sec => premiumObs.observe(sec));
-
-            /* ------- NAVBAR SCROLL ------- */
-            const navbar = document.getElementById('navbar');
-            const onScroll = () => { if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 40); };
-            window.addEventListener('scroll', onScroll, { passive: true });
-            onScroll();
-            /* ------- HAMBURGER MENU ------- */
-            const hamburger = document.getElementById('hamburger');
-            const navLinks = document.getElementById('navLinks');
-            if (hamburger && navLinks) {
-                hamburger.addEventListener('click', () => {
-                    const open = hamburger.classList.toggle('open');
-                    navLinks.classList.toggle('open', open);
-                    hamburger.setAttribute('aria-expanded', open);
-                });
-                // Close on link click
-                navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('open'); navLinks.classList.remove('open'); }));
-                // Close on outside click
-                document.addEventListener('click', e => { if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) { hamburger.classList.remove('open'); navLinks.classList.remove('open'); } });
-            }
-        }
-    </script>
+    <script src="js/about.js?v=2"></script>
 
 
 </body>
