@@ -2,14 +2,14 @@
    VEHICLES PAGE - FIXED IMAGE HANDLING
    100% Connected to Express + MongoDB backend
 ════════════════════════════════════════════════════════════════ */
-
+const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='100%25' height='100%25' fill='%23EDE5D8'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='20' fill='%237a6a64' text-anchor='middle' dominant-baseline='middle'%3ENo Image%3C/text%3E%3C/svg%3E";
 const API_BASE = window.location.port === '5500' || window.location.port === '3000'
   ? 'http://localhost:5000/api'
   : '/api';
 
 // ✅ PROPER IMAGE URL FORMATTING
 function getImageUrl(imagePath) {
-  if (!imagePath || imagePath === 'undefined') return '/images/no-image.jpg';
+  if (!imagePath || imagePath === 'undefined') return PLACEHOLDER_IMG;
   if (imagePath.startsWith('http')) return imagePath; // External URL
   if (imagePath.startsWith('/')) return imagePath; // Already has leading slash
   return '/' + imagePath; // Add leading slash
@@ -122,7 +122,7 @@ function renderVehicles(vehicles) {
           src="${imageUrl}" 
           alt="${vehicle.name || 'Vehicle'}" 
           loading="lazy"
-          onerror="this.src='/images/no-image.jpg'"
+          onerror="this.onerror=null; this.src='${PLACEHOLDER_IMG}'"
         >
         <div class="vehicle-img-overlay">
           <button class="quick-view-btn">Quick View</button>
@@ -360,7 +360,7 @@ function injectModalHTML() {
       <div class="vm-inner" id="vmInner">
         <div class="vm-left">
           <div class="vm-gallery">
-            <div class="vm-gallery-main-wrap"><img id="vmMainImg" src="" alt="" class="vm-gallery-main" onerror="this.src='/images/no-image.jpg'" /><span class="vm-img-badge" id="vmBadge"></span></div>
+            <div class="vm-gallery-main-wrap"><img id="vmMainImg" src="" alt="" class="vm-gallery-main" onerror="this.onerror=null; this.src='${PLACEHOLDER_IMG}'" /><span class="vm-img-badge" id="vmBadge"></span></div>
             <div class="vm-thumbs" id="vmThumbs"></div>
           </div>
           <div class="vm-info-header">
@@ -415,7 +415,7 @@ function populateModal(V) {
   V.images.forEach((src, i) => {
     const t = document.createElement('button');
     t.className   = `vm-thumb${i === 0 ? ' active' : ''}`;
-    t.innerHTML   = `<img src="${src}" alt="${V.name} view ${i+1}" loading="lazy" onerror="this.src='/images/no-image.jpg'"/>`;
+    t.innerHTML   = `<img src="${src}" alt="${V.name} view ${i+1}" loading="lazy" onerror="this.onerror=null; this.src='${PLACEHOLDER_IMG}'"/>`;
     t.addEventListener('click', () => {
       mainImg.classList.add('vm-img-fade');
       setTimeout(() => { mainImg.src = src; mainImg.classList.remove('vm-img-fade'); }, 200);
