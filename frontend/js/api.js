@@ -3,9 +3,9 @@
 ═══════════════════════════════════════════════ */
 
 const API = (() => {
-  const BASE = 'http://localhost:5000/api';
-  const PROD_BASE = 'https://atat-backend.onrender.com/api'; 
-  const DEV_BASE = 'http://localhost:5000/api';
+  const BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? DEV_BASE
+  : PROD_BASE;
   const TOKEN_KEY = 'voyago_token';
 
   function getToken() {
