@@ -79,7 +79,6 @@ function renderVehicles(vehicles) {
 
     const vehicleType = (vehicle.type || 'standard').toLowerCase();
     card.dataset.type = vehicleType;
-    card.dataset.ac = vehicle.ac !== false ? "true" : "false";
     card.dataset.price = Number(vehicle.pricePerDay || 0);
     card.dataset.seats = Number(vehicle.seats || 4);
     
@@ -147,10 +146,6 @@ function renderVehicles(vehicles) {
           <div class="spec-item">
             ${specIcons.seat}
             <span>${vehicle.seats || 4} Seats</span>
-          </div>
-          <div class="spec-item">
-            ${specIcons.ac}
-            <span>${vehicle.ac !== false ? 'AC' : 'Non-AC'}</span>
           </div>
           <div class="spec-item">
             ${specIcons.fuel}

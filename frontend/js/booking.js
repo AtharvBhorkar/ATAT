@@ -527,6 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ─── STATE ─── */
+  /* ─── STATE ─── */
   let currentStep = 1;
   let selectedVehicleId = null;
   let selectedVehicleType = 'sedan';
@@ -538,6 +539,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let packageModeInitialized = false;
   let lastBookingResponse = null;
   let lastBookingPayload = null;
+  let lastFareBreakdown = { baseFare: 0, distanceCharge: 0, driverAllowance: 0, tollParking: 0, taxes: 0, total: 0 };
+  let lastFetchedFrom = '';
+  let lastFetchedTo = '';
+  
 
   const popularLocations = [
     'Mumbai, Maharashtra', 'Pune, Maharashtra', 'Lonavala, Maharashtra',
@@ -954,164 +959,239 @@ document.addEventListener('DOMContentLoaded', () => {
     return key1; // dono na mile toh yehi return kar, aage hash fallback chalega
 }
 
-  function getStableHashDistance(from, to) {
-    const str = (from + to).toLowerCase().replace(/[^a-z]/g, '');
-    if (!str) return 120;
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    return 60 + (Math.abs(hash) % 390);
-  }
+function getStableHashDistance(from, to) {
+  const str = (from + to).toLowerCase().replace(/[^a-z]/g, '');
+  if (!str) return 120;
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  return 60 + (Math.abs(hash) % 390);
+}
 
 
 
-  let lastFetchedFrom = '';
-  let lastFetchedTo = '';
+async function calculateDistanceAndFares() {
+  const fromVal = pickupInput?.value?.trim() || '';
+  const toVal = dropoffInput?.value?.trim() || '';
+  if (!fromVal || !toVal) return;
 
-  async function calculateDistanceAndFares() {
-    const fromVal = pickupInput.value.trim();
-    const toVal = dropoffInput.value.trim();
-    if (!fromVal || !toVal) return;
+  if (fromVal !== lastFetchedFrom || toVal !== lastFetchedTo) {
+    lastFetchedFrom = fromVal;
+    lastFetchedTo = toVal;
 
-    if (fromVal !== lastFetchedFrom || toVal !== lastFetchedTo) {
-      lastFetchedFrom = fromVal;
-      lastFetchedTo = toVal;
-      
-      if (summaryDistance) summaryDistance.textContent = 'Calculating...';
-      if (summaryDuration) summaryDuration.textContent = 'Calculating...';
-      
-      const route = await getRouteFromORS(fromVal, toVal);
-      if (route) {
-        calculatedDistance = route.distance;
-        calculatedDuration = route.duration;
-      } else {
-        const routeKey = getRouteKey(fromVal, toVal);
-        if (routesDatabase[routeKey]) {
-          calculatedDistance = routesDatabase[routeKey].distance;
-          calculatedDuration = routesDatabase[routeKey].duration;
-        } else {
-          calculatedDistance = getStableHashDistance(fromVal, toVal);
-          const hours = Math.floor(calculatedDistance / 55);
-          const mins = Math.round(((calculatedDistance / 55) - hours) * 60);
-          calculatedDuration = `${hours}h ${mins}m`;
-        }
-      }
-    }
+    if (summaryDistance) summaryDistance.textContent = 'Calculating...';
+    if (summaryDuration) summaryDuration.textContent = 'Calculating...';
 
-    let distForFare = calculatedDistance;
-    if (tripType === 'Round Trip') distForFare *= 2;
+    const route = await getRouteFromORS(fromVal, toVal);
 
-    const cleanFrom = fromVal.split(',')[0].trim();
-    const cleanTo = toVal.split(',')[0].trim();
-    if (summaryRoute) summaryRoute.textContent = `${cleanFrom} → ${cleanTo}`;
-    if (summaryDistance) summaryDistance.textContent = `~ ${distForFare} km`;
-    if (summaryDuration) summaryDuration.textContent = tripType === 'Round Trip' ? `~ ${calculatedDuration} x2` : `~ ${calculatedDuration}`;
-    if (summaryTripType) summaryTripType.textContent = tripType;
-
-    const selectedVehicle = dbVehicles.find(v => v._id === selectedVehicleId) || { type: selectedVehicleType };
-    const pricing = vehiclePricingConfig[selectedVehicleType] || vehiclePricingConfig['sedan'];
-    const distanceCharge = 0;
-    const taxes = 0;
-
-    const isOutstation = outstationToggle?.checked || false;
-    const isLocal = localToggle?.checked || false;
-
-    let finalBaseFare = pricing.baseFare;
-    let extraKmCharge = 0;
-    let outstationDriverCharge = 0;
-    let localExtraHrsCharge = 0;
-    let localNightCharge = 0;
-
-    const extraKmRow = document.getElementById('extraKmRow');
-    const summaryExtraKm = document.getElementById('summaryExtraKm');
-    const extraKmLabel = document.getElementById('extraKmLabel');
-    const localExtraHrsRow = document.getElementById('localExtraHrsRow');
-    const summaryLocalExtraHrs = document.getElementById('summaryLocalExtraHrs');
-    const localExtraHrsLabel = document.getElementById('localExtraHrsLabel');
-    const localNightRow = document.getElementById('localNightRow');
-    const summaryLocalNight = document.getElementById('summaryLocalNight');
-    const baseFareLabel = document.getElementById('summaryBaseFareLabel');
-    const outstationChargeRow = document.getElementById('outstationChargeRow');
-    const summaryOutstationCharge = document.getElementById('summaryOutstationCharge');
-    const outstationChargeLabel = document.getElementById('outstationChargeLabel');
-
-    if (isLocal) {
-      const localConfig = getLocalConfigForVehicle(selectedVehicle);
-      const selectedPlanKey = localPlanSelect?.value || 'eightHrs';
-      let plan = localConfig[selectedPlanKey];
-      if (!plan) {
-        plan = localConfig['eightHrs'];
-        if (localPlanSelect) localPlanSelect.value = 'eightHrs';
-      }
-      finalBaseFare = plan.fare;
-      if (baseFareLabel) baseFareLabel.textContent = `Base Fare (${plan.hrs} Hrs / ${plan.km} Km)`;
-
-      const extraKm = Math.max(0, distForFare - plan.km);
-      extraKmCharge = extraKm * localConfig.extraKmRate;
-      if (extraKmCharge > 0) {
-        if (extraKmRow) extraKmRow.style.display = 'flex';
-        if (summaryExtraKm) summaryExtraKm.textContent = `₹ ${Number(extraKmCharge).toLocaleString('en-IN')}`;
-        if (extraKmLabel) extraKmLabel.textContent = `Extra KM Charge (${extraKm} km)`;
-      } else if (extraKmRow) extraKmRow.style.display = 'none';
-
-      const durationInHrs = parseDurationToHours(calculatedDuration);
-      const extraHrs = Math.max(0, Math.ceil(durationInHrs - plan.hrs));
-      localExtraHrsCharge = extraHrs * localConfig.extraHrRate;
-      if (localExtraHrsCharge > 0) {
-        if (localExtraHrsRow) localExtraHrsRow.style.display = 'flex';
-        if (summaryLocalExtraHrs) summaryLocalExtraHrs.textContent = `₹ ${Number(localExtraHrsCharge).toLocaleString('en-IN')}`;
-        if (localExtraHrsLabel) localExtraHrsLabel.textContent = `Extra Hours Charge (${extraHrs} hrs)`;
-      } else if (localExtraHrsRow) localExtraHrsRow.style.display = 'none';
-
-      const isNight = isNightTime(journeyTimeInput?.value);
-      localNightCharge = isNight ? localConfig.nightCharge : 0;
-      if (localNightCharge > 0) {
-        if (localNightRow) localNightRow.style.display = 'flex';
-        if (summaryLocalNight) summaryLocalNight.textContent = `₹ ${Number(localNightCharge).toLocaleString('en-IN')}`;
-      } else if (localNightRow) localNightRow.style.display = 'none';
-
-      if (outstationChargeRow) outstationChargeRow.style.display = 'none';
-    } else if (isOutstation) {
-      const outstationConfig = getOutstationConfigForVehicle(selectedVehicle);
-      let days = 1;
-      if (tripType === 'Round Trip' && journeyDateInput.value && returnDateInput.value) {
-        const start = new Date(journeyDateInput.value + 'T00:00:00');
-        const end = new Date(returnDateInput.value + 'T00:00:00');
-        const diffTime = end - start;
-        if (diffTime >= 0) {
-          days = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
-        }
-      }
-
-      const minDist = days * outstationConfig.minKmPerDay;
-      finalBaseFare = minDist * outstationConfig.rate;
-      if (baseFareLabel) baseFareLabel.textContent = `Base Fare (Min ${minDist} KM)`;
-
-      const extraKm = Math.max(0, distForFare - minDist);
-      extraKmCharge = extraKm * outstationConfig.rate;
-      if (extraKmCharge > 0) {
-        if (extraKmRow) extraKmRow.style.display = 'flex';
-        if (summaryExtraKm) summaryExtraKm.textContent = `₹ ${Number(extraKmCharge).toLocaleString('en-IN')}`;
-        if (extraKmLabel) extraKmLabel.textContent = `Extra KM Charge (${extraKm} km)`;
-      } else if (extraKmRow) extraKmRow.style.display = 'none';
-
-      outstationDriverCharge = days * outstationConfig.driverTaPerDay;
-      if (outstationChargeRow) outstationChargeRow.style.display = 'flex';
-      if (summaryOutstationCharge) summaryOutstationCharge.textContent = `₹ ${Number(outstationDriverCharge).toLocaleString('en-IN')}`;
-      if (outstationChargeLabel) outstationChargeLabel.textContent = `Driver Charge (Outstation - ${days} ${days === 1 ? 'Day' : 'Days'})`;
-
-      if (localExtraHrsRow) localExtraHrsRow.style.display = 'none';
-      if (localNightRow) localNightRow.style.display = 'none';
+    if (route) {
+      calculatedDistance = route.distance;
+      calculatedDuration = route.duration;
     } else {
-      if (baseFareLabel) baseFareLabel.textContent = 'Base Fare';
-      if (extraKmRow) extraKmRow.style.display = 'none';
-      if (localExtraHrsRow) localExtraHrsRow.style.display = 'none';
-      if (localNightRow) localNightRow.style.display = 'none';
-      if (outstationChargeRow) outstationChargeRow.style.display = 'none';
+      const routeKey = getRouteKey(fromVal, toVal);
+
+      if (routesDatabase[routeKey]) {
+        calculatedDistance = routesDatabase[routeKey].distance;
+        calculatedDuration = routesDatabase[routeKey].duration;
+      } else {
+        calculatedDistance = getStableHashDistance(fromVal, toVal);
+        const hours = Math.floor(calculatedDistance / 55);
+        const mins = Math.round(((calculatedDistance / 55) - hours) * 60);
+        calculatedDuration = `${hours}h ${mins}m`;
+      }
+    }
+  }
+
+  let distForFare = calculatedDistance;
+  if (tripType === 'Round Trip') distForFare *= 2;
+
+  const cleanFrom = fromVal.split(',')[0].trim();
+  const cleanTo = toVal.split(',')[0].trim();
+
+  if (summaryRoute) summaryRoute.textContent = `${cleanFrom} → ${cleanTo}`;
+  if (summaryDistance) summaryDistance.textContent = `~ ${distForFare} km`;
+  if (summaryDuration) {
+    summaryDuration.textContent =
+      tripType === 'Round Trip'
+        ? `~ ${calculatedDuration} x2`
+        : `~ ${calculatedDuration}`;
+  }
+  if (summaryTripType) summaryTripType.textContent = tripType;
+
+  const selectedVehicle =
+    dbVehicles.find(v => v._id === selectedVehicleId) || { type: selectedVehicleType };
+
+  const pricing =
+    vehiclePricingConfig[selectedVehicleType] || vehiclePricingConfig['sedan'];
+
+  const distanceCharge = 0;
+  const taxes = 0;
+
+  const isOutstation = outstationToggle?.checked || false;
+  const isLocal = localToggle?.checked || false;
+
+  let finalBaseFare = pricing.baseFare;
+  let extraKmCharge = 0;
+  let outstationDriverCharge = 0;
+  let localExtraHrsCharge = 0;
+  let localNightCharge = 0;
+
+  const extraKmRow = document.getElementById('extraKmRow');
+  const summaryExtraKm = document.getElementById('summaryExtraKm');
+  const extraKmLabel = document.getElementById('extraKmLabel');
+
+  const localExtraHrsRow = document.getElementById('localExtraHrsRow');
+  const summaryLocalExtraHrs = document.getElementById('summaryLocalExtraHrs');
+  const localExtraHrsLabel = document.getElementById('localExtraHrsLabel');
+
+  const localNightRow = document.getElementById('localNightRow');
+  const summaryLocalNight = document.getElementById('summaryLocalNight');
+
+  const baseFareLabel = document.getElementById('summaryBaseFareLabel');
+
+  const outstationChargeRow = document.getElementById('outstationChargeRow');
+  const summaryOutstationCharge = document.getElementById('summaryOutstationCharge');
+  const outstationChargeLabel = document.getElementById('outstationChargeLabel');
+
+  if (isLocal) {
+    const localConfig = getLocalConfigForVehicle(selectedVehicle);
+    const selectedPlanKey = localPlanSelect?.value || 'eightHrs';
+
+    let plan = localConfig[selectedPlanKey];
+    if (!plan) {
+      plan = localConfig['eightHrs'];
+      if (localPlanSelect) localPlanSelect.value = 'eightHrs';
     }
 
-    const subtotal = finalBaseFare + pricing.tollParking + outstationDriverCharge + extraKmCharge + localExtraHrsCharge + localNightCharge;
-    updateFareSummaryDisplay(finalBaseFare, distanceCharge, 0, pricing.tollParking, taxes, subtotal);
+    finalBaseFare = plan.fare;
+
+    if (baseFareLabel) {
+      baseFareLabel.textContent = `Base Fare (${plan.hrs} Hrs / ${plan.km} Km)`;
+    }
+
+    const extraKm = Math.max(0, distForFare - plan.km);
+    extraKmCharge = extraKm * localConfig.extraKmRate;
+
+    if (extraKmCharge > 0) {
+      if (extraKmRow) extraKmRow.style.display = 'flex';
+      if (summaryExtraKm) {
+        summaryExtraKm.textContent = `₹ ${Number(extraKmCharge).toLocaleString('en-IN')}`;
+      }
+      if (extraKmLabel) {
+        extraKmLabel.textContent = `Extra KM Charge (${extraKm} km)`;
+      }
+    } else {
+      if (extraKmRow) extraKmRow.style.display = 'none';
+    }
+
+    const durationInHrs = parseDurationToHours(calculatedDuration);
+    const extraHrs = Math.max(0, Math.ceil(durationInHrs - plan.hrs));
+    localExtraHrsCharge = extraHrs * localConfig.extraHrRate;
+
+    if (localExtraHrsCharge > 0) {
+      if (localExtraHrsRow) localExtraHrsRow.style.display = 'flex';
+      if (summaryLocalExtraHrs) {
+        summaryLocalExtraHrs.textContent = `₹ ${Number(localExtraHrsCharge).toLocaleString('en-IN')}`;
+      }
+      if (localExtraHrsLabel) {
+        localExtraHrsLabel.textContent = `Extra Hours Charge (${extraHrs} hrs)`;
+      }
+    } else {
+      if (localExtraHrsRow) localExtraHrsRow.style.display = 'none';
+    }
+
+    const isNight = isNightTime(journeyTimeInput?.value);
+    localNightCharge = isNight ? localConfig.nightCharge : 0;
+
+    if (localNightCharge > 0) {
+      if (localNightRow) localNightRow.style.display = 'flex';
+      if (summaryLocalNight) {
+        summaryLocalNight.textContent = `₹ ${Number(localNightCharge).toLocaleString('en-IN')}`;
+      }
+    } else {
+      if (localNightRow) localNightRow.style.display = 'none';
+    }
+
+    if (outstationChargeRow) outstationChargeRow.style.display = 'none';
+
+  } else if (isOutstation) {
+    const outstationConfig = getOutstationConfigForVehicle(selectedVehicle);
+    let days = 1;
+
+    if (
+      tripType === 'Round Trip' &&
+      journeyDateInput?.value &&
+      returnDateInput?.value
+    ) {
+      const start = new Date(journeyDateInput.value + 'T00:00:00');
+      const end = new Date(returnDateInput.value + 'T00:00:00');
+      const diffTime = end - start;
+
+      if (diffTime >= 0) {
+        days = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
+      }
+    }
+
+    const minDist = days * outstationConfig.minKmPerDay;
+    finalBaseFare = minDist * outstationConfig.rate;
+
+    if (baseFareLabel) {
+      baseFareLabel.textContent = `Base Fare (Min ${minDist} KM)`;
+    }
+
+    const extraKm = Math.max(0, distForFare - minDist);
+    extraKmCharge = extraKm * outstationConfig.rate;
+
+    if (extraKmCharge > 0) {
+      if (extraKmRow) extraKmRow.style.display = 'flex';
+      if (summaryExtraKm) {
+        summaryExtraKm.textContent = `₹ ${Number(extraKmCharge).toLocaleString('en-IN')}`;
+      }
+      if (extraKmLabel) {
+        extraKmLabel.textContent = `Extra KM Charge (${extraKm} km)`;
+      }
+    } else {
+      if (extraKmRow) extraKmRow.style.display = 'none';
+    }
+
+    outstationDriverCharge = days * outstationConfig.driverTaPerDay;
+
+    if (outstationChargeRow) outstationChargeRow.style.display = 'flex';
+    if (summaryOutstationCharge) {
+      summaryOutstationCharge.textContent = `₹ ${Number(outstationDriverCharge).toLocaleString('en-IN')}`;
+    }
+    if (outstationChargeLabel) {
+      outstationChargeLabel.textContent =
+        `Driver Charge (Outstation - ${days} ${days === 1 ? 'Day' : 'Days'})`;
+    }
+
+    if (localExtraHrsRow) localExtraHrsRow.style.display = 'none';
+    if (localNightRow) localNightRow.style.display = 'none';
+
+  } else {
+    if (baseFareLabel) baseFareLabel.textContent = 'Base Fare';
+    if (extraKmRow) extraKmRow.style.display = 'none';
+    if (localExtraHrsRow) localExtraHrsRow.style.display = 'none';
+    if (localNightRow) localNightRow.style.display = 'none';
+    if (outstationChargeRow) outstationChargeRow.style.display = 'none';
   }
+
+  const subtotal =
+    finalBaseFare +
+    pricing.tollParking +
+    outstationDriverCharge +
+    extraKmCharge +
+    localExtraHrsCharge +
+    localNightCharge;
+
+  updateFareSummaryDisplay(
+    finalBaseFare,
+    distanceCharge,
+    0,
+    pricing.tollParking,
+    taxes,
+    subtotal
+  );
+}
 
   function updateFareSummaryDisplay(base, dist, driver, toll, tax, total) {
     if (summaryBaseFare) summaryBaseFare.textContent = `₹ ${Number(base).toLocaleString('en-IN')}`;

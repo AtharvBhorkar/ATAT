@@ -584,7 +584,6 @@ async function saveVehicle() {
         rating: getFormNum(form, 'rating') || undefined,
         totalTrips: getFormNum(form, 'totalTrips') || undefined,
         totalKmLakhs: getFormNum(form, 'totalKmLakhs') || undefined,
-        ac: form.elements['ac'].value === 'true',
         status: getFormVal(form, 'status') || 'active',
         // ✅ FILTER OUT EMPTY IMAGE URLS
         images: state.vehicleImages.filter(function (u) { return u.trim() && u !== 'undefined'; }),

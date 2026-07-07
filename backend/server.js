@@ -19,6 +19,12 @@ if (!process.env.JWT_SECRET) {
 
 console.log('✓ JWT_SECRET is configured');
 
+// Check ORS API Key
+if (!process.env.ORS_API_KEY) {
+  console.warn('\n⚠️  WARNING: ORS_API_KEY is not configured in .env');
+  console.warn('Route distance calculations will fail until this is set.\n');
+}
+
 const connectDB = require('./config/db');
 const { seedDefaultAdmin } = require('./controllers/adminAuthController');
 
@@ -32,8 +38,7 @@ const publicApiRoutes = require('./routes/publicApi');
 const paymentRoutes = require('./routes/payments');
 const settingsRoutes = require('./routes/settings');
 const userRoutes = require('./routes/userRoutes');
-
-
+const routeRoutes = require('./routes/routeRoutes'); // ← NEW: Route calculation
 
 // Ensure upload directories exist
 const dirs = [
@@ -75,9 +80,7 @@ app.use(express.urlencoded({ extended: true }));
 const uploadPath = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadPath));
 
-
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
-
 
 // Optional fallback if you also keep uploads outside backend
 const altUploadPath = path.join(__dirname, '../uploads');
@@ -123,7 +126,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API routes
+// ════════════════════════════════════════════════════════════════════════════
+// API ROUTES
+// ════════════════════════════════════════════════════════════════════════════
 app.use('/api/admin', adminAuthRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/packages', packageRoutes);
@@ -133,7 +138,7 @@ app.use('/api/public', publicApiRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/human', userRoutes);
-       // driver CRUD routes
+app.use('/api/route', routeRoutes); // ← NEW: Route calculation endpoint
 
 // Ignore Chrome devtools file
 app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
@@ -173,7 +178,7 @@ async function start() {
       console.log(`  Port: ${PORT}`);
       console.log(`  Home: http://localhost:${PORT}`);
       console.log(`  Admin Login: http://localhost:${PORT}/admin`);
-      console.log(`  Admin Dashboard: http://localhost:${PORT}/admin/dashboard`);
+      console.log(`  Route Health: http://localhost:${PORT}/api/route/health`);
       console.log('========================================\n');
     });
   } catch (error) {
